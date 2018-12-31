@@ -57,7 +57,7 @@ def getGraphDynam(F,G,A,d=.2,normalize=False):
         L = np.diag(degr) - A
 
     def GraphDynam(x):
-        return F(x) - d*np.dot(L,G(x))
+        return F(x) + d*np.dot(L,G(x))
     
     return GraphDynam
 

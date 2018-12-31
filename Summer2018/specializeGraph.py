@@ -490,6 +490,35 @@ def outSpecialize(A,base):
                         #Add the new component to the component dictionary
                         comp[max(comp.keys())+1] = np.arange(n,n+len(comp[key]))
                         #Recompute out-degree if necessary
+    
+    #PATH METHOD
+    """
+    #Find all paths from a base node to a base node
+    #through the connected components
+    pressedPaths = findPathsToBase(smA,bSize)
+
+    #Begin creating the block diagonal of specialized matrix
+    S = A.copy()
+
+    #For each compressed path
+    nNodes = bSize
+    for Path in pressedPaths:
+        compnts = [comp[c] for c in Path]
+        pastSize = S.shape[0]
+        #Traverse the path backwards
+        for i in range(1,len(compnts)):
+            curSize = S.shape[0]
+            #Find links between the current component and 
+            #all copies of it's neighbor
+            tail = compnts[-i-1]
+            tip = list(compnts[-i])+list(range(pastSize,curSize))
+
+            links = findLinks(S,tail,tip)
+            #specialize each link
+            pastSize = S.shape[0]
+            for link in links:
+                S = outSplzLink(S,bSize,link,link[1],compnts[-i-1])
+    """
     return S
 
 def inSpecialize(A,base):
@@ -588,7 +617,7 @@ def laplacian(A,normalize=False,randomWalk=False):
     
     return np.diag(degr) - A
 
-def randomGraph(n,base=True,bSize=None,stronglyCon=False):
+def randomGraph(n,base=False,bSize=None):
     """
     Random Graph on n vertices with an optional 
     random base set of vertices
@@ -596,43 +625,11 @@ def randomGraph(n,base=True,bSize=None,stronglyCon=False):
     A = (np.random.rand(n,n)>np.random.rand())*1.
     for j in range(n): A[j,j] = 0
     nodes = list(range(n))
+    if bSize is None:
+        bSize = np.random.randint(1,high=n)
+    base = list(np.random.choice(nodes,replace=False,size=bSize))
     
-    if stronglyCon:
-        while not nx.is_strongly_connected(nx.DiGraph(A)):
-            A = (np.random.rand(n,n)>np.random.rand())*1.
-            for j in range(n): A[j,j] = 0
-            nodes = list(range(n))
-            
     if base:
-        if bSize is None:
-            bSize = np.random.randint(1,high=n)
-        base = list(np.random.choice(nodes,replace=False,size=bSize))
         return A,base
-    return A
-    
-def fiedler(A):
-    """
-    Returns the feedler eigenvalue
-    """
-    L = laplacian(A,randomWalk=0)
-    eigs = np.linalg.eigvals(L)  
-    ind = np.argsort(np.abs(eigs))[1]
-    fEig = eigs[ind]
-    return fEig
-
-def stableSpeci(n,grow=True):
-    """
-    Returns a random nxn adjacency matrix whose
-    laplacian specializes stably
-    """
-    unstable=True
-    while unstable:
-        G,base = randomGraph(n)
-        sG = specializeGraph(G,base)
-        rhoG = spectralRad(laplacian(G))
-        rhoSG = spectralRad(laplacian(sG))
-        if sG.shape[0] > n:
-            if np.isclose(rhoG,rhoSG):
-                unstable=False
-
-    return G,base
+    else:
+        return A

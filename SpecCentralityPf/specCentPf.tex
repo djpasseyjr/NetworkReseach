@@ -1,0 +1,152 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+\begin{document}
+\title{Eigencentrality of Specialized Graph}
+\section*{Eigencentrality of a Specialized Graph}
+
+Let $G = (V,E)$ be a graph with adjacency matrix $M$ let $B \subset V$ be a structural set and let $\mathcal{S}(G)$ and $\hat{M}$ represent the specialization of $G$ over $B$ and it's adjacency matrix respectively. Without loss of generality we can write
+\[M = \begin{bmatrix} U & W \\ Y & Z \\ \end{bmatrix} \] where $U$ is the adjacency matrix of $G|_{B}$ and $Z$ is the adjacency matrix of $G|_{\bar{B}}$. Assume that $Z$ is strongly connected. Then we can write 
+\[\hat{M} = 
+\begin{bmatrix}
+	U & \begin{bmatrix}W_1\cdots W_1 \end{bmatrix} & \cdots & \begin{bmatrix}W_m\cdots W_m \end{bmatrix} \\
+
+	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
+	
+	\vdots & & \ddots & \\
+	
+	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & & & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
+	
+\end{bmatrix}
+\]
+Where each $Y_j$ and $W_i$ has a single entry and 
+\[\sum_{j=1}^{k} Y_j = Y \hspace{1cm} \sum_{i=1}^{m} W_i = W\]
+by the definition of specialization.
+
+Assume that $Mv = \rho v$ where $\rho$ is the spectral radius of $M$. Since specialization preserves spectrum, we know that there exists $u \neq 0$ such that $\hat{M}u = \rho u$. Write $v = \begin{bmatrix}
+v_b \\ v_z
+\end{bmatrix}$ so that 
+
+\[Mv = \begin{bmatrix} U & W \\ Y & Z \\ \end{bmatrix} \begin{bmatrix} v_b \\ v_z \end{bmatrix}
+=
+\begin{bmatrix}Uv_b + Wv_z \\ Yv_b + Zv_z \end{bmatrix}
+= 
+\begin{bmatrix}\rho v_b \\ \rho v_z \end{bmatrix}
+\]
+and \begin{equation}
+\rho v_b = Uv_b + Wv_z
+\end{equation}
+\begin{equation}
+\rho v_z = Yv_b + Zv_z 
+\end{equation}
+
+Write \[ 
+u = 
+\begin{bmatrix}u_b & 
+\begin{bmatrix} u_{w_1,y_1} & u_{w_1,y_2} & \cdots & u_{w_1,y_k}   \end{bmatrix} &
+\cdots &
+\begin{bmatrix} u_{w_m,y_1} & u_{w_m,y_2} & \cdots &  u_{w_m,y_k}   \end{bmatrix}
+\end{bmatrix}^T
+\]
+so that 
+\[
+\hat{M}u = 
+\begin{bmatrix}
+	U & \begin{bmatrix}W_1\cdots W_1 \end{bmatrix} & \cdots & \begin{bmatrix}W_m\cdots W_m \end{bmatrix} \\
+
+	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
+	
+	\vdots & & \ddots & \\
+	
+	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & & & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
+	
+\end{bmatrix}
+ \begin{bmatrix}u_b \\
+\begin{bmatrix} u_{w_1,y_1} \\ \vdots \\ u_{w_1,y_k}   \end{bmatrix} \\
+\vdots \\
+\begin{bmatrix} u_{w_m,y_1}  \\ \vdots \\ u_{w_m,y_k}   \end{bmatrix}
+\end{bmatrix}^T
+=
+ \begin{bmatrix}\rho u_b \\
+\begin{bmatrix} \rho u_{w_1,y_1} \\ \vdots \\ \rho u_{w_1,y_k}   \end{bmatrix} \\
+\vdots \\
+\begin{bmatrix} \rho u_{w_m,y_1}  \\ \vdots \\ \rho u_{w_m,y_k}   \end{bmatrix}
+\end{bmatrix}^T
+\]
+
+producing the equations:
+\begin{equation}
+\rho u_b = Uu_b +\sum_{i=1}^{m}\sum_{j=1}^{k}W_iu_{w_i,y_j}
+\end{equation}
+
+\begin{equation}
+\rho u_{w_i,y_j} = Y_ju_b +Zu_{w_i,y_j}
+\end{equation}
+
+Summing (4) over $j$ produces
+\[
+\rho \sum_{j=1}^{k} u_{w_i,y_j}
+=
+\sum_{j=1}^{k} (Y_ju_b +Zu_{w_i,y_j})
+= \sum_{j=1}^{k} Y_ju_b + Z \sum_{j=1}^{k} u_{w_i,y_j}
+\]
+\[
+\rho( \sum_{j=1}^{k} u_{w_i,y_j} )
+= Yu_b + Z(\sum_{j=1}^{k} u_{w_i,y_j})
+\]
+Subtracting (2) from this produces
+\[
+\rho( \sum_{j=1}^{k} u_{w_i,y_j} - v_z)
+= Z(\sum_{j=1}^{k} u_{w_i,y_j} - v_z)
+\]
+Then $\sum_{j=1}^{k} u_{w_i,y_j} - v_z = 0 $ because $\rho$ is not an eigenvalue of $Z$. (The spectral radius of a subgraph is strictly smaller than the spectral radius of the graph.)
+Thus $\sum_{j=1}^{k} u_{w_i,y_j} = v_z$. This means that the sum of the vectors in each sub-bracket of $u$ is equal to the eigenvector centrality of the nodes in Z in the original graph.
+
+Next we consider equation (3).
+\[
+\rho u_b 
+= Uu_b +\sum_{i=1}^{m}\sum_{j=1}^{k}W_iu_{w_i,y_j}
+= Uu_b +\sum_{i=1}^{m}W_i\sum_{j=1}^{k}u_{w_i,y_j}
+= Uu_b +(\sum_{i=1}^{m}W_i)v_z
+= Uu_b + Wv_z
+\]
+subtracting (1) from this gives
+\[
+\rho (u_b-v_b) = U(u_b-v_b)
+\]
+implying that $u_b = v_b$. Then the eigenvector for the base set remains the same.
+
+To solve for each $u_{w_i,y_j}$ explicitly using $v_b$ of  we use equation (4).
+\[
+\rho u_{w_i,y_j} = Y_ju_b +Zu_{w_i,y_j}
+\]
+\[
+(\rho I - Z)u_{w_i,y_j} = Y_jv_b 
+\]
+\[
+u_{w_i,y_j} =(\rho I - Z)^{-1} Y_jv_b 
+\]
+The matrix $(\rho I - Z)^{-1}$ is invertible since $\rho$ is not an eigenvalue of $Z$.
+
+Specialization in this manner produces $km$ copies of $Z$. For a particular node in $Z$ one might be interested in how it's centrality in $G$ relates to the centrality of it's copies in $\mathcal{S}(G)$. Each $u_{w_i,y_j}$ represents the centralities of the nodes in a particular copy of $Z$. Thus, the sum, 
+\[
+\sum_{i=1}^{m}\sum_{j=1}^{k}u_{w_i,y_j} = mv_z
+\]
+tells us the the sum of the centrality of the copies is $m$ times the centrality of the node in the original graph where $m$ is the number of entries in $W$ and is therefore  the out degree of $Z$.
+
+Finally by equation (4) for any $u_{w_i,y_j}, u_{w_s,y_j}$ with $i \neq s$ we have,
+\[
+\rho u_{w_i,y_j} = Y_ju_b +Zu_{w_i,y_j}
+\]
+\[
+\rho u_{w_s,y_j} = Y_ju_b +Zu_{w_s,y_j}
+\]
+Subtracting these two equations gives,
+\[
+\rho (u_{w_i,y_j} - u_{w_s,y_j}) = Z(u_{w_i,y_j}-u_{w_s,y_j})
+\]
+Implying that,
+$u_{w_i,y_j} = u_{w_s,y_j}$
+because $\rho$ is not an eigenvalue of $Z$. Thus, each $u_{w_i,y_j}$ depends only on $j$.
+
+\end{document}
