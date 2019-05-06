@@ -18,17 +18,17 @@ class DirectedGraph:
     A class that creates a directed graph, mainly to be used to specialize a graph
 
     Attributes:
-        A (Square, ndarray): the adjecency matrix of a directed graph
+        A (Square, ndarray): the adjecency matrix of a directed graph where A(i,j) is node i receiving from node j
         n (int): the number of nodes in the graph
         labels (list(str)): list of labels assigned to the nodes of the graph
         labeler (dict(int, str)): maps indices to labels
         indexer (dict(str, int)): maps labels to indices
     '''
-    def __init__(self, A, labels=None):
+    def __init__(self, A, dynamics, labels=None):
         '''
         Parameters: 
             A ((n,n) ndarray): The asjecency matrix to a directed graph where
-                A[i,j] is the weight from node i to node j
+                A[i,j] is node i receiving from node j
             Labels (list(str)): labels for the nodes of the graph, defaults to 0 indexing
         '''
         n,m = A.shape
@@ -45,9 +45,69 @@ class DirectedGraph:
 
         self.A = A
         self.n = n
+        self.f = dynamics
         self.indices = np.arange(n)
         self.labeler = dict(zip(np.arange(n), labels))
         self.indexer = dict(zip(labels, np.arange(n)))
+        self.original_indexer = self.indexer.copy()
+    
+    def set_dynamics(self):
+        """
+        Using a matrix valued function, set the dynamics of the network
+
+        Parameters:
+            f (nxn matrix valued function): this discribes the independent influence the jth node has on the ith node
+                it will use the format for the position i,j in the matrix, node i receives from node j
+        """
+        a,f,c = self.f
+        F = np.array([None]*self.n)
+        for i in range(self.n):
+            o_i = self.origination(i)
+            F[i] = lambda x: np.sum([self.A[i,j] * f[o_i,self.origination(j)](x[j]) for j in range(self.n)])
+
+        return lambda x: [a[self.origination(k)]*x[k] + F[k](x) + c[self.origination(k)] for k in range(self.n)]
+
+    def origination(self, i):
+        """
+        Returns the original index, associated with the matrix valued dynamics function, of a given node index
+
+        Parameters:
+            i (int): the current index of a given node in self.A
+        Returns:
+            o_i (int): the original index of i
+        """
+        label = self.labeler[i]
+        temp_ind = label.find('.')
+        if temp_ind != -1:
+            label = label[:temp_ind]
+        return self.original_indexer[label]
+
+    
+    def iterate(self, iters, initial_condition, graph=False):
+        """
+        Model the dynamics on the network for iters timesteps given an intial condition
+
+        Parameters
+            iters (int): number of timsteps to be simulated
+            initial_condition (ndarray): initial conditions of the nodes
+            graph (bool): will graph states of nodes over time if True
+        Returns:
+            x (ndarray): the states of each node at every time step
+        """
+        F = self.set_dynamics()
+        x = [initial_condition]
+        for _ in range(iters):
+            x.append(F(x[-1]))
+        
+        x = np.array(x)
+        if graph:
+            domain = np.arange(iters+1)
+            for i in range(self.n):
+                plt.plot(domain, x[:,i])
+            plt.show()
+        
+        return x
+
     
     def specialize_graph(self, base, verbose=False):
         """
@@ -66,10 +126,8 @@ class DirectedGraph:
                 raise ValueError('base set must be either a list of labels or a list of indices')
         if type(base) != list:
             base = list(base)
-        # base = np.array(base)
-        # if np.any(base > self.n):
-        #     raise ValueError('Index out of range')
-        # base = list(base)
+        if len(base) > self.n:
+            raise ValueError('base list is too long')
 
         base_size = len(base)
         # permute the matrix so the base set comes first
