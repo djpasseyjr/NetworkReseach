@@ -49,22 +49,29 @@ class DirectedGraph:
         self.indices = np.arange(n)
         self.labeler = dict(zip(np.arange(n), labels))
         self.indexer = dict(zip(labels, np.arange(n)))
+        # we use the original indexer when we look at dynamics on the network
+        # this dict doesn't change under specialization
         self.original_indexer = self.indexer.copy()
     
     def set_dynamics(self):
         """
         Using a matrix valued function, set the dynamics of the network
 
-        Parameters:
+        Implicit Parameters:
             f (nxn matrix valued function): this discribes the independent influence the jth node has on the ith node
                 it will use the format for the position i,j in the matrix, node i receives from node j
+        Returns:
+            F (n-dimensional vector valued function): this is a vector valued function that takes in an ndarray of
+                node states and returns the states of the nodes at the next time step
         """
+        # here we unpack the different parts of the dynamic function
         a,f,c = self.f
         F = np.array([None]*self.n)
         for i in range(self.n):
             o_i = self.origination(i)
+            # for each node we create a component function that works much like matrix multiplication
             F[i] = lambda x: np.sum([self.A[i,j] * f[o_i,self.origination(j)](x[j]) for j in range(self.n)])
-
+        # we return a vector valued function that can be used for simple iteration
         return lambda x: [a[self.origination(k)]*x[k] + F[k](x) + c[self.origination(k)] for k in range(self.n)]
 
     def origination(self, i):
@@ -77,7 +84,9 @@ class DirectedGraph:
             o_i (int): the original index of i
         """
         label = self.labeler[i]
+        # find the first entry in the node's label
         temp_ind = label.find('.')
+        # if it is not the original label we use temp_ind
         if temp_ind != -1:
             label = label[:temp_ind]
         return self.original_indexer[label]
@@ -94,16 +103,24 @@ class DirectedGraph:
         Returns:
             x (ndarray): the states of each node at every time step
         """
+        # grab the iterative funciton
         F = self.set_dynamics()
+        # initialize an array with the initial condition
         x = [initial_condition]
         for _ in range(iters):
+            # we pass into the function F the last value of our nodes
             x.append(F(x[-1]))
         
         x = np.array(x)
+        
         if graph:
             domain = np.arange(iters+1)
             for i in range(self.n):
-                plt.plot(domain, x[:,i])
+                plt.plot(domain, x[:,i], label=self.labeler[i], lw=2)
+            plt.xlabel('Time')
+            plt.ylabel('Node Value')
+            plt.title('Network Dynamics')
+            plt.legend()
             plt.show()
         
         return x
