@@ -1,0 +1,1533 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Trim Size : 11in x 8.5in
+%% Text Area : 9.6in (include Runningheads) x 7in
+%% ws-ijbc.tex, 24 Jan 2010
+%% Tex file to use with ws-ijbc.cls written in Latex2E.
+%% The content, structure, format and layout of this style file is the
+%% property of World Scientific Publishing Co. Pte. Ltd.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+
+%\documentclass[draft]{ws-ijbc}
+\documentclass{ws-ijbc}
+\usepackage{ws-rotating}     % used only when sideways tables/figures are used
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{overpic}
+\usepackage{color}
+
+\begin{document}
+
+\catchline{}{}{}{}{} % Publisher's Area please ignore
+
+\markboth{Bunimovich, Passey, Smith, and Webb}{Spectral and Dynamic Consequences of Network Specialization}
+
+\title{Spectral and Dynamic Consequences of Network Specialization}
+
+\author{Leonid Bunimovich}
+\address{School of Mathematics, Georgia Institute of Technology, 686 Cherry Street\\
+Atlanta, GA 30332, USA\\
+bunimovich@math.gatech.edu}
+
+\author{DJ Passey}
+\address{Department of Mathematics, Brigham Young University, TMCB 274\\
+Provo, UT 84602, USA\\
+djpasseyjr@gmail.com}
+
+\author{Dallas Smith}
+\address{Department of Mathematics, Brigham Young University, TMCB 274\\
+Provo, UT 84602, USA\\
+dallas.smith@mathematics.byu.edu}
+
+\author{Benjamin Webb}
+\address{Department of Mathematics, Brigham Young University, TMCB 274\\
+Provo, UT 84602, USA\\
+bwebb@mathematics.byu.edu}
+
+\maketitle
+
+\begin{history}
+\received{(to be inserted by publisher)}
+\end{history}
+
+\begin{abstract}
+One of the hallmarks of real networks is their ability to perform increasingly complex tasks as their topology evolves. To explain this, it has been observed that as a network grows certain subsets of the network begin to specialize the function(s) they perform. A recent model of network growth based on this notion of specialization has been able to reproduce some of the most well-known topological features found in real-world networks including right-skewed degree distributions, the small world property, and a modular and hierarchical topology, etc. Here we describe how specialization under this model also effects the spectral properties of a network. This allows us to give conditions under which a network is able to maintain its dynamics as its topology evolves. Specifically, we show that if a network is intrinsically stable, which is a stronger version of the standard notion of global stability, then the network maintains its dynamics as the network evolves. This is one of the first steps toward unifying the rigorous study of the two types of dynamics exhibited by networks. These are the \emph{dynamics of} a network, which is the study of the topological evolution of the network's structure, modeled here by the process of network specialization, and the \emph{dynamics on} a network, which is the changing state of the network elements, where the type of dynamics we consider is global stability. The main examples we apply our results to are recurrent neural networks, which are the basis of certain types of machine learning algorithms.
+\end{abstract}
+
+\keywords{networks, specialization, spectral properties, intrinsic stability, recurrent neural networks}
+
+%\begin{multicols}{2}
+\section{Introduction}
+Networks studied in the biological, social and technological sciences perform various tasks. How well these tasks are carried out depends both on the network’s \emph{topology}, i.e. the network's structure of interactions, as well as the dynamics of the network elements. For instance, in the biological setting neuronal networks are responsible for complicated processes related to cognition and memory, which are based on the network’s structure of connections as well as the electrical dynamics of the network neurons \cite{BS09}. The performance of social networks such as Facebook and Twitter depend on the social interactions between individuals and on the local/global structure of established relationships. The performance of technological networks such as the internet is based both on the topology of network links, e.g. connections between routers, and the router’s ability to manage requests.
+
+A major goal of network science is to understand how a network's \emph{topology} and the dynamics of the network's elements effects the network's ability to carry out its function. This goal is complicated by the fact that not only are the network's elements \emph{dynamic}, i.e. have a state that changes over time, but the network's topology also evolves over time. That is, most real-world network in dynamic in two distinct ways.
+
+The changing state of the network elements is referred to as the \emph{dynamics on} the network. For instance, on the World Wide Web, the dynamics on the network consists of internet traffic, or how many individuals navigate between different web page over time. In a neural network the electrical behavior of the individual neurons is the dynamics on the network. In a distribution network of warehouses and delivery routes, the way in which inventory levels at each warehouse change over time describes the \emph{dynamics on} the network.
+
+In contrast, the structural evolution of a network's topology is referred as the \emph{dynamics of} the network. In a transportation network the topology of the network evolves as new roads are built to increase the number of routes between destinations. In the World Wide Web new links between web pages are added for similar reasons as are new warehouses and delivery routes in distribution networks. In other networks such as social networks the network topology evolves as individuals form new relations, etc.
+
+In most real networks there is an interplay between the \emph{dynamics on} the network and the \emph{dynamics of} the network. For instance, in transportation, technological, and information networks new routes are added in response to areas of high traffic, e.g. the addition of new road in transportation systems, new routers to the internet, new web pages to the World Wide Web, etc. These new routes in turn create new traffic patterns that lead to different areas of high traffic and the creation of new routes.
+
+Determining how these two types of dynamics influence each other is an especially difficult problem. In fact, most studies consider either \emph{dynamics on} the network or \emph{dynamics of} the network but not the interplay of the two \cite{Newman2006}. There are some exceptions. For instance, the area of adaptive networks combines both the dynamics on the network with the dynamical adaptive changes of the network's topology \cite{GS09}. However, to the best of the authors knowledge, results in this area are strictly numerical and little if anything is rigourously known. A major goal of this paper is to take steps towards unifying the specifically rigorous analysis of the \emph{dynamics on} and \emph{of} networks.
+
+A complication to achieving this objective is that there are many network growth models describing the dynamics of a network and many models describing the dynamics of a network. The most well-known of the network growth models is the Barabasi and Albert model \cite{BA99} and its predecessor the Price model \cite{Price76}, in which elements are added one by one to a network and are preferentially attached to vertices with high degree or some variant of this process \cite{Bara00,Doro00,Krap01}. Other standard models include \emph{vertex copying models} in which a new element is added to a network by choosing another network element uniformly at random and connecting the new element to this element's neighbors \cite{Klein99,Sole02,Vaz03}. The third type of network growth models are \emph{network optimization models} where the topology of the network is evolved to minimize some global constraint, e.g. operating costs vs. travel times in a transportation network \cite{Ferrer03,Gastner06}.
+
+These models are devised to create networks that exhibit some of the most widely observed features found in real networks. This includes right-skewed degree distributions, high \emph{clustering coefficients}, the \emph{small-world property}, etc. (see \cite{Newman10} for more details on these properties). Although these model are successful in a number of ways, currently, little is known regarding how the \emph{dynamics on} a network is effected by the growth described in these models. Similarly, relatively little is known regarding how these models effect the spectral properties of networks. This is of interest as a network's eigenvalues and eigenvectors are used in defining network centralities, community detection algorithms, and determining network dynamics \cite{Newman10}.
+
+One of the hallmarks of real networks is that as their topology evolves so does their ability to perform increasingly complex versions of their function. This happens, for instance, in neural networks, which become more modular in structure as individual parts of the brain become increasingly specialized in function \cite{Sporns13}. Similarly, gene regulatory networks can specialize the activity of existing genes to create new patterns of gene behavior \cite{Esp10}. In technological networks such as the internet, this differentiation of function is also observed and is driven by the need to handle and more efficiently process an increasing amount of information.
+
+Previously, in \cite{BSW18} the authors introduced the \emph{specialization model} of network growth built on this notion of specialization. This model is based on the idea that as a network specializes the function of one or more of its \emph{components}, i.e. some subnetwork that performs a specific function, a number of copies of this component are created that are linked to the network in a way similar to the original component. These new copies ``specialize" the function of the original component in that they carry out only those functions requiring these links (cf. Figure \ref{Fig:1} and \ref{Fig:2}). Repeated application of this specialization process results in networks with a highly modular \cite{Milo02,Newman2006}, hierarchical \cite{Clauset08,Leskovec2008}, as well as sparse topology \cite{N03,HG08} each of which is a defining feature of real networks, which are not captured by previous models (see \cite{BSW18} for more details).
+
+In contrast to studying the topological features produced by this model, in this paper we consider how specialization effects the spectral properties of a network. This is done by using, an in particular extending, the theory of isospectral network transformations \cite{BW12,BWBook}, which describes how certain changes in a network's structure effect the network's \emph{spectrum}, i.e. the eigenvalues associated with the network's weighted or unweighted adjacency matrix. We show that if a network is specialized then the spectrum of the resulting network is that of the original network together with the eigenvalues of the specialized components (see Section \ref{sec3} Theorem \ref{thm1}). Additionally, using the theory of isospectral transformations we show how the eigenvectors of a network are effected by specialization and specifically its effect on eigenvector centrality (see Section \ref{sec3} Theorem \ref{prop:0})
+
+As a network's dynamics can be related to the network's spectrum we can in certain cases determine how specialization of a network will effect the \emph{dynamics on} the network. The type of dynamics we consider here is stability, which is an important property in a number of systems including neural networks \cite{Cao2003,Cheng2006,SChena2009,MCohen1983,LTao2011}, network epidemic models \cite{Wang2008}, and in the study of congestion on computer networks \cite{Alpcan2005}. The main example(s) we consider here and apply our results to are recurrent neural networks, which model the electrical activity in the brain which the basis of certain algorithms in machine learning \cite{Sch2015}.
+
+In a \emph{stable} dynamical network the network always evolves to the same unique state irrespective of the network's initial state. We show that if a dynamical network is \emph{intrinsically stable}, which is a stronger form of a standard notion of stability (see Definition \ref{def:intrinsic} or \cite{BW13} for more details), then any specialized version of this network will also be intrinsically stable (see Section \ref{sec4}, Theorem \ref{thm:evostability}). Hence, network growth via specialization will not destabilize the network's dynamics if the network has this stronger version of stability. This is potentially useful in many real-world applications since network growth can have a destabilizing effect on a network. For instance, a well-known example of this phenomena is cancer, which is the abnormal growth of cells that can impair the function and ultimately lead to the failure of the system.
+
+Although networks exhibit many other types of dynamics including multistability, periodicity, and synchronization the reason we study stability is because of its simplicity and use it as a first step towards rigourously understanding the interplay of network dynamics and network growth. Importantly, our results suggest that if a network's growth is due to specialization and the network has a ``strong" form of dynamics, e.g. intrinsic stability, the network can maintain its dynamics as its structure evolves. It is worth noting that the ability to maintain dynamics during periods of growth is an important feature found in real networks, e.g. the cellular network of a beating heart maintain's its periodic beating as an adolescent heart grows into an adult heart.
+
+This paper is organized as follows. In Section \ref{sec2} we describe the specialization model of network growth. In Section \ref{sec3} we give our main results regarding the spectral properties of specialized networks, which describe the effect of a specialization on the eigenvalues and eigenvectors associated with a network or graph. In Section \ref{sec4} we adapt the method of graph specializations to evolve the structure of a general class of dynamical systems used to model network dynamics, which include recurrent neural networks. We show that if such dynamical systems, which we refer to as dynamical networks, are intrinsically stable then any specialized version of the network is also intrinsically stable. Section \ref{sec5} discusses a number of variants of the specialization method introduced in \cite{BSW18} and described in Section \ref{sec2} as well as their spectral and dynamic consequences to a network. The last section, Section \ref{conc} contains some concluding remarks. Proofs of the paper's main results together with the necessary parts of the theory of isospectral network transformations are placed in the paper's Appendix.
+
+\section{The Specialization Process}\label{sec2}
+
+The \emph{topology} of a network, which is the network's structure of interactions, is most often represented by a graph. A \emph{graph} $G=(V,E,\omega)$ is composed of a \emph{vertex set} $V$, an \emph{edge set} $E$, and a function $\omega$ used to weight the edges of the graph. The vertex set $V$ represents the \emph{elements} of the network, while the edges $E$ represent the links or \emph{interactions} between these network elements. The weights of the edges, given by $\omega$, give some measure of the \emph{strength} of these interactions. Here we consider weights that are real numbers, which account for the vast majority of weights used in network analysis \cite{Newman10}.
+
+For the graph $G=(V,E,\omega)$ we let $V=\{v_1,\dots,v_n\}$, where $v_i$ represents the $i$th network element. An edge between vertices $v_i$ and $v_j$ can be either directed or undirected depending on the particular network. In the undirected case in which an interaction is reciprocal, e.g. a \emph{friendship} in a social network, one can consider an undirected edge to be two directed edges: one edge pointing from the first to the second element, the other pointing from the second to the first element. We can, therefore, consider any graph to be a directed graph. For a graph $G=(V,E,\omega)$ we let $e_{ij}$ denote the directed edge that begins at $v_i$ and ends at $v_j$. In terms of the network, the edge $e_{ij}$ belongs to the edge set $E$ if the $i$th network element has some direct influence or is linked to the $j$th network element in some way.
+
+The edges $E$ of a graph can also either be \emph{weighted} or \emph{unweighted}. If the edges of a graph $G$ are unweighted we write $G=(V,E)$. However, any unweighted graph can be considered weighted by giving each edge unit weight. The class of graphs we consider without any loss in generality in this paper are weighted directed graphs. To motivate the specialization model introduced in \cite{BSW18} of a graph $G$ representing some network we consider the following example of disambiguation in a Wikipedia network, a subset of the World Wide Web.
+
+\begin{figure}
+  \begin{overpic}[scale=.24]{SpecFig1.pdf}
+
+    \put(10,-1.5){Undifferentiated Mercury Page}
+
+    \put(18.5,28){\small{\emph{Mercury}}}
+    \put(20,26){\small{\emph{Page}}}
+    \put(43,38){\small{\emph{Mythology}}}
+    \put(43,36){\small{\emph{Pages}}}
+    \put(43,23){\small{\emph{Planet}}}
+    \put(43,21){\small{\emph{Pages}}}
+    \put(43,7){\small{\emph{Element}}}
+    \put(43,5){\small{\emph{Pages}}}
+
+    \put(65,-1.5){Disambiguated Mercury Pages}
+
+    \put(74.5,42.5){\small{\emph{Mercury}}}
+    \put(73,40.5){\small{\emph{(Mythology)}}}
+    \put(74.5,28){\small{\emph{Mercury}}}
+    \put(73.75,26){\small{\emph{(Element)}}}
+    \put(74.5,12.5){\small{\emph{Mercury}}}
+    \put(74.75,10.5){\small{\emph{(Planet)}}}
+
+    \put(99,38){\small{\emph{Mythology}}}
+    \put(99,36){\small{\emph{Pages}}}
+    \put(99,23){\small{\emph{Planet}}}
+    \put(99,21){\small{\emph{Pages}}}
+    \put(99,7){\small{\emph{Element}}}
+    \put(99,5){\small{\emph{Pages}}}
+    \end{overpic}
+    \vspace{0.25cm}
+  \caption{Disambiguation of the Wikipedia page on ‘Mercury’ into three distinct webpages, which are respectively Mercury the mythological figure, Mercury the planet and mercury the element. The colors red, green, and blue represent web pages that are respectively mythology, planets, and elements pages.}\label{Fig:1}
+\end{figure}
+
+\begin{example}
+\textbf{(Wikipedia Disambiguation)} The website Wikipedia is a collection of webpages consisting of articles that are linked by topic. The website evolves as new articles are either added, linked, and/or modified within the existing website. One of the ways articles are modified is via the process of disambiguation. That is, if an article’s content is deemed to refer to a number of distinct topics then the article can be \emph{disambiguated} by separating the article into a number of new articles, each on a more specific or specialized topic than the original.
+
+Wikipedia’s own page on disambiguation gives the example that the word ``Mercury" can refer to either Mercury the mythological figure, Mercury the planet, or mercury the element \cite{Wiki17}. To emphasize these differences, the Wikipedia page on Mercury has since been disambiguated into three pages; one for each of these subcategories. Users arriving at the Wikipedia ‘Mercury’ page \cite{Merc17} from some related web page are redirected to these pages. The result of this disambiguation is shown in Figure \ref{Fig:1}. In the original undifferentiated Mercury page users arriving from other pages could presumably find links to other ‘mythology’, ‘planet’ and ‘element’ pages (see Figure \ref{Fig:1}, left). After the page was disambiguated users were linked to only those relevant to the particular ‘Mercury’, e.g. mythology, planet, or element (see Figure \ref{Fig:1}, right). In terms of the topology of the network, this disambiguation results in the creation of a number of new ``Mercury" pages each of which is linked to a subset of pages that were linked to the original ‘Mercury’ page.
+\end{example}
+
+In this example growth via disambiguation is a result of the number of new ‘copies’ of the original webpage. However, what is important to the functionality of the new specialized network is that the way in which these new copies are linked to the unaltered pages reflects the topology of the original network. In the specialization model the way in which we link these new components is by separating out the paths and cycles on which these components lie, in a way that mimics the original network structure.
+
+To describe the model of network specialization we consider in this paper and its consequences we first need to describe the paths and cycles of a graph. A \emph{path}\index{path} $P$ in the graph $G=(V,E,\omega)$ is an ordered sequence of distinct vertices $P=v_1,\dots,v_m$ in $V$ such that $e_{i,i+1}\in E$ for $i=1,\dots,m-1$. If the first and last vertices $v_1$ and $v_m$ are the same then $P$ is a \emph{cycle}\index{cycle}. If it is the case that a cycle contains a single vertex then we call this cycle a \emph{loop}\index{loop}.
+
+Another fundamental concept that is needed is the notion of a strongly connected component. A graph $G=(V,E,\omega)$ is \emph{strongly connected} if for any pair of vertices $v_i,v_j\in V$ there is a path from $v_i$ to $v_j$ or, in the trivial case, $G$ consists of a single vertex. A \emph{strongly connected component} of a graph $G$ is a subgraph that is strongly connected and is maximal with respect to this property.
+
+Because we are concerned with evolving the topology of a network in ways that preserve, at least locally, the network's topology we will also require the notion of a graph restriction. For a graph $G=(V,E,\omega)$ and a subset $B\subseteq V$ we let $G|_{B}$ denote the \emph{restriction} of the graph $G$ to the vertex set $B$, which is the subgraph of $G$ on the vertex set $B$ along with any edges of the graph $G$ between the vertices in $B$. We let $\bar{B}$ denote the \emph{complement} of $B$, so that the restriction $G|_{\bar{B}}$ is the graph restricted to the complement of vertices in $B$.
+
+{The key to specializing the structure of a graph is to look at the strongly connected components of the restricted graph $G|_{\bar{B}}$. If $C_1,\dots,C_m$ denote these strongly connected components then we need the collection of paths or cycles of these components, which we refer to as \emph{components branches}.
+
+\begin{definition}\label{def:componentbranch} \textbf{(Component Branches)}
+For a graph $G=(V,E,\omega)$ and vertex set $B\subseteq V$ let $C_1,\dots,C_m$ be the strongly connected components of $G|_{\bar{B}}$. If there are edges $e_0,e_1,\dots,e_m\in E$ and vertices $v_i,v_j\in B$ such that\\
+\indent (i) $e_k$ is an edge from a vertex in $C_k$ to a vertex in $C_{k+1}$ for $k=1,\dots,m-1$;\\
+\indent (ii) $e_0$ is an edge from $v_i$ to a vertex in $C_1$; and\\
+\indent (iii) $e_m$ is an edge from a vertex in $C_m$ to $v_j$, then we call the ordered set
+\[
+\beta=\{v_i,e_{0},C_1,e_{1},C_2,\dots,C_m,e_{m},v_{j}\}
+\]
+a \emph{path of components} in $G$ with respect to $B$. If $v_i=v_j$ then $\beta$ is a \emph{cycle of components}. We call the collection $\mathcal{B}_B(G)$ of these paths and cycles the \emph{component branches} of $G$ with respect to the base set of vertices $B$.
+\end{definition}
+
+The sequence of components $C_1,\dots,C_m$ in this definition can be empty in which case $m=0$ and $\beta$ is the path $\beta=\{v_i,v_j\}$ or loop if $v_i=v_j$. It is worth emphasizing that each branch $\beta\in\mathcal{B}_B(G)$ is a subgraph of $G$. Consequently, the edges of $\beta$ inherit the weights they had in $G$ if $G$ is weighted. If $G$ is unweighted then its component branches are likewise unweighted.
+
+Once a graph has been decomposed into its various branches we construct the specialized version of the graph by merging these branches as follows.
+
+\begin{definition} \textbf{(Graph Specialization)}\label{def:exp}
+Suppose $G=(V,E,\omega)$ and $B\subseteq V$. Let $\mathcal{S}_B(G)$ be the graph which consists of the component branches $\mathcal{B}_{B}(G)=\{\beta_1,\dots,\beta_{\ell}\}$ in which we \emph{merge}, i.e. identify, each vertex $v_i\in B$ in any branch $\beta_j$ with the same vertex $v_i$ in any other branch $\beta_k$. We refer to the graph  $\mathcal{S}_B(G)$ as the \emph{specialization} of $G$ over the \emph{base} vertex set $B$.
+\end{definition}
+
+A specialization of a graph $G$ over a base vertex set $B$ is a two step process. The first step is the construction of the graph's component branches. The second step is the merging of these components into a single graph. We note that, in a component branch $\beta\in\mathcal{B}_B(G)$ only the first and last vertices of $\beta$ belong to the base $B$. The specialized graph $\mathcal{S}_B(G)$ is therefore the collection of branches $\mathcal{B}_B(G)$ in which we identify an endpoint of two branches if they are the same vertex. This is demonstrated in the following example.
+
+\begin{figure}
+  \begin{overpic}[scale=.33]{SpecFig2.pdf}
+
+    \put(15,5){\emph{Unspecialized Graph} $G$}
+
+    \put(4,9){$B$}
+    \put(18.25,9){$C_1$}
+    \put(31,9){$C_2$}
+    \put(41.5,9){$B$}
+
+    \put(4,20.5){$v_1$}
+    \put(4,12){$v_2$}
+    \put(18.5,20.5){$v_3$}
+    \put(16,12){$v_4$}
+    \put(21,12){$v_5$}
+    \put(28.5,18){$v_6$}
+    \put(33,20.5){$v_7$}
+    \put(33,12){$v_8$}
+    \put(41.5,20.5){$v_1$}
+    \put(41.5,12){$v_2$}
+
+    \put(67,-5){\emph{Specialized Graph} $\mathcal{S}_B(G)$}
+
+    \put(57,9){$B$}
+    \put(71.25,-2){$C_1$}
+    \put(84,-2){$C_2$}
+    \put(94,9){$B$}
+
+    \put(78,28.5){$\beta_1$}
+    \put(78,20.5){$\beta_2$}
+    \put(78,12.25){$\beta_3$}
+    \put(78,4){$\beta_4$}
+    \end{overpic}
+    \vspace{0.5cm}
+  \caption{The unweighted graph $G=(V,E)$ is shown left. The components $C_1$ and $C_2$ of $G$ with respect to the vertex set $B=\{v_1, v_2\}$ are shown right. These components are indicated by the dashed boxes, which are the strongly connected components of the restricted graph $G|_B$.}\label{Fig:2}
+\end{figure}
+
+\begin{example}\label{ex:2} \textbf{(Constructing Graph Specializations)}
+Consider the \emph{unweighted} graph $G=(V,E)$ shown in Figure \ref{Fig:2} (left). For the base vertex set $B=\{v_1,v_2\}$, which are shown in red in the figure once on the left and once on the right, the specialization $\mathcal{S}_B(G)$ is constructed as follows.\\
+
+\noindent\emph{Step 1:} \emph{Construct the branch components of $G$ with respect to $B$.} The graph $G|_{\bar{B}}$ has the strongly connected components $C_1=G|_{\{v_3,v_4,v_5\}}$ and $C_2=G|_{\{v_6,v_7,v_8\}}$, which are the green and blue vertices in Figure \ref{Fig:2} (right), respectively. The set $\mathcal{B}_B(G)$ of all paths and cycles of components beginning and ending at vertices in $B$ consists of the component branches
+\begin{align*}
+\beta_1&=\{v_1,e_{13},C_1,e_{56},C_2,e_{71},v_1\} \ \ \ \ \ \ \ \ \ \ \ \ \ \beta_2=\{v_1,e_{13},C_1,e_{56},C_2,e_{82},v_2\}\\
+\beta_3&=\{v_2,e_{23},C_1,e_{56},C_2,e_{71},v_1\} \ \ \ \ \ \ \ \ \ \ \ \ \ \beta_4=\{v_2,e_{23},C_1,e_{56},C_2,e_{82},v_2\};
+\end{align*}
+which can be seen in Figure \ref{Fig:2} (right).\\
+
+\noindent\emph{Step 2:} \emph{Merge the branch components.} By merging each of the vertices $v_1\in B$ in all branches of $\mathcal{B}_B(G)=\{\beta_1,\beta_2,\beta_3,\beta_4\}$ and doing the same for the vertex $v_2\in B$, the result is the graph $\mathcal{S}_B(G)$ shown in Figure \ref{Fig:2} (right), which is the specialization of $G$ over the base vertex subset $B$.
+\end{example}
+
+Essentially, after selecting a base set $B\subseteq V$ from a graph (network), the specialization model creates a new graph (network) consisting of all the component branches $\mathcal{B}_B(G)$, separated out from one another. Thus a copy of each strongly connected components of $G|_{\bar{B}}$ will appear as a copy in the new graph for each component branch which includes it. In this sense the strongly connected components $C_1,\dots,C_m$ are specialized as the network evolves under this process, which is referred to as the specialization model of network growth \cite{BSW18}.
+
+Once a graph has been specialized it can again be specialized by choosing a new base of the specialized graph. In this way a network can be sequentially specialized. As a simple example one can randomly choose a fixed percentage of the graph's vertices at each step (see Figure \ref{Fig:-1}). The result is a graph that has many features consistent with real-world networks. For example, it has a right-skewed degree distribution, is disassociative, has the small world property, is sparse, and its topology is both modular and hierarchical (see Example 3.1 in \cite{BSW18}). As one might expect, the resulting sequence of specializations depends very much on the way in which a base is chosen at each step in the specialization process (cf. Example 3.2 and 3.3 in \cite{BSW18}).
+
+In the following section we consider how the process of specialization effects the spectral properties if the network.
+
+\begin{figure}
+  \begin{overpic}[scale=.25]{HallPicture.pdf}
+
+    \put(8,-1.5){$G_1$}
+    \put(30,-1.5){$G_2$}
+    \put(55,-1.5){$G_3$}
+    \put(85,-1.5){$G_4$}
+
+    \end{overpic}
+    \vspace{0.25cm}
+  \caption{The unweighted graph $G_1$ is sequentially specialized by randomly choosing eighty percent of its vertices to be its base in each step of the this sequence. The resulting networks $G_1$, $G_2$, $G_3$, and $G_4$ have features that are increasingly similar to real world networks (see Example 3.1 in \cite{BSW18}).}\label{Fig:-1}
+\end{figure}
+
+\section{Spectral Properties of Specializations}\label{sec3}
+\textcolor{blue}{To understand how specializing a network's topology effects the network's dynamics and in turn the network's function, we need some notion that relates both structure and dynamics. One of the most fundamental concepts that relates the two is the notion of a network's spectrum \cite{WM10,BW12,BW13}. Moreover, spectral properties are also used in a number of network applications including determining network centralities and network communities \cite{Newman10}. The spectrum of a network can be defined in a number of ways since a number of matrices can be associated with a network. This includes various Laplacian matrices, distance matrices, and adjacency matrices of a graph.}
+
+\textcolor{blue}{The type of matrix we consider here is the weighted adjacency matrix of a graph. The \emph{weighted adjacency matrix} of a graph $G=(V,E,\omega)$ is the matrix $A=\mathcal{A}(G)$ where
+\begin{equation}\label{eq:adj}
+A_{ij}=
+\begin{cases}
+\omega(e_{ij}) \ \ \text{if} \ e_{ij}\in E\\
+0 \hspace{.8cm} \ \text{otherwise}.
+\end{cases}
+\end{equation}
+If $G$ is unweighted then each entry $A_{ij}=\omega(e_{ij})=1$ if $e_{ij}\in E$ and $A_{ij}=0$ otherwise. The \emph{eigenvalues} of the matrix $A\in\mathbb{R}^{n\times n}$ make up the graph's \emph{spectrum}, which we denote by
+\[
+\sigma(G)=\{\lambda\in\mathbb{C}:\det(A-\lambda I)=0\},
+\]
+where we consider $\sigma(G)$ to be a set that includes multiplicities, i.e. a \emph{multiset}. The \emph{spectral radius} of $G$ is the spectral radius of $A=\mathcal{A}(G)$ denoted by
+\[
+\rho(G)=\max\{|\lambda|:\lambda\in\sigma(A)\}.
+\]
+In Section \ref{sec4} we will investigate the connection between the spectrum of a graph $G$ and the dynamics of the network associated with it. For now we assume that to each graph $G$ there is an associated adjacency matrix $A=\mathcal{A}(G)$.}
+
+Because we are concerned with the spectrum of a graph, which is a set that includes multiplicities, the following is important for our discussion. First, the element $\alpha$ of the set $A$ has \emph{multiplicity} $m$ if there are $m$ elements of $A$ equal to $\alpha$. If $\alpha\in A$ with multiplicity $m$ and $\alpha\in B$ with multiplicity $n$ then\\
+\indent (i) the \emph{union} $A\cup B$ is the set in which $\alpha$ has multiplicity $m+n$; and\\
+\indent (ii) the \emph{difference} $A-B$ is the set in which $\alpha$ has multiplicity $m-n$ if $m-n>0$ and where $\alpha\notin A-B$ otherwise.
+
+For ease of notation, if $A$ and $B$ are sets that include multiplicity then we let $B^k=\cup_{i=1}^kB$ for $k\geq 1$. That is, the set $B^k$ is $k$ copies of the set $B$ where we let $B^0=\emptyset$. For $k=-1$ we let $A\cup B^{-1}=A-B$. With this notation in place, the spectrum of a graph $G$ and the spectrum of the specialized graph $\mathcal{S}_B(G)$ are related by the following result.
+
+\begin{theorem}\label{thm1} \textbf{(Spectra of Specialized Graphs)}
+Let $G=(V,E,\omega)$, $B\subseteq V$, and let $C_1,\dots,C_m$ be the strongly connected components of $G|_{\bar{B}}$. Then
+\[
+\sigma\big(\mathcal{S}_B(G)\big)=\sigma(G)\cup\sigma(C_1)^{n_1-1}\cup\sigma(C_2)^{n_2-1}\cup\dots\cup \sigma(C_m)^{n_m-1}
+\]
+where $n_i$ is the number of \textcolor{blue}{copies of the component $C_i$ in $\mathcal{S}_B(G)$}.
+\end{theorem}
+
+\textcolor{blue}{(Possibly give algorithms and complexity for computation of eigenvalues and a potential explanation for the spectrum of real networks.)}
+
+If a network has an evolving structure that can be modeled via a graph specialization, or more naturally a sequence of specializations, then Theorem \ref{thm1} allows us to effectively track the changes in the network's spectrum, resulting from the components $C_1,\dots,C_m$. Specifically, the eigenvalues of the resulting specialized graph $G$ are the eigenvalues of the original unspecialized graph together with the eigenvalues of the new copies of the strongly connected components $C_1,\dots,C_m$ appearing in $\mathcal{S}_B(G)$.
+
+In nearly every network $G=(V,E,\omega)$ edges are considered to have \emph{positive edge weights}, i.e. $\omega:E\rightarrow\mathbb{R}^+$ (see [Newman]). In this situation Theorem \ref{thm1} has the following corollary, which is fundamental to the results regarding network dynamics in Section \ref{sec:4}.
+
+\begin{corollary} \textbf{(Spectral Radius of Specialized Graphs)}
+Suppose $G=(V,E,\omega)$ has positive edge weights. Then for any $B\subseteq V$ the spectral radius $\rho(\mathcal{S}_B(G))=\rho(G)$.
+\end{corollary}\label{cor1}
+
+If a graph has positive weights then its spectral radius is preserved under specialization or any sequence of specializations. The reason the spectral radius is preserved under a sequence of specializations is that by construction the edge weights of a graph are preserved when the graph is specialized (see Definition ??). Hence, if a graph $G$ has positive edge weights then so do any of its specializations or sequential specializations.
+
+We defer the proof of Theorem \ref{thm1} and Corollary \ref{cor1} until the Appendix. For now, we consider an example of Theorem \ref{thm1}.
+
+\begin{example}\label{ex:3}
+The unwieghted graph $G=(V,E)$ in Figure \ref{Fig:2} (left) has eigenvalues
+\[\sigma(G)\approx\{2.188,1.167\pm .544i,-1.262\pm0.238i,-1,-1,0\}.\]
+Note that for $B=\{v_1,v_2\}$ the graph $G|_{\bar{B}}$ has the strongly connected components $C_1$ and $C_2$ with eigenvalues $\sigma(C_1)=\{2,-1,-1\}$ and $\sigma(C_2)=\{\pm\sqrt{2},0\}$. Since each of the branches of $\mathcal{B}_B(G)$ contain $C_1$ and $C_2$ respectively, Theorem \ref{thm1} implies that the specialized graph $\mathcal{S}_B(G)$ has the twenty-six eigenvalues
+\begin{equation}\label{eq:ex2}
+\sigma(\mathcal{S}_B(G))=\sigma(G)\cup\sigma(C_1)^3\cup\sigma(C_2)^3.
+\end{equation}
+Moreover, by inspecting the eigenvalues of $G$, $C_1$, and $C_2$ it follows from Equation \ref{eq:ex2} that $\rho(S_B(G))=\rho(G)=2.188$. This follows from Corollary \ref{cor1} as the graph $G$ has unit edge weights, which are positive.
+\end{example}
+
+Not only are the eigenvalues and spectral radius of a graph $G$ preserved, in a specific way, as the graph is specialized but so are its eigenvectors. An \emph{eigenvector} $\mathbf{v}$ of a graph $G$ corresponding to the eigenvalue $\lambda$ is a vector such that $M(G)\mathbf{v}=\lambda\mathbf{v}$, in which case $(\lambda, \mathbf{v})$ an \emph{eigenpair} of $G$. For a subset $B\subset V$ of the vertices of $G$ then we let $\mathbf{v}_B$ denote the eigenvector $\mathbf{v}$ restricted to those entries indexed by the set $B$. This allows us to state the following theorem.
+
+\begin{theorem}\label{prop:0}\textbf{(Eigenvectors of Specialized Graphs)}
+Let $(\lambda,\mathbf{v})$ be an eigenpair of the graph $G=(V,E,\omega)$. If $B\subseteq V$ and $\lambda\notin\sigma(G|_{\bar{B}})$ then there is an eigenpair $(\lambda,\mathbf{w})$ of the specialized graph $\mathcal{S}_B(G)$ such that $\mathbf{w}_B=\mathbf{v}_B$.
+\end{theorem}
+
+Theorem \ref{prop:0} states that the graphs $G$ and $\mathcal{S}_B(G)$ have the same eigenvectors if we restrict our attention to those entries that correspond to the base vertices $B$ and to those eigenvectors with corresponding eigenvalues in $\sigma(G)-\sigma(G|_{\bar{B}})\subset\sigma(\mathcal{S}_B(G))$. One consequence of this fact is that the eigenvector centrality of the vertices in $B$ remain the same as the graph is specialized.
+
+To define eigenvector centrality note that by the Perron-Frobenius theorem, if the unweighted  graph $G=(V,E)$ is strongly connected then $G$ has a unique eigenvalue $\rho=\rho(G)$, which is strictly larger than any of its other eigenvalues in absolute value. Moreover, $\rho$ is a simple eigenvalue and the eigenvector $\mathbf{p}$ associated with $\rho$ has nonnegative entries. \textcolor{blue}{The vector $\mathbf{p}$, which is unique up to a constant, gives the relative ranking $p_i$ to each vertex $v_i\in V$. This value $p_i$ is referred to as the \emph{eigenvector centrality} of the vertex $v_i$ (see \cite{Newman10} for more details). Here we refer to the vector $\mathbf{p}$ as an \emph{eigencentrality vector} of the graph $G$. A graph specialization of $G$ preserves its vertices' eigenvector centrality in the following way.}
+
+\begin{theorem}\label{prop10}\textbf{(Eigenvector Centrality of Specialized Graphs)}
+Let $G=(V,E)$ be strongly connected with eigencentrality vector $\mathbf{p}$. If $B\subset V$ then $\mathcal{S}_B(G)$ has an eigencentrality vector $\mathbf{q}$ where $\mathbf{p}_B=\mathbf{q}_B$. Hence, the relative eigenvalue centrality of the vertices in the base $B$ is preserved as the graph is specialized.
+\end{theorem}
+
+\begin{figure}
+  \begin{overpic}[scale=.33]{SpecFig2.pdf}
+    \put(15,3){Unspecialized Graph $G$}
+    \put(67,-5){Specialized Graph $\mathcal{S}_B(G)$}
+
+    \put(4,8){$B$}
+    \put(4.25,20.5){\tiny{\textbf{1}}}
+    \put(4.25,11.5){\tiny{\textbf{1}}}
+
+    \put(18.25,8){$C_1$}
+    \put(18.25,20.5){\tiny{\textbf{1.18}}}
+    \put(16,11.5){\tiny{\textbf{1.18}}}
+    \put(20,11.5){\tiny{\textbf{1.41}}}
+
+    \put(31,8){$C_2$}
+    \put(33,20.5){\tiny{\textbf{.78}}}
+    \put(29,14.5){\tiny{\textbf{.71}}}
+    \put(33,11.5){\tiny{\textbf{.78}}}
+
+    \put(41.5,8){$B$}
+    \put(41.75,20.5){\tiny{\textbf{1}}}
+    \put(41.75,11.5){\tiny{\textbf{1}}}
+
+
+    \put(57,8){$B$}
+    \put(57.5,20.5){\tiny{\textbf{1}}}
+    \put(57.5,11.5){\tiny{\textbf{1}}}
+
+    \put(71,-2){$C_1$}
+    \put(73.5,31){\tiny{\textbf{.59}}}
+    \put(69,27.5){\tiny{\textbf{.59}}}
+    \put(74.5,27.5){\tiny{\textbf{.7}}}
+
+    \put(73.5,22.75){\tiny{\textbf{.59}}}
+    \put(69,19.25){\tiny{\textbf{.59}}}
+    \put(74.5,19.25){\tiny{\textbf{.7}}}
+
+    \put(73.5,14.5){\tiny{\textbf{.59}}}
+    \put(69,11){\tiny{\textbf{.59}}}
+    \put(74.5,11){\tiny{\textbf{.7}}}
+
+    \put(73.5,6.25){\tiny{\textbf{.59}}}
+    \put(69,2.75){\tiny{\textbf{.59}}}
+    \put(74.5,2.75){\tiny{\textbf{.7}}}
+
+
+    \put(84,-2){$C_2$}
+    \put(86,29.5){\tiny{\textbf{.62}}}
+    \put(81.5,29.5){\tiny{\textbf{.335}}}
+    \put(86,27.5){\tiny{\textbf{.16}}}
+
+    \put(86,21.25){\tiny{\textbf{.62}}}
+    \put(81.5,21.25){\tiny{\textbf{.335}}}
+    \put(86,19.25){\tiny{\textbf{.16}}}
+
+    \put(86,13){\tiny{\textbf{.62}}}
+    \put(81.5,13){\tiny{\textbf{.335}}}
+    \put(86,11){\tiny{\textbf{.16}}}
+
+    \put(86,4.75){\tiny{\textbf{.62}}}
+    \put(81.5,4.75){\tiny{\textbf{.335}}}
+    \put(86,2.75){\tiny{\textbf{.16}}}
+
+    \put(94,8){$B$}
+    \put(94.5,20.5){\tiny{\textbf{1}}}
+    \put(94.5,11.5){\tiny{\textbf{1}}}
+
+    \end{overpic}
+    \vspace{0.5cm}
+  \caption{(This figure needs to be modified to show the forward and backward branch paths.)}\label{Fig:3}
+\end{figure}
+
+\begin{example}
+(Example about eigenvectors for the running example.)
+\end{example}
+
+The graph $G$ in Figure \ref{fig1} (left) and its specialization $\mathcal{S}_B(G)$ in Figure \ref{fig2} (right) have eigencentrality vectors $\mathbf{p}\in\mathbb{R}^7$ and $\mathbf{q}\in\mathbb{R}^{17}$, which correspond to the spectral radius $\rho\approx1.38$ of both graphs. Since $G$ is strongly connected it follows from Theorem \ref{prop10} that $\mathbf{p}_B=\mathbf{q}_B\approx\{1.27,1\}$. That is, the vertices $v_1$ and $v_4$ of $B$ have the same relative eigenvalue centrality in $G$ and in $S_B(G)$.
+
+As with the proof of Theorem \ref{thm1} the proofs of Proposition \ref{prop:0} and Theorem \ref{prop10} are given in the Appendix. These proofs rely on a number of results from the theory of isospectral graph reductions found in \cite{BW12,BWBook}, which can also be found in the Appendix.
+
+\section{Network Growth, Dynamics, and Function}\label{sec4}
+Sections \ref{sec2} and \ref{sec3} of this paper are primarily concerned with the \emph{dynamics of} a network, i.e. the temporal evolution of the network's structure of interactions, and the spectral consequences of this evolution. This evolution also effects the network's ability to perform its intended function. This function is not only dependent on the network's topology but also on the type of dynamics that emerges from the interactions between the network elements, i.e. the dynamics \emph{on} the network. For instance, power is transferred efficiently in power grids when the grid is synchronized.
+
+In this section our goal is to understand how the dynamics \emph{of} a network can impact the dynamics \emph{on} the network. Specifically, we study under what condition(s) a network can maintain its dynamics as the network's structure evolves via specialization. This ability to maintain functionality even as the network grows is observed in many systems. A prime example is the physiological network of organs within the body, all of which develop over time but maintain specific functions \cite{Plamen2015}. 
+
+The dynamics \emph{on} a network with a fixed structure can be formalized as follows.
+
+\begin{definition}\label{def:dn}{\textbf{\emph{(Dynamical Network)}}}
+Let $(X_i,d_i)$ be a complete metric space where $X_i\subseteq \mathbb{R}$ and let $(X,d_{max})$ be the complete metric space formed by giving the product space $X=\bigoplus_{i=1}^n X_i$ the metric
+\[
+d_{max}(\mathbf{x},\mathbf{y}) = \max_i d_i(x_i,y_i) \quad \text{ where } \quad \mathbf{x},\mathbf{y} \in X \quad \text{ and } \quad x_i,y_i \in X_i.
+\]
+Let $F:X \to X$  be a $C^1(X)$ map with $i^{th}$ component function $F_i:X\to X_i$ given by
+\[
+F_i = \bigoplus_{j\in I_i}X_j\rightarrow X_i \quad \text{where} \quad I_i\subseteq N=\{1,2,\dots,n\}.
+\]
+The discrete-time dynamical system $(F,X)$ generated by iterating the function $F$ on $X$ is called a \emph{dynamical network}. If an initial condition $\mathbf{x}^0\in X$ is given, we define the $k^{th}$ \emph{iterate} of $\mathbf{x}^0$ as $\mathbf{x}^k=F^k(\mathbf{x}^0)$, with orbit $\{F^k(\mathbf{x}^0)\}_{k=0}^\infty=\{\mathbf{x}^0,\mathbf{x}^1,\mathbf{x}^2,\hdots\}$ in which $\mathbf{x}^k$ is the state of the network at time $k \ge 0$.
+\end{definition}
+
+The component function $F_i$ describes the dynamics of the $i^{th}$ network element that emerges from its interactions with a subset of the other network elements where there is a directed interaction between the $i^{th}$ and $j^{th}$ elements if $j\in I_i$. For the initial condition $\mathbf{x}^0\in X$ the state of the $i^{th}$ element at time $k\ge 0$ is $x^k_i=(F^k(\mathbf{x}^0))_i\in X_i$ where $X_i$ is the state space of the $i^{th}$ element. The state space $X=\bigoplus_{i=1}^n X_i$ is the collective state space of all network elements.
+
+For simplicity in our discussion we assume that the map $F:X\rightarrow X$ is continuously differentiable and that each $X_i$ is some closed interval of real numbers (see Definition \ref{def:dn}). In fact, all of our results in this section hold in the more general setting where $F:X\rightarrow X$ is Lipschitz continuous and $X$ is any complete metric space (see \cite{BW12,BWBook}).
+
+The specific type of dynamics we consider here is global stability, which is observed in a number of systems including neural networks \cite{Cao2003,Cheng2006,SChena2009,MCohen1983,LTao2011}, in epidemic models \cite{Wang2008}, and is also important in the study of congestion in computer networks \cite{Alpcan2005}. In a globally stable network, which we will simply refer to as \emph{stable}, the state of the network tends towards an equilibrium irrespective of its present state. Formally, network stability is defined as follows.
+
+\begin{definition}\textbf{(Network Stability)}
+The dynamical network $(F,X)$ is \emph{globally stable} if there is an $\mathbf{x}^*\in X$ such that for any $\mathbf{x}^0\in X$
+\[
+\lim_{k\rightarrow\infty}d_{max}(F^k(\mathbf{x}^0),\mathbf{x}^*)=0.
+\]
+\end{definition}
+
+A globally attracting equilibrium $\mathbf{x}^*$ in a network is presumably a state at or near which a network can efficiently carry out its function. Whether or not this equilibrium remains stable over time depends on a number of factors including external influences such as changes in the network's environment, etc. However, not only can outside influences destabilize a network but potentially the network's own growth can have this effect. As mentioned in the introduction, an important example of this type of destabilization is cancer, which is the abnormal growth of cells that can lead to significant problems in biological networks.
+
+Here we consider how growth via specialization can effect the stability of a network. Specifically, we consider the specialization of a class of dynamical networks $(F,X)$ with components of the form
+\begin{equation}\label{eq:netclass}
+F_i(\mathbf{x})=\sum_{j=1}^n A_{ij}f_{ij}(x_j), \quad \text{for} \quad i\in N=\{1,2,\dots,n\}
+\end{equation}
+where the matrix $A\in\{0,1\}^{n\times n}$ is a matrix of zeros and ones and each $f_{ij}:X_j\rightarrow\mathbb{R}$ are $C^1(X_j)$ functions with bounded derivatives for all $i,j\in N$. We refer to the graph $G$ with adjacency matrix $A=\mathcal{A}(G)$ in Equation \eqref{eq:netclass} as the \emph{graph of interactions} of $(F,X)$.
+
+It is worth noting that we could absorb the matrix $A$ into the functions $f_{ij}$. However, we use this matrix as a means of specializing the dynamical network $(F,X)$ in a way analogous to the method of specialization described in Section \ref{sec2} for graphs. This is possible as there is a one-to-one relation between a graph $G=(V,E,\omega)$ and its weighted adjacency matrix $\mathcal{A}(G)\in\mathbb{R}^{n\times n}$. Therefore, we can use the notion of a graph specialization to define a matrix specialization.
+
+\begin{definition}\label{def:matspec}\textbf{(Matrix Specialization)}
+Let $A\in\mathbb{R}^{n\times n}$ and $B\subseteq N=\{1,2,\dots,n\}$ be a base. Then the \emph{specialization} of $A$ over $B$ is the matrix
+\[
+\underline{A}=\mathcal{S}_B(A)=\mathcal{A}(\mathcal{S}_B(G))\in\mathbb{R}^{m\times m}
+\]
+where $A=\mathcal{A}(G)$. Additionally, suppose $G=(V,E,\omega)$ and $\mathcal{S}_B(G)=(\mathcal{V},\mathcal{E},\mu)$. For $M=\{1,2,\dots,m\}$ let $\tau:M\rightarrow N$ where $\tau(i)=j$ if $\nu_i\in\mathcal{V}$ is a copy of $v_j\in V$. We refer to the function $\tau$ as the \emph{origination function} of this specialization. \textcolor{blue}{(Is this notion of vertex copy clear enough?)}
+\end{definition}
+
+Note that we are slightly abusing notation in Definition \ref{def:matspec} by letting the base $B$ be both a subset of $N=\{1,2,\dots,n\}$ and a subset of $V=\{v_1,v_2,\dots,v_n\}$. The idea is that $B\subseteq N$ is a set of indices over which the matrix $A$ is specialized, which in turn is the set that indexes the vertices $B\subseteq V$ over which $G=(V,E,\omega)$ is specialized. Roughly speaking, to specialize the matrix $A\in\mathbb{R}^{n\times n}$ we specialize the associated graph $G$ with adjacency matrix $A$. The adjacency matrix of the resulting specialized graph is the specialization of the matrix $A$. This allows us to specialize dynamical networks as follows.
+
+\begin{definition}\label{def:specdyn}\textbf{(Specializations of Dynamical Networks)}
+Suppose $(F,X)$ is a dynamical network given by Equation \eqref{eq:netclass}. If $B\subseteq \{1,2,\dots,n\}$ then the \emph{specialization} of $(F,X)$ over the base $B$ is the dynamical network $(G,Y)$ with components
+\[
+G_i(\mathbf{y})=\sum_{j=1}^m \underline{A}_{ij}f_{\tau(i)\tau(j)}(y_j), \quad \text{for} \quad i\in M=\{1,2,\dots,m\}
+\]
+where $\underline{A}=\mathcal{S}_B(A)$, $Y=\bigoplus_{i=1}^m Y_i$ with $Y_i=X_{\tau(i)}$, and $\tau:M\rightarrow N$ is the origination function of the specialization.
+\end{definition}
+
+To give an example of a well-studied class of dynamical networks that can be specialized according to Definition \ref{def:specdyn} consider the class of dynamical networks known as discrete-time recurrent neural networks. The stability of such systems has been the focus of a large number of studies \cite{Cheng2006,SChena2009,MCohen1983,LTao2011}, especially time-delayed versions of these systems \cite{LWSL07}, both of which have the form given in Equation \eqref{eq:netclass}.
+
+\begin{definition}\label{def:DRNN}\textbf{(Discrete-Time Recurrent Neural Network)}
+A \emph{discrete-time recurrent neural network} $(R,X)$ is a dynamical network of the form
+\begin{equation}\label{eq:DRNN}
+R_i(\mathbf{x})=a_i x_i+\sum_{j=1,j\neq i}^n W_{ij}g_j(x_j)+c_i, \ \ i\in N=\{1,2,\dots,n\}.
+\end{equation}
+where the component $R_i$ describes the dynamics of the $i^{th}$ neuron in which each $|a_i|<1$ are the \emph{feedback coefficients}, the matrix $W\in\mathbb{R}^{n\times n}$ with $W_{ii}=0$ is the \emph{connection weight matrix}, and the constants $c_i$ are the \emph{exogenous inputs} to the network.
+\end{definition}
+
+In the general theory of discrete-time recurrent neural networks (DRNN) the functions $g_j:\mathbb{R}\rightarrow\mathbb{R}$ are typically assumed to be differentiable, monotonically increasing, and bounded. Here, for the sake of illustration, we make the additional assumption that each $g_j$ has a bounded derivative.
+
+%Before continuing we note that a discrete-time recurrent neural network (DRNN) can be written in the form of equation \eqref{eq:netclass} by setting
+%\begin{equation}\label{eq:DRNN2}
+%f_{ij}(x_j)=
+%\begin{cases}
+%a_jx_j+c_j, &\text{for} \hspace{0.2cm} i=j\\
+%W_{ij}g_j(x_j), &\text{for} \hspace{0.2cm} i\neq j
+%\end{cases}
+%\hspace{0.3cm} \text{and} \hspace{0.3cm}
+%A_{ij}=
+%\begin{cases}
+%0 \hspace{0.2cm} \text{if} \hspace{0.1cm} f_{ij}(x_j)\equiv0,\\
+%1 \hspace{0.2cm} \text{otherwise}.
+%\end{cases}
+%\end{equation}
+
+In the following example we consider the specialization of a DRNN and the dynamic consequences of this specialization.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{c}
+    \begin{overpic}[scale=.3]{SpecialFig3.pdf}
+    \put(2,-2){\small{Stable: Globally Attracting Fixed Point}}
+    \put(15,1){$(R,\mathbb{R}^3)$}
+    \put(43,-2){\small{Unstable: Oscillating}}
+    \put(48,1){$(S,\mathbb{R}^4)$}
+    \put(75,-2){\small{Unstable: Synchronizing}}
+    \put(82,1){$(T,\mathbb{R}^7)$}
+    \end{overpic}\\\\\\
+    \begin{overpic}[scale=.22]{NewSpecFig.pdf}
+    \put(15.6,-3){$G_1$}
+    \put(21.6,13){$x_3$}
+    \put(15.6,1.1){$x_2$}
+    \put(11,13){$x_1$}
+
+    \put(49.75,-3){$G_2$}
+    \put(41.1,9.5){$y_1$}
+    \put(60,2){$y_2$}
+    \put(60,13){$y_3$}
+    \put(51.25,9.5){$y_4$}
+
+    \put(85.5,-3){$G_3$}
+    \put(80,8.75){$z_1$}
+    \put(92.75,3){$z_2$}
+    \put(92.75,11.75){$z_3$}
+    \put(73,8.75){$z_4$}
+    \put(85.75,13){$z_5$}
+    \put(85.75,1.5){$z_6$}
+    \put(98.5,8.75){$z_7$}
+    \end{overpic}\\\\
+\end{tabular}
+\caption{Left: The stable dynamics of the network $(R,\mathbb{R}^3)$ considered in Example \ref{ex:DRNN} is shown (top) together with its graph of interactions $G_1$ (bottom). Center: The unstable periodic dynamics of the specialization $(S,\mathbb{R}^4)$ of $(R,\mathbb{R}^3)$ over the set $B=\{2,3\}$ is shown (top) with its graph of interactions $G_2$ (bottom). Right: The unstable but partially synchronizing dynamics of the specialization $(T,\mathbb{R}^7)$ of $(S,\mathbb{R}^4)$ over the set $C=\{1,2,3\}$ is shown (top) together with its graph of interactions $G_3$. In each of $G_1$, $G_2$, and $G_3$ loops are omitted and vertex colors indicate from which element of the previous network an element was specialized.}\label{Fig:Spec1}
+\end{center}
+\end{figure}
+
+\begin{example}\label{ex:DRNN}\textbf{(Destabilization via Specialization)}
+Consider the dynamical network $(R,\mathbb{R}^3)$ given by
+\begin{equation}\label{ex:system}
+R\left(\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3
+\end{bmatrix}\right)
+=
+\left[
+\begin{array}{c}
+\frac{9}{10}x_1-2\tanh(x_3)+\frac{7}{4}\\ [1pt]
+\frac{9}{10}x_2+\tanh(x_1)+\frac{5}{4}\\ [1pt]
+\frac{9}{10}x_3+\tanh(x_1)+\tanh(x_2)+\frac{2}{4}
+\end{array}\right],
+\end{equation}
+which is the DRNN in which $a_i=\frac{9}{10}$ and $f_{ij}(x)=g_i(x)=\tanh(x)$ for $i=1,2,3;$ $c_1=\frac{7}{4}$, $c_2=\frac{5}{4}$, $c_3=\frac{2}{4}$, with the connection weight matrix
+\[
+W=
+\left[\begin{array}{ccc}
+0&0&-2\\
+1&0&0\\
+1&1&0
+\end{array}\right].
+\]
+We choose the function $g_i(x)=\tanh(x)$ as this is a standard activation function used to model neural interactions in network science. The network's graph of interactions $G_1$ is shown in Figure \ref{Fig:Spec1} (bottom left). As is shown in Figure \ref{Fig:Spec1} (top left) the dynamical network $(R,\mathbb{R}^3)$ is stable with globally attracting fixed point $\mathbf{x}^*=(-2.49,2.65,5.05)$.
+
+If the network $(R,\mathbb{R}^3)$ is specialized over the base $B=\{2,3\}$ the result is the network $(S,\mathbb{R}^4)$ given by
+\begin{equation*}
+S\left(\begin{bmatrix}
+y_1 \\
+y_2 \\
+y_3 \\
+y_4
+\end{bmatrix}\right)
+=
+\left[
+\begin{array}{c}
+\frac{9}{10}y_1+\tanh(y_4)+\frac{2}{4}\\ [1pt]
+\frac{9}{10}y_2+\tanh(y_3)+\frac{2}{4}\\ [1pt]
+\frac{9}{10}y_3+\tanh(y_4)+\frac{5}{4}\\ [1pt]
+\frac{9}{10}y_4-2\tanh(y_1)-2\tanh(y_2)+\frac{7}{4}\\
+\end{array}\right].
+\end{equation*}
+The network's graph of interaction $G_2=\mathcal{S}_B(G_1)$ is shown in Figure \ref{Fig:Spec1} (top center) where the vertex colors indicate from which network element the elements of $G_2$ were specialized. Although the dynamics of the original network $(R,\mathbb{R}^3)$ is stable, the dynamics of its specialization $(S,\mathbb{R}^4)$ oscillates periodically as can be seen in Figure \ref{Fig:Spec1} (bottom center). That is, specialization does not, at least in general, preserve stability.
+
+The network can again be specialized over the base $C=\{1,2,3\}$ which results in the network of seven elements $(T,\mathbb{R}^7)$ given by
+\begin{equation*}
+T\left(\begin{bmatrix}
+z_1 \\
+z_2 \\
+z_3 \\
+z_4 \\
+z_5 \\
+z_6 \\
+z_7
+\end{bmatrix}\right)
+=
+\left[
+\begin{array}{c}
+\frac{9}{10}z_1+\tanh(z_4)+\tanh(z_6)+\frac{2}{4}\\ [1pt]
+\frac{9}{10}z_2+\tanh(z_3)+\frac{2}{4}\\ [1pt]
+\frac{9}{10}z_3+\tanh(z_5)+\tanh(z_7)+\frac{5}{4}\\ [1pt]
+\frac{9}{10}z_4-2\tanh(z_1)+\frac{7}{4}\\ [1pt]
+\frac{9}{10}z_5-2\tanh(z_1)+\frac{7}{4}\\ [1pt]
+\frac{9}{10}z_6-2\tanh(z_2)+\frac{7}{4}\\ [1pt]
+\frac{9}{10}z_7-2\tanh(z_2)+\frac{7}{4}
+\end{array}\right].
+\end{equation*}
+The network's graph of interaction $G_3=\mathcal{S}_C(G_2)$ is shown in Figure \ref{Fig:Spec1} (bottom right) where, as before, the vertex colors indicate from which network element the elements of $G_3$ were specialized. Here specialization has again altered the dynamics of the network as $(T,\mathbb{R}^{7})$ has unstable but now synchronizing dynamics. Specifically, elements $z_4$ and $z_6$ and also elements $z_5$ and $z_7$ synchronize irrespective of the network's initial condition (see Figure \ref{Fig:Spec1} top right).
+\end{example}
+
+In previous studies of dynamical networks the goal has been to determine under what condition(s) a given network has stable dynamics (see for instance the references in \cite{LWSL07}). Here we consider a different but related question which is, under what condition(s) does a dynamical network with an evolving structure of interactions maintain its stability as it evolves.
+
+As a partial answer to this general question, we use the following notion of a stability matrix, which allows us to study the change or lack of change in a network's stability after it has been specialized.
+
+\begin{definition} \textbf{(Stability Matrix)}
+For the dynamical network $(F,X)$ suppose there exist finite constants
+\begin{equation}\label{eq:stability}
+\Lambda_{ij}=\sup_{\mathbf{x}\in X}\left|\frac{\partial F_i}{\partial x_j}(\mathbf{x})\right|<\infty \ \text{for all} \ i,j\in N=\{1,2,\dots,n\}.
+\end{equation}
+Then we call the matrix $\Lambda\in\mathbb{R}^{n\times n}$ the \emph{stability matrix} of $(F,X)$.
+\end{definition}
+
+The stability matrix $\Lambda$ can be thought of as a global linearization of the typically nonlinear dynamical network $(F,X)$. The following result states that if the eigenvalues of the matrix $\Lambda$ lie within the unit circle then the dynamical network $(F,X)$ is stable, the proof of which can be found in \cite{BW12}.
+
+\begin{theorem}\label{stability} \textbf{(Network Stability)}
+Suppose $\Lambda$ is the stability matrix of the dynamical network $(F,X)$. If $\rho(\Lambda)<1$ then the dynamical network $(F,X)$ is stable.
+\end{theorem}
+
+As it will be helpful in what follows, if $\Lambda$ is the stability matrix of the dynamical network $(F,X)$ we let $\rho(F)=\rho(\Lambda)$ be the \emph{spectral radius} of the network.
+
+A key feature of the stability described in Theorem \ref{stability} is that it is not the standard notion of stability. In \cite{BW13} it is shown that if $\rho(F)<1$ then the dynamical network $(F,X)$ is not only stable but remains stable even if time-delays are introduced into the network's interactions (see Theorem ?? \cite{BW13}). Since the addition of time-delays can have a destabilizing effect on a network, the type of stability considered in Theorem \ref{stability} is a stronger version of the standard notion of stability. To distinguish between these two types of stability, the stability described in Theorem \ref{stability} is given the following name (see \cite{BW13} for more details).
+
+\begin{definition}\label{def:intrinsic} \textbf{(Intrinsic Stability)}
+For the dynamical network $(F,X)$, if the spectral radius $\rho(F)<1$ then we say that this network is \emph{intrinsically stable}.
+\end{definition}
+
+In the following example we consider the specialization of an intrinsically stable dynamical network.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{c}
+    \begin{overpic}[scale=.3]{SpecialFig2.pdf}
+    \put(10,-2){\small{Intrinsically Stable}}
+    \put(14.5,1){$(\tilde{R},\mathbb{R}^3)$}
+    \put(43.5,-2){\small{Intrinsically Stable}}
+    \put(48,1){$(\tilde{S},\mathbb{R}^4)$}
+    \put(77,-2){\small{Intrinsically Stable}}
+    \put(82,1){$(\tilde{T},\mathbb{R}^7)$}
+    \end{overpic}\\\\
+    \begin{overpic}[scale=.22]{NewSpecFig.pdf}
+    \put(15.6,-3){$H_1$}
+    \put(21.6,13){$x_3$}
+    \put(15.6,1.1){$x_2$}
+    \put(11,13){$x_1$}
+
+    \put(49.75,-3){$H_2$}
+    \put(41.1,9.5){$y_1$}
+    \put(60,2){$y_2$}
+    \put(60,13){$y_3$}
+    \put(51.25,9.5){$y_4$}
+
+    \put(85.5,-3){$H_3$}
+    \put(80,8.75){$z_1$}
+    \put(92.75,3){$z_2$}
+    \put(92.75,11.75){$z_3$}
+    \put(73,8.75){$z_4$}
+    \put(85.75,13){$z_5$}
+    \put(85.75,1.5){$z_6$}
+    \put(98.5,8.75){$z_7$}
+    \end{overpic}\\\\
+\end{tabular}
+\caption{Left: The stable dynamics of the network $(\tilde{R},\mathbb{R}^3)$ considered in Example \ref{ex:DRNN} is shown (top) together with its graph of interactions $H_1$ (bottom). Center: The unstable periodic dynamics of the specialization $(\tilde{S},\mathbb{R}^4)$ of $(\tilde{R},\mathbb{R}^3)$ over the set $B=\{2,3\}$ is shown (top) with its graph of interactions $H_2$ (bottom). Right: The unstable but partially synchronizing dynamics of the specialization $(\tilde{T},\mathbb{R}^7)$ of $(\tilde{S},\mathbb{R}^4)$ over the set $C=\{1,2,3\}$ is shown (top) together with its graph of interactions $H_3$. In each of $H_1$, $H_2$, and $H_3$ loops are omitted and vertex colors indicate from which element of the previous network an element was specialized.}\label{Fig:Spec2}
+\end{center}
+\end{figure}
+
+\begin{example}\label{ex:DRNN}\textbf{(Specialization of an Intrinsically Stable Network)}
+Consider the dynamical network $(\tilde{R},\mathbb{R}^3)$, which has the same topology as the network $(R,\mathbb{R}^3)$ in Example \ref{ex:DRNN}, given by
+\begin{equation}\label{ex:system}
+\tilde{R}\left(\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3
+\end{bmatrix}\right)
+=
+\left[
+\begin{array}{c}
+\frac{3}{10}x_1-\frac{1}{2}\tanh(x_3)+\frac{1}{4}\\ [1pt]
+\frac{3}{10}x_2+\frac{1}{2}\tanh(x_1)\\ [1pt]
+\frac{3}{10}x_3+\frac{1}{2}\tanh(x_1)+\frac{1}{2}\tanh(x_2)
+\end{array}\right],
+\end{equation}
+which is the DRNN in which $a_i=\frac{3}{10}$ and $f_{ij}(x)=g_i(x)=\tanh(x)$ for $i=1,2,3;$ $c_1=\frac{1}{4}$, $c_2=c_3=0$, with the connection weight matrix
+\[
+\tilde{W}=
+\left[\begin{array}{ccc}
+0&0&-\frac{1}{2}\\ [1pt]
+\frac{1}{2}&0&0\\ [1pt]
+\frac{1}{2}&\frac{1}{2}&0
+\end{array}\right].
+\]
+The graph of interactions $H_1$ corresponding to this dynamical network is shown in Figure \ref{Fig:Spec2} (bottom left). The dynamical network $(\tilde{R},\mathbb{R}^3)$ is stable with globally attracting fixed point $\mathbf{x}^*=(.19,.13,.23)$, as can be seen in Figure \ref{Fig:Spec1} (top left). In fact, the network is intrinsically stable with spectral radius $\rho(S)=.962<1$.
+
+If we specialize this network over the base $B=\{2,3\}$, similar to what is done in the previous example, the result is the network $(\tilde{S},\mathbb{R}^4)$ given by
+\begin{equation*}
+\tilde{S}\left(\begin{bmatrix}
+y_1 \\
+y_2 \\
+y_3 \\
+y_4
+\end{bmatrix}\right)
+=
+\left[
+\begin{array}{c}
+\frac{3}{10}y_1+\frac{1}{2}\tanh(y_4)\\ [1pt]
+\frac{3}{10}y_2+\frac{1}{2}\tanh(y_3)\\ [1pt]
+\frac{3}{10}y_3+\frac{1}{2}\tanh(y_4)\\ [1pt]
+\frac{3}{10}y_4-\frac{1}{2}\tanh(y_1)-\frac{1}{2}\tanh(y_2)+\frac{1}{4}\\
+\end{array}\right].
+\end{equation*}
+Here the network's graph of interaction $H_2=\mathcal{S}_B(H_1)$ is shown in Figure \ref{Fig:Spec1} (bottom center). The vertex colors again indicate from which network element the resulting elements of $H_2$ are specialized. Notably, in contrast to the previous example where specialization destabilized the network's dynamics, the network $(\tilde{S},\mathbb{R}^4)$ is once again intrinsically stable with $\rho(\tilde{S})=.962$ (see Figure \ref{Fig:Spec1}, center bottom).
+
+If the network $(\tilde{S},\mathbb{R}^4)$ is then specialized over the base $C=\{1,3,4\}$ the result in the specialization $(\tilde{T},\mathbb{R}^7)$ given by
+\begin{equation*}
+\tilde{T}\left(\begin{bmatrix}
+z_1 \\
+z_2 \\
+z_3 \\
+z_4 \\
+z_5 \\
+z_6 \\
+z_7
+\end{bmatrix}\right)
+=
+\left[
+\begin{array}{c}
+\frac{3}{10}z_1+\frac{1}{2}\tanh(z_4)+\frac{1}{2}\tanh(z_6)\\ [1pt]
+\frac{3}{10}z_2+\frac{1}{2}\tanh(z_3)\\ [1pt]
+\frac{3}{10}z_3+\frac{1}{2}\tanh(z_5)+\frac{1}{2}\tanh(z_7)\\ [1pt]
+\frac{3}{10}z_4-\frac{1}{2}\tanh(z_1)+\frac{1}{4}\\ [1pt]
+\frac{3}{10}z_5-\frac{1}{2}\tanh(z_1)+\frac{1}{4}\\ [1pt]
+\frac{3}{10}z_6-\frac{1}{2}\tanh(z_2)+\frac{1}{4}\\ [1pt]
+\frac{3}{10}z_7-\frac{1}{2}\tanh(z_2)+\frac{1}{4}
+\end{array}\right].
+\end{equation*}
+The network's graph of interaction $H_3=\mathcal{S}_C(H_2)$ is shown in Figure \ref{Fig:Spec1} (bottom right). Again one can show that $\rho(\tilde{T})=.962$ so that
+\begin{equation}\label{eq:specsame}
+\rho(\tilde{R})=\rho(\tilde{S})=\rho(\tilde{T})=.962<1.
+\end{equation}
+Hence, $(\tilde{T},\mathbb{R}^7)$ is intrinsically stable (see Figure \ref{Fig:Spec1} right bottom). Interestingly, as in the previous example elements $z_4$ and $z_6$ and also elements $z_5$ and $z_7$ synchronize irrespective of the network's initial condition.
+\end{example}
+
+Perhaps surprisingly the dynamical network and each of its specializations in the previous example have the same spectral radius. This is not a coincidence but rather a consequence of the similarity between how graph specializations and specializations of dynamical networks are defined. In the proof of the following result we show that if a dynamical network $(F,X)$ is specialized, the resulting dynamical network $(G,Y)$ will have the same spectral radius, i.e. $\rho(F)=\rho(G)$.
+For example, each of the networks in Example \ref{ex:DRNN} have the same spectral radius
+\[
+\rho(R)=\rho(S)=\rho(T)=2.669>1.
+\]
+Consequently, the following holds.
+
+\begin{theorem}\label{thm:evostability} \textbf{(Stability of Intrinsically Stable Networks Under Specialization)}
+Suppose the dynamical network $(F,X)$ given by equation \eqref{eq:netclass} is intrinsically stable. Then for any $B\subset\{1,2,\dots,n\}$ the specialization $(G,Y)$ of $(F,X)$ over $B$ is intrinsically stable.
+\end{theorem}
+
+\begin{proof}
+\textcolor{blue}{Suppose the dynamical network $(F,X)$ is intrinsically stable so that in particular $\rho(\Lambda)<1$. Given a specialization rule $\tau$, Theorem \ref{thm1} states, in terms of matrices, that
+\begin{equation}\label{eq:matrixver}
+\sigma(\tau(\Lambda))=\sigma(\Lambda)\cup\sigma(\Lambda_1)^{n_1-1}\cup\dots\cup\sigma(\Lambda_m)^{n_m-1}
+\end{equation}
+where each $\Lambda_i$ is a square submatrices of $\Lambda$ and $n_i\geq 0$ for all $1\leq i\leq m$.}
+
+\textcolor{blue}{Since $\Lambda$ is a nonnegative matrix then $\rho(\Lambda_i)\leq\rho(\Lambda)$ for all $1\leq i\leq m$ (see, for instance, corollary 8.1.20 in \cite{HJ90}). Hence, $\rho(\tau(\Lambda))=\rho(\Lambda)<1$ by equation \eqref{eq:matrixver}. Since $\tau(\Lambda)=\Lambda_{\tau}$ is the stability matrix of $(F_{\tau},X_{\tau})$ then this implies that $\rho(\Lambda_{\tau})<1$ so that the specialized network $(F_{\tau},X_{\tau})$ is intrinsically stable. Conversely, if $(F_{\tau},X_{\tau})$ is intrinsically stable then $\rho(\Lambda_{\tau})<1$ and equation \eqref{eq:matrixver} likewise implies that $\rho(\Lambda)<1$, completing the proof.}
+\end{proof}
+
+Theorem \ref{thm:evostability} is based on the fact that the spectral radius of a graph is preserved under a graph specialization if the graph has nonnegative weights, which every stabilization matrix does (see Corollary \ref{cor1}). The importance of Theorem \ref{thm:evostability} is that it describes, as far as is known to the authors, the first general mechanism for evolving the structure of a network that preserves the network's dynamics. Currently, it is unknown whether any real-world network intrinsically stable. That is, it is unknown whether any naturally occurring network uses intrinsic stability to maintain its function as its structure evolves. However, from a design point of view, if a network is made to be intrinsically stable, rather than just stable, it is guaranteed to to remain stable so long as its topology evolves under the method of specialization described in Section \ref{sec2}. Moreover, if $(F,X)$, given by \eqref{eq:netclass}, is intrinsically stable then any specialization of this network is also intrinsically stable. Hence, any sequence of specializations of the network will result in an intrinsically stable network (cf. Example \ref{ex:DRNN} and \ref{ex:DRNN}).
+
+\begin{corollary}\label{cor:1}
+Suppose $(F,X)$ is an intrinsically stable dynamical network given by \eqref{eq:netclass}. If $\{(F^i,X^i)\}_{i=1}^k$ is any sequence of specialization of $(F,X)$ then $(F^k,X^k)$ is intrinsically stable.
+\end{corollary}
+
+A natural and open question is whether this is the case for other types of dynamics exhibited by networks, i.e. whether stronger versions of dynamical behavior such as multistability, periodicity, and synchronization, etc. are required for a network to maintain its dynamics as it grows.
+
+\section{Variations of Network Specialization}\label{sec5}
+
+There are a number of variants of the specialization method that preserve both spectral and dynamic properties of a network. One of the most natural is the \emph{partial specialization} of a graph (equivalently dynamical network) in which only a subset of the component branches are specialized. This method is demonstrated in the following example
+
+\begin{figure}
+  \begin{overpic}[scale=.33]{NewSpecFig2.pdf}
+
+    \put(15,-0.5){\emph{Unspecialized Graph} $G$}
+
+    \put(3.25,3){$B$}
+    \put(18.25,3){$C_1$}
+    \put(31,3){$C_2$}
+    \put(41.5,3){$B$}
+
+    %\put(4,16.5){$v_1$}
+    %\put(4,8){$v_2$}
+    %\put(18.5,16.5){$v_3$}
+    %\put(16,8){$v_4$}
+    %\put(21,8){$v_5$}
+    %\put(28.5,14){$v_6$}
+    %\put(33,16.5){$v_7$}
+    %\put(33,8){$v_8$}
+    %\put(41.5,16.5){$v_1$}
+    %\put(41.5,8){$v_2$}
+
+    \put(62,-5){\emph{Partially Specialized Graph} $\mathcal{P}_B(G)$}
+
+    \put(57.5,3){$B$}
+    \put(71.75,-1.5){$C_1$}
+    \put(84.4,-1.5){$C_2$}
+    \put(95,3){$B$}
+
+    \put(79,13){$\rho_1$}
+    \put(79,4.5){$\rho_2$}
+    \end{overpic}
+    \vspace{0.5cm}
+  \caption{A partial specialization $\mathcal{P}_B(G)$ of $G$ over the vertex set $B$ is shown. The partial component branches of the specialization are $\rho_1=\beta_1\cup\beta_2$ and $\rho_2=\beta_3\cup\beta_4$, where $\beta_1,\beta_2,\beta_3,\beta_4$ are the component branches in the standard specialization $\mathcal{S}_B(G)$ shown in Figure \ref{Fig:2} (right).}}\label{Fig:last0}
+\end{figure}
+
+\begin{example}
+Let $G$ and $B$ be the graph and base considered in Example \ref{ex:2} and shown in Figure \ref{Fig:last0} (left). In the specialization $\mathcal{S}_B(G)$ there are four component branches $\beta_1,\beta_2,\beta_3,\beta_4\in\mathcal{B}_B(G)$ used to create this graph (see Figure \ref{Fig:2} right). If we instead use the two \emph{partial component branches} $\rho_1=\beta_1\cup\beta_2$ and $\rho_2=\beta_3\cup\beta_4$ the result is the partial specialization $\mathcal{P}_B(G)$ shown in \ref{Fig:last0} (right).
+\end{example}
+
+A partial specialization $\mathcal{P}_B(G)$ of a graph $G$ over the base $B$ (equivalently dynamical network) is constructed similar to a standard specialization. First the component branches $\mathcal{B}_B(G)$ are created. Then we choose a partition of $\mathcal{B}_B(G)$, i.e. a collection $\{B_{i=1}^m\}$ such that $\mathcal{B}_B(G)$ is the disjoint union of this set. We then let $\rho_i=\cup_{\beta\in B_i}\beta$ be the $i^{th}$ \emph{partial component branch} for $i=1,\dots,m$. The \emph{partial specialization} $\mathcal{P}_B(G)$ is constructed by \emph{merging}, i.e. identifying, each vertex $v_i\in B$ in any partial branch $\rho_j$ with the same vertex $v_i$ in any other branch $\rho_k$.
+
+We note that the notation $\mathcal{P}_B(G)$ does not uniquely define a specific partial specialization of the graph $G$ as there are typically many ways to choose a partition of the component branches $\mathcal{B}_B(G)$. It is also worth mentioning that the standard specialization method is the partial specialization where the partition we choose is the one in which every subset has a single element. Hence, a graph specialization is the largest partial specialization over a given base. Additionally, an analogous version of Theorems \ref{thm1} and \ref{thm:evostability} as well as Corollary \ref{cor1} hold when we replace the term ``specialization" with ``partial specialization" in these results.
+
+\begin{proposition}\label{prop:10}\textbf{(Spectral and Dynamic Consequences of Partial Specialization)}
+Let $G=(V,E,\omega)$, $B\subseteq V$, and let $C_1,\dots,C_m$ be the strongly connected components of $G|_{\bar{B}}$. Then for any partial specialization $\mathcal{P}_B(G)$ of $G$ we have
+\[
+\sigma\big(\mathcal{P}_B(G)\big)=\sigma(G)\cup\sigma(C_1)^{n_1-1}\cup\sigma(C_2)^{n_2-1}\cup\dots\cup \sigma(C_m)^{n_m-1}
+\]
+where $n_i$ is the number of copies of $C_i$ contained in $\mathcal{P}_B(G)$. Also if $G$ has positive edge weights then
+\[
+\rho(\mathcal{S}_B(G))=\rho(G).
+\]
+Additionally, if the dynamical network $(F,X)$ given by equation \eqref{eq:netclass} is intrinsically stable, then for any $B\subset\{1,2,\dots,n\}$ the partial specialization $(G,Y)$ of $(F,X)$ over $B$ is intrinsically stable.
+\end{proposition}
+
+\textcolor{blue}{A proof of Proposition \ref{prop:10} is given in the Appendix.}
+
+Aside from partial specializations another class of specializations we consider is what we refer to as thinned specializations. A \emph{thinned specialization} $\mathcal{T}_B(G)$ of a graph $G$ over the base $B$ (equivalently dynamical network) is a specialization or partial specialization of $G$ in which we do not include some number of component or partial component branches in the specialized graph.
+
+For example, the specialization of the Wikipedia graph in Figure \ref{Fig:1} is an example of a thinned specialization. The reason is that a number of component branches have been omitted in this specialization. Specifically, the component branches that begin with one color on the left and end with another color on the right are missing. The fact that these branches have been removed in this example makes sense in the context of a disambiguated network since the network segregates by topic. This type of specialization has following spectral and dynamic properties.
+
+\begin{proposition}\label{prop:11}\textbf{(Spectral and Dynamic Consequences of Tinned Specialization)}
+Let $G=(V,E,\omega)$ have positive edge weights and $B\subseteq V$. Then for any \emph{thinned specialization} $\mathcal{T}_B(G)$ of $G$ we have
+\[
+\rho(\mathcal{T}_B(G))\leq\rho(G).
+\]
+Additionally, if the dynamical network $(F,X)$ given by equation \eqref{eq:netclass} is intrinsically stable, then for any $B\subset\{1,2,\dots,n\}$ the thinned specialization $(G,Y)$ of $(F,X)$ over $B$ is intrinsically stable.
+\end{proposition}
+
+As a consequence of Theorem \ref{thm:evostability} and Propositions \ref{prop:10} and \ref{prop:11} any sequence of specializations of a graph, whether these are standard, partial, thinned or a combination of these transformations, results in a graph whose spectral radius is bounded by the spectral radius of the original graph. Similarly, if an intrinsically stable dynamical network is sequentially specialized using any combination of these transformations the result is an intrinsically stable network.
+
+\section{Concluding Remarks}\label{conc}
+
+In this paper we consider the interplay of the \emph{dynamics on} a network and the \emph{dynamics of} a network, where the dynamics of the network is modeled by the process of network specialization and the type of dynamics on the network we consider is stability. What allows us to bridge these two types of dynamics is knowing how specialization effects the spectral properties of the network. In this way we are able to rigourously study the effect the evolving structure of the network has on the dynamics of the network elements.
+
+In a following paper we plan to use this model to study the full interplay of these two types of network dynamics. Specifically, how the dynamics on the network effects the structural evolution of the network and vice-versa and what the eventual structure and dynamics of such networks are.
+
+It is worth mentioning that the extent to which the specialization model models the growth of real-world networks is still unknown. The reason is that, as a network (graph) can be specialized over any subset of its elements (vertices) these are many ways to grow a network especially considering the new variants of network specialization introduced in this paper. An open question is, for specific real-world network, whether a rule can be devised for selecting a base or sequence of bases that grows a small network into a network that has some of the ``finer details" of the real network, e.g. similar features, specific statistics, etc.
+
+Another aspect of the paper that is worth addressing here is the notion of intrinsic stability. An interesting feature of intrinsic stability, not shared by the standard version of stability, is its resilience to change in network structure. Not only is intrinsic stability maintained under specialization but it is also maintained when time delays are introduced into the network's interactions (see [??]). As time-delays lengthen the paths and cycles between network elements in the network's graph of interactions these time delays have an effect on the network's topology, which are distinct from the topological changes caused by specialization. 
+
+An open question is whether other types of intrinsic dynamics exist, i.e. other types of network dynamics that are maintained under structural changes to the network. Such stronger forms of the standard forms of network dynamics would potentially suggest how real networks maintain their function even as their structure evolves as intrinsic stability does for stable networks.
+
+\section{Appendix: Isospectral Graph Reductions and Proofs}\label{appendix}
+
+In this section we a give a proof of Theorems \ref{thm1} and \ref{prop10} as well as a proof of Proposition \ref{prop:0}. The proofs of Theorem \ref{prop10} and Proposition \ref{prop:0} rely on the theory of isospectral graph reductions, which we give in part here (see \cite{BWBook} for more details).
+
+% To prove Theorem \ref{thm1} we first give the following lemma, which is the special case in which the specialized graph has a single strongly connected component.
+
+% \begin{lemma}\label{lem:IBF} \textbf{(Inverse Block Form)}
+% Suppose we have a block matrix $Z$ of the form
+% $$Z=
+% \left[\begin{matrix}
+%  S_1 &  C_{12} & C_{13} & C_{14} &\dots &C_{1,N} \\
+%  0 & S_2 &  C_{23} & C_{24} & \dots &C_{2N} \\
+% 0 &0 & S_3 &  C_{34} & \cdots  &C_{3N} \\
+% 0 &0 &0 &  S_4 &\ddots  &\vdots \\
+%  \vdots & \vdots & \vdots & \ddots & \ddots &C_{N-1,N} \\
+%  0 &0 &  0 & \dots & 0 &S_N \\
+% \end{matrix}\right]
+% $$
+% where each $S_i$ is invertible, (but not necessarily the same size). Suppose $\mathcal{P}_{ij}$ is the collection of all ordered lists of integers of the form $p=( i,p_1,p_2,\dots , p_k,j) $ where $i<p_1<p_2<\dots < p_k<j$. Then the $ij{th}$ block entry $Z^{-1}_{ij}$ of $Z^{-1}$  is given by
+% \begin{equation} \label{N1}
+% Z^{-1}_{ij}=
+% \begin{cases}
+% 0 \ \ \text{if} \ \ i>j,\\
+% S_i^{-1} \ \ \text{if} \ \ i=j,\\
+% \displaystyle{\sum_{p\in\mathcal{P}_{ij}}}(-1)^{k-1}\left(S_i^{-1}C_{ip_1}S_{p_1}^{-1}C_{p_1p_2}S_{p_2}^{-1}\dots S_{p_k}^{-1}C_{p_kj}S_j^{-1}\right)  \ \ \text{if} \ \ i<j.
+% \end{cases}
+% \end{equation}
+
+% \end{lemma}
+
+% \begin{proof}
+% We prove this result by induction.  First for $N=2$ one can check that
+% \begin{equation}\label{N2}
+% \left[\begin{matrix}
+% S_1 & C_{12}\\
+% 0  & S_2
+% \end{matrix}\right]^{-1}=\left[\begin{matrix}
+% S_1^{-1} & -S_1^{-1}C_{12}S_2^{-1}\\
+% 0  & S_2^{-1}
+% \end{matrix}\right].
+% \end{equation}
+% We now suppose the lemma holds for an $(N-1) \times (N-1)$ block matrix.  Let $Z$ be the $N\times N$ block matrix
+% $$Z=
+% \left[\begin{array}{ccccc|c}
+% S_1 &  C_{12} & C_{13} & \dots & C_{1,N-1} & C_{1,N}\\
+% 0 & S_2 &  C_{23} & \dots & C_{2,N-1} & C_{2,N}\\
+% 0 &0 & S_3  & \ddots & \vdots & \vdots\\
+% \vdots & \vdots & & \ddots & C_{N-2,N-1} &C_{N-2,N} \\
+% 0 & 0 & 0 & \cdots & S_{N-1} & C_{N-1,N} \\
+% \hline
+% 0 & 0 & 0 & \cdots & 0 & S_N \\
+% \end{array}\right]=\left[\begin{matrix}
+% \tilde{Z} & \tilde{C}\\
+% 0  & S_N
+% \end{matrix}\right]
+% $$ From equation \eqref{N2} we have
+% \begin{equation}\label{eq:littlemat}
+% Z^{-1}=
+% \left[\begin{matrix}
+% \tilde{Z}^{-1} & -\tilde{Z}^{-1}\tilde{C}S_N^{-1}\\
+% 0  & S_N^{-1}
+% \end{matrix}\right].
+% \end{equation}
+
+% By the induction hypothesis the matrix $\tilde{Z}^{-1}$ in \eqref{eq:littlemat} has the desired form. Additionally, by equation \eqref{N2} the block $Z^{-1}_{i,N}$ also has the desired form specified in equation \eqref{N1}. To show $Z_{ij}^{-1}$ has the desired form in the Nth block column, we consider the $\ell{th}$ block row of $-\tilde{Z}^{-1}\tilde{C}S_N^{-1}$. Via matrix multiplication the $\ell, Nth$ block of the matrix $Z^{-1}$ for $\ell<N$%, which is a block of the matrix $-\tilde{Z}^{-1}\tilde{C}S_N^{-1}$,
+% is given by
+% \begin{align*}
+% &\sum_{b=1}^{N-1}- \left(\sum_{p\in\mathcal{P}_{\ell b}}(-1)^{k-1}S_i^{-1}C_{ip_1}S_{p_1}^{-1}C_{p_1p_2}S_{p_2}^{-1}\dots S_{p_k}^{-1}C_{p_kb}S_b^{-1}\right)C_{b,N}S_N^{-1}\\
+% \end{align*}
+% We think of each $(i,p_1,\dots,p_n,j)\in\mathcal{P}_{ij}$ corresponding to a path through strongly connected components represented by $S_i^{-1}C_{i,p_1}S_{p_1}^{-1}\dots C_{p_{n},j}S_{j}^{-1}$. From a graph-theoretic point of view, the inner sum in the above expression sums over all paths which begin at component $\ell$ and end at component $b$.  To each element in this sum, we append the single link from component $b$ to component $N$.  Now summing over all possible choices of intermediate components $b$ the result is a sum over all possible paths from component $\ell$ to component $N$, which can be written as
+
+% $$\sum_{p\in\mathcal{P}_{\ell,N}}(-1)^{k-1}S_i^{-1}C_{ip_1}S_{p_1}^{-1}C_{p_1p_2}S_{p_2}^{-1}\dots S_{p_k}^{-1}C_{p_kN}S_N^{-1}.$$
+
+% This sum has the desired form for the $\ell,Nth$ block given in equation \eqref{N1}. We note here that the $(-1)^{(k-1)}$ is correct since $k$ depends on length of the path in $\mathcal{P}_{\ell b}$ being considered.  After a single connection is appended to the end of every path, the sign will switch but still depends on the length of the path being considered in $\mathcal{P}_{\ell N}$.
+
+% \end{proof}
+
+We now give a proof of Theorem \ref{thm1}.
+\begin{proof}
+For the graph $G=(V,E,\omega)$ without loss of generality let $B=\{v_1,\dots,v_\ell\}$ where $V=\{v_1,\dots,v_n\}$. By a slight abuse in notation we let $B$ denote the index set $B=\{1,\dots,\ell\}$ that indexes the vertices in $B$.
+
+For the moment we assume that the graph $G|_{\bar{B}}$ has the single strongly connected component $S_1$. The weighted adjacency matrix $M\in\mathbb{R}^{n\times n}$ then has the block form
+\[
+M=
+\left[\begin{array}{cc}
+U&W\\
+Y&Z
+\end{array}\right]
+\]
+where $U\in\mathbb{R}^{\ell\times\ell}$ is the matrix $U=M_{BB}$, which is the weighted adjacency matrix of $G|_{B}$. The matrix $Z\in\mathbb{R}^{(n-\ell)\times (n-\ell)}$ is the matrix $Z=M_{\bar{B}\bar{B}}$, which is the weighted adjacency matrix of $G|_{\bar{B}}=S_1$. The matrix $W=M_{B\bar{B}}\in\mathbb{R}^{\ell\times (n-\ell)}$ is the matrix of edges weights of edges from vertices in $G|_{B}$ to vertices in $S_1$ and $Y=M_{\bar{B}B}\in\mathbb{R}^{n-\ell\times \ell}$ is the matrix of edge weights of edges from vertices in $S_1$ to vertices in $G|_{B}$.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{c}
+    \begin{overpic}[scale=.43]{ProofExpEx}
+    \put(21.75,-2){$G$}
+    \put(21.5,11.5){$S_1$}
+    \put(18,15.25){$v_3$}
+    \put(18,8.25){$v_4$}
+    \put(25,8.25){$v_6$}
+    \put(25,15.25){$v_5$}
+    \put(1,15.25){$v_1$}
+    \put(1,8.25){$v_2$}
+    \put(42,15.25){$v_7$}
+    \put(42,8.25){$v_8$}
+
+    \put(74,-3){$\mathcal{S}_B(G)$}
+    \put(76,21){$S_1$}
+    \put(76,15){$S_1$}
+    \put(76,8.5){$S_1$}
+    \put(76,2){$S_1$}
+    \put(56,18){$v_1$}
+    \put(56,6){$v_2$}
+    \put(96.5,18){$v_7$}
+    \put(96.5,6){$v_8$}
+
+    \put(72,21){$v_3$}
+    \put(72,14.75){$v_3$}
+
+    \put(72,8.5){$v_4$}
+    \put(72,2.5){$v_4$}
+
+    \put(80.5,21){$v_5$}
+    \put(80.5,14.75){$v_6$}
+
+    \put(80.5,8.5){$v_5$}
+    \put(80.5,2.5){$v_6$}
+
+    \end{overpic}
+\end{tabular}
+\end{center}
+  \caption{An example of a graph $G=(V,E,\omega)$ with the single strongly connected component $S_1=G|_{\bar{B}}$ is shown (left), where solid boxes indicate the graph $G|_{B}$. As there are two edges from $G|_{B}$ to $S_1$ and two edges from $S_1$ to $G|_{B}$ there are $2\times 2$ branches in $\mathcal{B}_B(G)$ containing $S_1$. These are merged together with $G|_{B}$ to form $\mathcal{S}_B(G)$ (right).}\label{fig000}
+\end{figure}
+
+The specialization $\mathcal{S}_B(G)$ is the graph in which all component branches of the form
+\[
+\beta=v_i,e_{ip},S_1,e_{qj},v_j \ \ \text{for all} \ \ v_i,v_j\in S, v_p,v_q\in \bar{B} \ \ \text{and} \ \ e_{ip},e_{qj}\in E
+\]
+are merged together with the graph $G|_{B}$ (cf. Figure \ref{fig000}). The weighted adjacency matrix $\hat{M}=M(\mathcal{S}_B(G))$ has the block form
+
+\[
+\hat{M}=
+\left[\begin{array}{cccc}
+U&\Big[W_1 \hspace{0.15in} \cdots\hspace{0.15in} W_1\Big]&\cdots&\Big[W_{w} \hspace{0.15in} \cdots \hspace{0.15in} W_{w}\Big]\\\\
+
+\left[\begin{array}{c}
+Y_1\\
+\vdots\\
+Y_y
+\end{array}\right]&
+
+\left[\begin{array}{ccc}
+Z&&\\
+&\ddots&\\
+&&Z
+\end{array}\right]&&0\\
+\vdots&&\ddots&\\
+\left[\begin{array}{c}
+Y_1\\
+\vdots\\
+Y_y
+\end{array}\right]&0&&
+
+\left[\begin{array}{ccc}
+Z&&\\
+&\ddots&\\
+&&Z
+\end{array}\right]\\
+
+\end{array}\right]=
+\left[\begin{array}{cc}
+U&\hat{W}\\
+\hat{Y}&\hat{Z}
+\end{array}\right],
+\]
+where each $W_i\in\mathbb{R}^{\ell\times (n-\ell)}$, each $Y_j\in\mathbb{R}^{(n-\ell)\times \ell}$, $\sum_{i=1}^w W_i=W$ and $\sum_{j=1}^y Y_j=Y$. Here, $w\geq0$ is the number of directed edges from $G|_{B}$ to $S_1$. The matrix $W_i$ has a single nonzero entry corresponding to exactly one edge from this set of edges. Similarly, $y\geq0$ is the number of directed edges from $S_1$ to $G|_{B}$. The matrix $Y_i$ has a single nonzero entry corresponding to exactly one edge from this set of edges. Since there are $w\cdot y$ component branches in $\mathcal{S}_B(G)$ containing $S_1$ then the matrix $\hat{M}\in\mathbb{R}^{(\ell+p(n-\ell))\times (\ell+p(n-\ell))}$ where $p=w\cdot y$.
+
+To prove the result of Theorem \ref{thm1} we will use the Schur complement formula, which states that a matrix with the block form of $M$ has the determinant
+\[
+\det[M]=\det[Z]\det[U-WZ^{-1}Y]
+\]
+if $Z$ is invertible. Here we apply this formula to the block matrix $M-\lambda I$, which results in the determinant
+\begin{align*}
+\det[M-\lambda I]&=\det[Z-\lambda I]\det[(U-\lambda I)-W(Z-\lambda I)^{-1}Y]\\
+                 &=\det[Z-\lambda I]\det[(U-\lambda I)-\sum_{i=1}^w \sum_{j=1}^y W_i(Z-\lambda I)^{-1}Y_j],
+\end{align*}
+where the matrix $Z-\lambda I$ is invertible as a result of the proof of Theorem 1.2 in \cite{thebook}. Similarly, applying the Schur complement formula to the matrix $\hat{M}-\lambda I$ we have the determinant
+\begin{align*}
+\det[\hat{M}-\lambda I]&=\det[\hat{Z}-\lambda I]\det[(\hat{U}-\lambda I)-\hat{W}(Z-\lambda I)^{-1}\hat{Y}]\\
+                 &=\det[Z-\lambda I]^p\det[(U-\lambda I)-\sum_{i=1}^w \sum_{j=1}^y W_i(Z-\lambda I)^{-1}Y_j],
+\end{align*}
+where the equality $\hat{W}(Z-\lambda I)^{-1}\hat{Y}=\sum_{i=1}^w \sum_{j=1}^y W_i(Z-\lambda I)^{-1}Y_j$ can be seen by direct multiplication of the block entries in the matrix $\hat{M}$. Hence,
+\[
+\det[M-\lambda I]\det[Z-\lambda I]^{p-1}=\det[\hat{M}-\lambda I]
+\]
+implying
+\begin{equation}\label{eq:last}
+\sigma(\mathcal{S}_B(G))=\sigma(G)\cup\sigma(S_1)^{p-1},
+\end{equation}
+so that Theorem \ref{thm1} holds if $G|_{\bar{B}}$ has a single strongly connected component $S_1$.
+
+In order to prove Theorem \ref{thm1} in full generality, we will first need to describe an alternative process which generates the specialized graph $\mathcal{S}_B(G)$, which we refer to as ``stepwise specialization.'' We start this process by defining $L_1$ to be the set of the strongly connected components of $G|_{\bar{B}}$, and label the components of this set as $L_1=\{S_{1,1},S_{2,1},\dots,S_{m,1}\}$.  Next we set $G_1=G$ and randomly choose a strongly connected component $S_{i_1,1}\in L_1$ with the property that specializing G around $S_{i_1,1}$ generates a \emph{non-trivial specialization}, i.e. $\mathcal{S}_{\bar{S}_{i,1}}(G_1)\neq G_1$. That is, when $G$, is specialized over $\bar{S}_{i,1}$, the result is a larger graph, meaning that there is more than one directed edge into or out of $S_{i,1}$. We then let $G_2=\mathcal{S}_{\bar{S}_{i,1}}(G_1)$.  Because $S_{i_1,1}$ is a single strongly connected component, we showed in the beginning of this proof that the only new vertices which appear in $G_2$ as $G_1$ is specialized must be $w\cdot y$ copies of $S_{i_1,1}$, where $w$ is the number of edges which are directed into $S_{i_1,1}$ and $y$ is the number of edges which are directed out of $S_{i_1,1}$. Now we relabel the collection of all copies of $S_{i_1,1}$ in the specialized graph $G_2$ as $\{S_{i_1,1}, S_{i_1,2}, \dots, S_{i_1,r_1}\}$.
+
+Next we define $L_2$ to be the collection of all strongly connected components of $G_2|_{\bar{B}}$, which includes all the elements of $L_1$, plus the newly relabeled collection of copies of $S_{i_1,1}$. Thus $L_2=\{S_{1,1},S_{2,1},\dots,S_{i_1-1,1},S_{i_1,1},S_{i_1,2},\dots,S_{i_1,r_1},S_{i_1+1,1},\dots,S_{m,1}\}$.  We then define $G_3$ by selecting a random element $S_{i_2,j_2}$ of $L_2$ which does not induce a trivial specialization of $G_2$ and set $G_3=\mathcal{S}_{\bar{S}_{i_2,j_2}}(G_2)$.  Again we relabel all of the strongly connected component copies of $S_{i_2,j_2}$ which appear in $G_3$ (this includes new copies and any copies which previously existed in the graph) and define $L_3$ to be the collection of all strongly connected components of $G_3|_{\bar{B}}$.  We continue this process inductively, at each step defining $G_{k+1}=\mathcal{S}_{\bar{S}_{i_k,j_k}}(G_k)$ where $S_{i_k,j_k}$ is randomly chosen from $L_{k}$ and has the property that $\mathcal{S}_{\bar{S}_{i_k,j_k}}(G_k)\neq G_k$. Then we relabel all copies of $S_{i_k,1}$ in $G_k$ as $\{S_{i_k,1},\dots S_{i_k,p_k}\}$ and define $L_{k+1}$ as the strongly connected components of $G_{k+1}$ with all the newly defined labels.
+
+Note that at each step we only specialize over one strongly connected component of $G_{\bar{B}}$. An important observation about this process is that the set of component branches with respect to base $B$ is invariant over each step.  This can be seen by recognizing that there is a one-to-one correspondence between the component branches $\mathcal{B}_B(G_k)$ and $\mathcal{B}_B(G_{k+1})$.  From this fact we can conclude that \begin{equation}\label{amy}
+\mathcal{S}_B(G_k)=\mathcal{S}_B(G)
+\end{equation}
+for all $k\geq 1$,  since we defined specialization to be the graph built by identifying elements of $B$ in all component branches of the graph.
+
+We will continue the process described above until all strongly connected components of $G_K|_{\bar{B}}$ induce a trivial specialization. At this point, the process terminates and we are left with the final graph $G_K$.  We claim that eventually this process must reach this condition and terminate.  Suppose the process did not terminate, then the specialized graph in each step would be strictly larger than the graph in the previous step.  Thus the number of vertices in $G_k$ must diverge to infinity, which we denote as $\lim_{k\rightarrow\infty}|G_k|=\infty$.  However, we know that by construction $|G_k|\leq|\mathcal{S}_B(G_k)$. Using Equation \eqref{amy} we know that $|\mathcal{S}_B(G_k)|=|\mathcal{S}_B(G)|<\infty$.  Therefore, at some point  this process must terminate.
+
+%specialization can never result in a smaller graph. Thus $|G_k|\leq|\mathcal{S}_B(G_k)$, but we showed in the previous paragraph that $\mathcal{S}_B(G_k)=\mathcal{S}_B(G)$. Because we know $\mathcal{S}_B(G)$ is finite, at some point this process must terminate.
+
+When the process does terminate, we claim the final graph $G_K=\mathcal{S}_B(G)$.  To see this, first recall that we defined $\mathcal{S}_B(G)$ to be the graph which consists of the component branches of $\mathcal{B}_B(G)$ in which all elements of $B$ are individually identified (see Definition \ref{def:exp}). Thus, if $S$ is a strongly connected component of $G|_{\bar{B}}$, then each copy of $S$ found in $\mathcal{S}_B(G)$ will have exactly one edge pointing into it and exactly one edge pointing out of it by the definition of a component branch. In the final graph $G_K$, there are no more strongly connected components for which specializing gives a larger graph. Therefore, each strongly connected component in $L_K$ has exactly one edge directing into it and one edge directing out of it. Since this is true for each strongly connected component, then $G_K$ must be composed of a collection of component branches where all corresponding vertices in $B$ are identified.  We already showed $G_K$ has the same component branches with respect to $B$ as $\mathcal{S}_B(G)$.  Using this fact and because strongly connected components of $G_K|_{\bar{B}}$ are each their own component branch, we can conclude that $G_K=\mathcal{S}_B(G)$.
+
+
+%As a first step let $G=G_1$. Proceeding inductively, we let $G_k$ be a graph defined on the $k$th step of our construction.  The idea is we can we are going to specialize $G$ one strongly connected component at a times, thus allowing us to repeatedly apply Equation %\eqref{eq:last}.
+%If we can choose a strongly connected component $S_{i_k}$ of the restricted graph $G_k|_{\bar{B}}$ such that $\mathcal{S}_{\bar{S}_{i_k}}(G_k)$ is larger than $G_k$ (i.e. specializing $G_k$ over $S_{i_k}$ results in a graph with additional copies $S_{i_k}$),  then let $G_{k+1}=\mathcal{S}_{\bar{S}_{i_k}}(G_k)$. If there is more than one strongly connected component such that this is true, choose any one of them.  At each step the original base $B$ remains a subset of the vertices of the specialized graphs since $B\subseteq \bar{S}_{i_k}$ for any $i_k$.  We also see that all new vertices are added as copies of $S_{i_k}$.  If no such strongly connected component exists at the $K$th step, then the process of specializing the graph $G$ over the base $B$ is complete and we claim that final graph in our sequence $G_K=\mathcal{S}_B(G)$.
+
+%To prove this claim, we first note that specialization does not create new branch components since we know the set of \index{component branches} components branches  $\mathcal{B}_B(G_i)$ is invariant under specialization. That is $\mathcal{B}_B(G)=\mathcal{B}_B(\mathcal{S}_B(G)$ so that the branch components are the same and after any specialization. This means that every $G_i$ in our sequence of graphs (in particular $G_K$), has the same branch components as $\mathcal{S}_B(G)$.  Because there are a finite number of component branches, after enough steps, each strongly connected component will only be in exactly one component branch.  At this point, the process will terminate as explained above.  When every $S_{i_k}$ is in a single component branch, which are the same component branches as $\mathcal{S}_B(G)$, then this is clearly equivalent to listing all the component branches and identifying all vertices contained in the base $B$.  Thus by the way specialization was constructed, we know $G_K=\mathcal{S}_B(G)$.
+
+
+Hence, we can repeatedly apply the result given in Equation \eqref{eq:last} for a single strongly connected component at each step in our ``stepwise specialization process.'' Thus the spectrum of the specialized graph $G_k$ is the spectrum of the graph $G_{k-1}$ from the previous step together with the eigenvalues $\sigma(S_{i_k})^{p_k}$ where $p_k$ is the number of copies of $S_{i_k}$ which were added.  Therefore the eigenvalues of the final graph will be the eigenvalues of the original graph together with the eigenvalues of all the copies of the strongly connected components we added at each step.  That is
+$$
+\sigma(\mathcal{S}_{B})=\sigma(G)\cup\sigma(S_1)^{n_1-1}\cup\dots\cup\sigma(S_m)^{n_m-1}
+$$
+where $n_i$ is the number of component branches in $\mathcal{B}_{B}(G)$ containing $S_i$. This completes the proof.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{proof}
+
+% \begin{proof}
+% Let $M=M(G)$ and $\hat{M}=M(\mathcal{S}_B(G))$ for some base $B$ of $G$. In general $M$ has the following form
+% \begin{equation}\label{matrix1}
+% M=
+% \left[\begin{matrix}
+% U & W_1 & W_2 & W_3 & \cdots & W_N\\
+% Y_1 & S_1 &  C_{12} & C_{13}  &\dots &C_{1N} \\
+% Y_2& 0 & S_2 &  C_{23} & \dots &C_{2N} \\
+% Y_3& 0 &0 & S_3  & \ddots  &\vdots \\
+% \vdots&  \vdots & \vdots & \ddots & \ddots &C_{N-1,N} \\
+% Y_ N& 0 &0 & \dots & 0 &S_N \\
+% \end{matrix}\right]=\left[\begin{matrix}
+% U & \hat{W}\\
+% \hat{Y} & \hat{Z}
+% \end{matrix}\right]
+% \end{equation}
+% where $M(G|_B)=U$, and each matrix $S_i$ represents, by slight abuse of notation, the strongly connected component $S_i$ of $G|_{\bar{B}}$.  The matrix $C_{ij}$ corresponds to all the edges which connect $S_i$ to $S_j$, $W_i$ corresponds to all edges which connect vertices in $G|_{B}$ to vertices in $S_i$, and each $Y_i$ corresponds to edges which connect vertices in $S_i$ to those in $G|_{B}$. For notational simplicity we let $A-\lambda I=A[\lambda]$. Hence, the characteristic polynomial of $M$ is given by $\det{(M[\lambda])}$.
+
+% Using Schur's complement formula, which gives the determinant of a $2\times2$-block matrix, we find
+% \begin{align}\label{eq:1}
+% \det{(M[\lambda])}=&\det{(\hat{Z}[\lambda])}\det{(U[\lambda]-\hat{W}\hat{Z}[\lambda]^{-1}\hat{Y})}\nonumber \\
+% =&\left[\prod_{j=1}^N\det{(S_j[\lambda])}\right]\det{(U[\lambda]-\hat{W}\hat{Z}[\lambda]^{-1}\hat{Y})},
+% \end{align}
+% where the second equality follows from the fact that $\hat{Z}[\lambda]$ is an upper block-triangular matrix. Also, the matrix $\hat{Z}[\lambda]$ is invertible by the proof of Theorem 1.2 in \cite{BWBook}. By expanding the last term in the determinant using lemma \ref{lem:IBF} we have
+% \begin{align*}
+% \hat{W}\hat{Z}[\lambda]^{-1}\hat{Y}=&\sum_{i,j=1}^{N}W_i\left[\hat{Z}[\lambda]^{-1}\right]_{ij}Y_j\\
+% =&\sum_{i,j=1}^{N}\sum_{p\in\mathcal{P}_{ij}}(-1)^{k-1}W_i\left(S_i^{-1}C_{ip_1}S_{p_1}^{-1}C_{p_1p_2}S_{p_2}^{-1}\dots S_{p_k}^{-1}C_{p_kj}S_j^{-1}\right)Y_j
+% \end{align*}
+% As in the proof of Lemma \ref{lem:IBF}, $\mathcal{P}_{ij}$ is the collection of all ordered lists of integers of the form $p=( i,p_1,p_2,\dots , p_k,j) $ where $i<p_1<p_2<\dots < p_k<j$. Next, we decompose each $W_i$ and $Y_j$ into
+% $$
+% W_i=\sum_{\ell=1}^{q_i} W_i^{\ell} \text{     and      }Y_j=\sum_{m=1}^{r_j} Y_j^m
+% $$
+% where each $W_i^\ell$ and $Y_j^m$ have a single nonzero entry and $q_i$ and $r_j$ are the number of nonzero entries in $W_i$ and $Y_j$ respectively.  Therefore
+% $$
+% \hat{W}\hat{Z}[\lambda]^{-1}\hat{Y}=\sum_{i,j=1}^{N}\sum_{p\in\mathcal{P}_{ij}}\sum_{\ell=1}^{q_i} \sum_{m=1}^{r_j}(-1)^{k-1}W_i^\ell\left(S_i^{-1}C_{ip_1}S_{p_1}^{-1}C_{p_1p_2}S_{p_2}^{-1}\dots S_{p_k}^{-1}C_{p_kj}S_j^{-1}\right)Y_j^m
+% $$
+% Finally, we also notice that each $C_{st}$ can be decomposed similarly so that
+% $$
+% C_{st}=\sum_{a_{st}}C_{st}^{a_{st}}
+% $$
+% where again each $C_{st}^{a_{st}}$ has only one nonzero entry and $a_{st}$ ranges from 1 to the number of nonzero entries in  $C_{st}$.  Thus we can write
+% $$
+% \hat{W}\hat{Z}[\lambda]^{-1}\hat{Y}=\sum_{i,j=1}^{N}\sum_{p\in\mathcal{P}_{ij}}\sum_{\ell=1}^{q_i} \sum_{m=1}^{r_j}\sum_{a_{ip_1}\dots a_{p_kj}}(-1)^{k-1}W_i^\ell\left(S_i^{-1}C_{ip_1}^{a_{ip_1}}S_{p_1}^{-1}C_{p_1p_2}^{a_{p_1p_2}}S_{p_2}^{-1}\dots S_{p_k}^{-1}C_{p_kj}^{a_{p_kj}}S_j^{-1}\right)Y_j^m.
+% $$
+% Each term in this sum corresponds to exactly one component branch $\beta\in\mathcal{B}_B(G)$ given by
+% \begin{equation}\label{eq:beta}
+% \beta=v_{in}, e_0, S_i, e_1, S_{p_1}, e_2, S_{p_2}, \dots, S_{p_k}, e_{p_k+1}, S_j, e_{p_k+2}, v_{out}
+% \end{equation}
+% where $v_{in},v_{out}\in G|_{B}$, $e_0$ is the edge corresponding to the $W_i^{\ell}$ matrix,  $e_{p_k+2}$ is the edge corresponding to the $Y_j^{m}$ matrix, and $e_t$  is the edge corresponding to the $C_{p_{t-1}p_{t}}^{a_{p_{t-1}p_t}}$ matrix for $1\leq t\leq p_k+1$, letting  $p_0=i$  and $p_{k+1}=j$.
+
+% Now we compare the characteristic polynomial of $M$ to the characteristic polynomial of $\hat{M}$. The claim is that $\hat{M}$ has the form
+% \begin{equation}\label{matrix2}
+% \hat{M}=
+% \left[
+% \begin{array}{cccccc}
+% U & \check{W}_1 & \check{W}_2 & \check{W}_3 & \cdots & \check{W}_{\tilde{n}} \\
+% \check{Y}_1 & Z_1 & 0 & 0 &\dots & 0 \\
+% \check{Y}_2 & 0 & Z_2 & 0 &\dots &0 \\
+% \check{Y}_3 & 0 & 0 & Z_3  &\dots &0 \\
+% \vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+% \check{Y}_{\tilde{n}} & 0 &0 & 0  & \cdots  & Z_{\tilde{n}}
+% \end{array}
+% \right]=\left[\begin{matrix}
+% U & \check{W}\\
+% \check{Y} & \check{Z}
+% \end{matrix}\right]
+% \end{equation}
+% In this matrix  $Z_t$, $\check{W}_t$, and $\check{Y}_t$, together represent a single component branch for each $1\leq t\leq \tilde{n}$, and $\tilde{n}$ is the total number of component branches. For a branch component $\beta\in\mathcal{B}_B(G)$ given by \eqref{eq:beta} the corresponding matrices $Z_t,\check{W}_t, \check{Y_t}$ will have the form
+% $$Z_t=
+% \left[\begin{matrix}
+% S_i & C^{a_{ip_1}}_{ip_1} & 0 & 0 & \cdots & 0\\
+% 0 & S_{p_1} &  C_{p_1p_2}^{a_{p_1p_2}} &  0 &\dots &0 \\
+% 0& 0 & S_{p_2} &  C_{p_2p_3}^{a_{p_2p_3}} &  &\vdots \\
+% 0& 0 & 0 & S_{p_3} & \ddots  & 0 \\
+% \vdots& \vdots & \vdots & & \ddots  & C_{p_kj}^{a_{p_kj}} \\
+% 0& 0 &0 &  \cdots & 0 &S_j \\
+% \end{matrix}\right],$$
+% $\check{W}_t=[W_i^\ell \ 0 \ 0 \dots \ 0]$, and $\check{Y}_t=[0  \ \dots \ 0 \  Y_j^m]^T$ respectively, with all the same edge-matrix correspondences described in the previous paragraph. Now we find the characteristic polynomial of $\hat{M}$.
+% \begin{align}\label{eq:2}
+% \det{(\hat{M}[\lambda])}=&\det{(\check{Z}[\lambda])}\det{(U[\lambda]-\check{W}\check{Z}[\lambda]^{-1}\check{Y})}\nonumber \\
+% =&\prod_{j=1}^N\left(\det{(S_j[\lambda])}\right)^{n_j}\det{(U[\lambda]-\check{W}\check{Z}[\lambda]^{-1}\check{Y})}.
+% \end{align}
+% Again we will focus on the last term in the determinant
+% \begin{equation}\label{dd}
+% \check{W}\check{Z}[\lambda]^{-1}\check{Y}=\sum_{t=1}^{\tilde{n}}\check{W}_t Z_t[\lambda]^{-1}\check{Y}_t
+% \end{equation}
+% Using Lemma \ref{lem:IBF}, we find the upper right block of the above general $Z_t[\lambda]^{-1}$ is given by
+% $$(-1)^{k-1}S_i^{-1}C_{ip_1}^{a_{tp_1}}S_{p_1}^{-1}C_{p_1p_2}^{a_{p_1p_2}}S_{p_2}^{-1}\dots S_{p_k}^{-1}C_{p_kj}^{a_{p_kj}}S_j^{-1}.$$
+% Thus $$\check{W}_t\check{Z}_t[\lambda]^{-1}\check{Y}_t=W_i^{\ell}(-1)^{k-1}S_i^{-1}C_{ip_1}^{a_{tp_1}}S_{p_1}^{-1}C_{p_1p_2}^{a_{p_1p_2}}S_{p_2}^{-1}\dots S_{p_k}^{-1}C_{p_kj}^{a_{p_kj}}S_j^{-1}Y_j^m.$$
+% Because each term of the sum in \ref{dd} represents a component branch, we can conclude that
+% \begin{equation}\label{eq}
+% \check{W}\check{Z}[\lambda]^{-1}\check{Y}=\hat{W}\hat{Z}[\lambda]^{-1}\hat{Y}.
+% \end{equation}
+% By comparing equation \ref{eq:1} and equation \ref{eq:2} we find
+% $$
+% \det{(\hat{M}[\lambda])}=\prod_{j=1}^N\left(\det{(S_j[\lambda])}\right)^{n_j-1}\det{(M[\lambda])}.
+% $$
+% From this we can conclude that $$\sigma(\hat{M})=\sigma(M)\cup\sigma(S_1)^{n_1-1}\cup\sigma(S_2)^{n_2-1}\cup\dots\cup\sigma(S_N)^{n_N-1}.$$
+% \end{proof}
+
+To prove Theorem \ref{prop10} we need the notion of an \emph{isospectral graph reduction}, which is a way of reducing the size of a graph while essentially preserving its set of eigenvalues. Since there is a one-to-one relation between the graphs we consider and the matrices $M\in\mathbb{R}^{n\times n}$, there is also an equivalent theory of \emph{isospectral matrix reductions}. Both types of reductions will be useful to us.
+
+For the sake of simplicity we begin by defining an isospectral matrix reduction. For these reductions we need to consider matrices with rational function entries. The reason is that, by the Fundamental Theorem of Algebra, a matrix $A\in\mathbb{R}^{n\times n}$ has exactly $n$ eigenvalues including multiplicities. In order to reduce the size of a matrix while at the same time preserving its eigenvalues we need something that carries more information than scalars, which for us are rational functions. The specific reasons for using rational functions can be found in \cite{BWBook}, chapter 1.
+
+We let $\mathbb{W}^{n\times n}$ be the set of $n\times n$ matrices whose entries are rational functions  $p(\lambda)/q(\lambda)\in\mathbb{W}$, where $p(\lambda)$ and $q(\lambda)\neq0$ are polynomials with real coefficients in the variable $\lambda$. The eigenvalues of the matrix $M=M(\lambda)\in\mathbb{W}^{n\times n}$ are defined to be solutions of the \emph{characteristic equation}
+\[
+\det(M(\lambda)-\lambda I)=0,
+\]
+which is an extension of the standard definition of the eigenvalues for a matrix with complex entries.
+
+For $M\in\mathbb{R}^{n\times n}$ let $N=\{1,\ldots,n\}$. If the sets $T,U\subseteq N$ are proper subsets of $N$, we denote by $M_{TU}$ the $|T| \times |U|$ \emph{submatrix} of $M$ with rows indexed by $T$ and columns by $U$. The isospectral reduction of a square real valued matrix is defined as follows.
+
+\begin{definition}\label{def:isored} \textbf{(Isospectral Matrix Reduction)}
+The \emph{isospectral reduction} of a matrix $M\in\mathbb{R}^{n\times n}$ over the proper subset $B\subseteq N$ is the matrix
+\[
+\mathcal{R}_B(M) = M_{BB} - M_{B\bar{B}}(M_{\bar{B}\bar{B}}-\lambda I)^{-1} M_{\bar{B}B}\in\mathbb{W}^{|B|\times|B|}.
+\]
+\end{definition}
+
+A proof of Proposition \ref{prop:0} is based on the following result relating the eigenvectors of the a graph $G$ and its reduction $\mathcal{R}_B(G)$.
+
+\begin{theorem}\label{thm:reduction}\textbf{(Eigenvectors of Reduced Matrices)}
+Suppose $M\in\mathbb{R}^{n\times n}$ and $B\subseteq N$. If $(\lambda,\mathbf{v})$ is an eigenpair of $M$ and $\lambda\notin \sigma(M_{\bar{B}\bar{B}})$ then $(\lambda,\mathbf{v}_B)$ is an eigenpair of $\mathcal{R}_B(M)$.
+\end{theorem}
+
+\begin{proof}
+Suppose $(\lambda,\mathbf{v})$ is an eigenpair of $M$ and $\lambda\notin \sigma(M_{\bar{B}\bar{B}})$. Then without loss in generality
+we may assume that $\mathbf{v}=(\mathbf{v}_B^T,\mathbf{v}_{\bar{B}}^T)^T$. Since $M\mathbf{v}=\lambda\mathbf{v}$ then
+\[
+\left[\begin{array}{cc}
+M_{BB}&M_{B\bar{B}}\\
+M_{\bar{B}B}&M_{\bar{B}\bar{B}}
+\end{array}\right]
+\left[\begin{array}{c}
+\mathbf{v}_B\\
+\mathbf{v}_{\bar{B}}
+\end{array}\right]=
+\lambda \left[\begin{array}{c}
+\mathbf{v}_B\\
+\mathbf{v}_{\bar{B}}
+\end{array}\right],
+\]
+which yields two equations the second of which implies that
+\[
+M_{\bar{B}B}\mathbf{v}_B+M_{\bar{B}\bar{B}}\mathbf{v}_B=\lambda\mathbf{v}_{\bar{B}}.
+\]
+Solving for $\mathbf{v}_{\bar{B}}$ in this equation yields
+\begin{equation}\label{eq:bar}
+\mathbf{v}_{\bar{B}}=-(M_{\bar{B}\bar{B}}-\lambda I)^{-1}M_{\bar{B}B}\mathbf{v}_{B},
+\end{equation}
+where $M_{\bar{B}\bar{B}}-\lambda I$ is invertible given that $\lambda\notin \sigma(M_{\bar{B}\bar{B}})$.
+
+Note that
+\begin{align*}
+(M-\lambda I)\mathbf{v}&=
+\left[\begin{array}{c}
+(M-\lambda I)_{ BB}\mathbf{v}_{B}+(M-\lambda I)_{ B\bar{B}}\mathbf{v}_{\bar{B}}\\
+(M-\lambda I)_{\bar{B}B}\mathbf{v}_{B}+(M-\lambda I)_{\bar{B}\bar{B}}\mathbf{v}_{\bar{B}}
+\end{array}\right]\\
+&=
+\left[\begin{array}{c}
+M_{BB}\mathbf{v}_{B}-M_{ B\bar{B}}(M_{\bar{B}\bar{B}}-\lambda I)^{-1}M_{\bar{B}B}\mathbf{v}_{B}\\
+M_{\bar{B}B}\mathbf{v}_{B}-(M_{\bar{B}\bar{B}}-\lambda I)(M_{\bar{B}\bar{B}}-\lambda I)^{-1}M_{\bar{B}B}\mathbf{v}_{B}
+\end{array}\right]\\
+&=\left[\begin{array}{c}
+(\mathcal{R}_B(M)-\lambda I)\mathbf{v}_{B}\\
+0
+\end{array}\right].
+\end{align*}
+Since $(M-\lambda I)\mathbf{v}=0$ it follows that $(\lambda,\mathbf{v}_B)$ is an eigenpair of $\mathcal{R}_B(M)$.
+
+Moreover, we observe that if $(\lambda,\mathbf{v}_B)$ is an eigenpair of $\mathcal{R}_B(M)$ then by reversing this argument, $\big(\lambda,(\mathbf{v}_B^T,\mathbf{v}_{\bar{B}}^T)^T\big)$ is an eigenpair of $M$ where $\mathbf{v}_{\bar{B}}$ is given by \eqref{eq:bar}.
+\end{proof}
+
+We now give a proof of Theorem \ref{prop10}.
+
+\begin{proof}
+Let $M=M(G)$ and $\hat{M}=M(\mathcal{S}_B(G))$ where $B$ is a base of $G$. By slightly abusing our notation we let $B$ also denote the subset of integers $B\subset\{1,\dots,N\}$ that indexes the vertices in this base. If $(\lambda,\mathbf{v})$ is an eigenpair of $M$ and $\lambda\notin \sigma(M_{\bar{B}\bar{B}})$ then Theorem \ref{thm:reduction} implies that $(\lambda,\mathbf{v}_B)$ is an eigenpair of $\mathcal{R}_B(M)$. The claim is that $(\lambda,\mathbf{v}_B)$ is also an eigenpair of of the reduced matrix $\mathcal{R}_B(\hat{M})$.
+
+To see this first we note that the matrix $M$ and $\hat{M}$ have the form given in \eqref{matrix1} and \eqref{matrix2}, respectively.
+By the definition \label{def:isored} the reduced matrices $\mathcal{R}_B(M)$ and $\mathcal{R}_B(\hat{M})$ are
+\begin{align*}
+\mathcal{R}_B(M)&=U-\hat{W}\hat{Z}[\lambda]^{-1}\hat{Y}\in\mathbb{W}^{|B|\times|B|}\\
+\mathcal{R}_B(\hat{M})&=U-\check{W}\check{Z}[\lambda]^{-1}\check{Y}\in\mathbb{W}^{|B|\times|B|}.
+\end{align*}
+Now using equation \eqref{eq} in the proof of Theorem \ref{thm1}, we can see that conclude that $\mathcal{R}_B(\mathcal{S}_B(M))=\mathcal{R}_B(M).$  Using this fact and the observation in the last line of the proof of Theorem \ref{thm:reduction} it follows that $(\lambda,\hat{\mathbf{v}})$ is an eigenpair of $\hat{M}$ where
+\[
+\hat{\mathbf{v}}=
+\left[
+\begin{array}{c}
+\hat{\mathbf{v}}_B\\
+\hat{\mathbf{v}}_{\bar{B}}
+\end{array}
+\right]=
+\left[
+\begin{array}{c}
+\mathbf{v}_B\\
+-(\hat{M}_{\bar{B}\bar{B}}-\lambda I)^{-1}\hat{M}_{\bar{B}B}\mathbf{v}_{B}
+\end{array}
+\right].
+\]
+Note that $\mathbf{v}_B=\hat{\mathbf{v}}_B$, which completes the proof.
+\end{proof}
+
+\section{Acknowledgement} The work of L. A. Bunimovich was partially supported by the NSF grant DMS-1600568. The work of B. Z. Webb is partially supported by was partially supported by the DOD grant HDTRA1-15-0049.
+
+
+\begin{thebibliography}{9}
+\bibitem{Bara00} Albert, R. $\&$ Barabasi, A.-L., Topology of Evolving Networks: Local events and universiality, \emph{Phys. Rev. Lett.} \textbf{85}, 5234-5237 (2000).
+
+\bibitem{A07} Alon, U. Network motifs: theory and experimental approaches. \emph{Nature Reviews Genetics} \textbf{8}, 450-461 (2007).
+
+\bibitem{Alpcan2005} Alpcan. T. $\&$ Basar, T. A Globally Stable Adaptive Congestion Control Scheme for Internet-Style Networks With Delay, \emph{IEEE/ACM Transactions on Networking}, \textbf{13}, 6 (2005).
+
+\bibitem{BA99} Barabasi, A.-L. $\&$ Albert, R. (1999) Emergence of scaling in random networks. Science, 286, 509–512.
+
+\bibitem{Bara99} Barabasi, A.-L. $\&$ Albert, R., Emergence of Scaling in Random Networks, Science \textbf{286} 509-512 (1999).
+
+\bibitem{BO04} Barabasi, A.-L. $\&$ Oltvai, Z. N. Network Biology: Understanding the Cell's Functional Organization. \emph{Nature Reviews Genetics} \textbf{5}, 101-113 (2004).
+
+\bibitem{BW12} Bunimovich, L. A. $\&$ Webb, B. Z. Isospectral Graph Transformations, Spectral Equivalence, and Global Stability of Dynamical Networks. \emph{Nonlinearity} \textbf{25}, 211-254 (2012).
+
+\bibitem{BW13} Bunimovich, L. A. $\&$ Webb, B. Z. Restrictions and Stability of Time-Delayed Dynamical Networks. \emph{Nonlinearity} \textbf{26}, 2131-2156 (2013).
+
+\bibitem{BWBook} Bunimovich, L. A. $\&$ Webb, B. Z. Isospectral Transformations: A New Approach to Analyzing Multidimensional Systems and Networks. Springer Monographs in Mathematics (2014).
+
+\bibitem{BSW18} Bunimovich, L. A. Smith, D. $\&$ Webb, B. Z. Specialization Models of Network Growth. \emph{Journal of Complex Networks} https://doi.org/10.1093/comnet/cny024 (2018).
+
+\bibitem{BS09} Bullmore, E. $\&$ Sporns, O. Complex brain networks: graph theoretical analysis of structural and functional systems. \emph{Nature Reviews Neuroscience} \textbf{10}, 186-198 (2009).
+
+\bibitem{Cao2003} Cao, J. Global asymptotic stability of delayed bi-directional associative memory neural networks,\emph{ Applied Mathematics and Computation}, \textbf{142}, 2-3, 333--339 (2003).
+
+\bibitem{Cheng2006} Cheng, C.-Y., Lin, K.-H., $\&$ Shih, C.-W. Multistability in Reccurent Neural Networks, \emph{SIAM J. Appl. Math} \textbf{66}, 4, 1301--1320 (2006).
+
+\bibitem{SChena2009} Chena, S., Zhaoa, W., $\&$ Xub, Y. New criteria for globally exponential stability of delayed Cohen-Grossberg neural network. \emph{Mathematics and Computers in Simulation} \textbf{79} 1527-1543 (2009).
+
+\bibitem{CF14} Clark, R. M. $\&$ Fewell, J. H. Transitioning from unstable to stable colony growth in the desert leafcutter ant Acromyrmex versicolor. \emph{Behavioral Ecology and Sociobiology} \textbf{68} 163-171 (2014).
+
+\bibitem{Clauset08} A. Clauset, C. Moore and M. Newman, Hierarchical structure and the prediction of missing links in networks, Nature \textbf{453}, (2008).
+
+\bibitem{MCohen1983} Cohen, M. $\&$ Grossberg S. Absolute stability and global pattern formation and parallel memory storage by competitive neural networks, \textit{IEEE Transactions on Systems, Man, and Cybernetics} SMC-13 815-821 (1983).
+
+\bibitem{Doro00} Dorogovtsev, S. N., and Mendes, J. F. F., Scaling behaviour of developing and decaying networks, \emph{Europhys Lett.} \textbf{52}, 33-39, (2000).
+
+\bibitem{Esp10} C. Espinosa-Soto, A. Wagner Specialization Can Drive the Evolution of Modularity. PLoS Comput Biol 6(3): e1000719. doi:10.1371/journal.pcbi.1000719 (2010).
+
+\bibitem{Ferrer03} Ferrer i Cancho, R., $\&$ Sole, R. V., Optimization in complex networks, in R. Pastor-Satorras, J. Rubi, and A. Diaz-Guilera, eds. \emph{Statistical Mechanics of Complex Networks}, no. 625 in Lecture Notes in Physics, pp. 114-125, Springer, Berlin (2003).
+
+\bibitem{FAIPW12} Fewell, J. H., Armbruster D., Ingraham J., Petersen A., $\&$ Waters, J. S. Basketball Teams as Strategic Networks. \emph{PLOS ONE}, 7(11): e47445 (2012).
+
+\bibitem{Gastner06} Gaster, M. T. $\&$ Newman, M. E. J., Optimal design of spacial distribution networks, Phys. Rev. E 74, 016117 (2006).
+
+\bibitem{GS09} Gross, T. $\&$ Sayama, H. (eds). Adaptive Networks: Theory Models and Applications. Springer (2009)
+
+\bibitem{HJ90} Horn, R. $\&$ Johnson, C., Matrix Analysis, Cambridge University Press, Cambridge, (1990).
+
+\bibitem{HG08} Humphries, M. D. $\&$ Gurney, K. Network 'Small-World-Ness': A Quantitative Method for Determining Canonical Network Equivalence. \emph{PLOS ONE}, 3(4): e2051 (2008).
+
+\bibitem{HEOGF13} Holbrook, C.T., Eriksson, T.H., Overson, R.P., $\&$ J. H. Fewell Colony-size effects on task organization in the harvester ant Pogonomyrmex californicus. \emph{Insectes Sociaux} \textbf{60} 191-201 (2013).
+
+\bibitem{KS08} Karlebach, G. $\&$ Shamir, R. Modelling and Analysis of Gene Regulatory Networks. \emph{Nature Reviews Molecular Cell Biology} \textbf{9}, 770-780 (2008).
+
+\bibitem{Klein99} Kleinberg, J. M., Kumar, S. R., Raghavan, P., Rajagopalan, and Tomkins, A. The Web as a graph: Measurments, models, and methods, in T. Asano, H. Imai, D. T. Lee, S.-I. Nakano, and T. Tokuyama, eds., \emph{Proceedings of the 5th Annual International Confernce on Combinatorics and Computing}, no. 1627 in Lecture Notes in Computer Science, pp. 1-18, Springer, Berlin (1999).
+
+\bibitem{Krap01} Krapivsky, P. L., Rodgers, G. J., $\&$ Redner, S., Degree distributions of growing networks, \emph{Phys. Rev. Lett.} \textbf{86}, 5401-5404 (2001).
+
+\bibitem{Leskovec2008} J. Leskovec, K. Lang, A. Dasgupta, and M. Mahoney, Statistical Properties of Community Structure in Large Social and Information Networks, Proceedings of the 17th International Conference on World Wide Web, 695--704, ACM, New York, NY, USA (2008).
+
+\bibitem{LWSL07} Liu, Y., Wang, Z., Serrano, A., $\&$ Liu, X. Discrete-time recurrent neural networks with time-varying delays: Exponential stability analysis, \emph{Physics Letters A}, 362(5-6): 480-488 (2007).
+
+\bibitem{MSA08} MacArthur, B. D., Sanchez-Garcia, R. J., $\&$ Andersonc J. W. Symmetry in Complex Networks. \emph{Discrete Applied Mathematics} \textbf{156}, 3525-3531 (2008).
+
+\bibitem{Milo02} Milo, R., Shen-Orr, S., Itzkovitz, S., Kashtan, N., Chklovskii, D., $\&$ Alon, U. Network Motifs: Simple Building Blocks of Complex Networks, Science \textbf{298}, 824 (2002).
+
+\bibitem{N03} Newman, M. E. J. The Structure and Function of Complex Networks. \emph{SIAM Review} \textbf{45}, 167-256 (2003).
+
+\bibitem{Newman2006} Newman, M. E. J., Barabasi, A.-L., and Watts, D. J., The Structure and Dynamics of Complex Networks, Princeton University Press (2006).
+
+\bibitem{Newman2006} Newman, M. E. J. Modularity and community structure in networks, \emph{Proc Natl Acad Sci USA} 103(23): 8577-8582 (2006).
+
+\bibitem{Newman10} M. Newman, Networks: An Introduction, Oxford University Press (2010).
+
+\bibitem{Plamen2015} R. P. Bartsch, K. K. L. Liu, A. Bashan, and P. Ch. Ivanov, Network Physiology: How Organ Systems Dynamically Interact. \emph{PLOS} https://doi.org/10.1371/journal.pone.0142143, (2015).
+
+\bibitem{Price76} Price, D.J. de S., A general theory of bibliometric and other cumilitive advantage processes, \emph{J. Amer. Soc. Inform. Sci.} \textbf{27}, 292-306 (1976).
+
+\bibitem{Sch2015} Schmidhuber, J. Deep learning in neural networks: An overview. \emph{Neural Networks}, Volume 61, 85-117 (2015).
+
+\bibitem{Sole02} Sole, R. V., Pastor-Satorras, R., Smith, E. $\&$ Kepler, T. B., A model of large scale proteome evolution, Adv. Complex Syst. \textbf{5}, 43-54, (2002).
+
+\bibitem{Sporns13} O. Sporns, Structure and function of complex brain networks, Dialogues Clin Neurosci. 15(3): 247-262 (2013).
+
+\bibitem{LTao2011} Tao, L., Ting, W., $\&$ Shumin, F. Stability analysis on discrete-time Cohen-Grossberg neural networks with bounded distributed delay, \textit{Proceedings of the 30th Chinese Control Conference}, July 22-24, Yantai, China (2011).
+
+\bibitem{TSE99} Tononi, G., Sporns, O., $\&$ Edelman G. M. Measures of Degeneracy and Redundancy in Biological Networks, \emph{Proc. Natl. Acad. Sci. USA} \textbf{96} 3257-3262 (1999).
+
+\bibitem{Vaz03} Vazquez, A., Flammini, A., Martin, A., $\&$ Vespignani, A., Modeling of protein interaction networks, \emph{Complexus} \textbf{1}, 38-44 (2003).
+
+\bibitem{Wang2008} Wang, L. $\&$ Dai, G.-Z. Global Stability of Virus Spreading in Complex Heterogeneous Networks, \emph{SIAM J. Appl. Math.}, 68(5), 1495--1502 (2008).
+
+\bibitem{WM10} Watanabe, T. $\&$ Masuda, N. Enhancing the spectral gap of networks by node removal, \emph{Phys. Rev. E} \textbf{82} (2010).
+
+\bibitem{Wiki17} https://en.wikipedia.org/wiki/Wikipedia:Disambiguation last accessed Aug. 2017.
+
+\bibitem{Merc17} https://en.wikipedia.org/wiki/Mercury last accessed Aug. 2017.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{thebibliography}
+
+
+
+
+
+
+\section{References}
+\textcolor{blue}{References cited in the text should be placed within square
+brackets and stated as [surname of author(s), year of
+publication], e.g., \cite{Golub89} and, with three
+or more authors, \cite{Hall97}. If the reference reads as part of
+the sentence, the square brackets enclose only the year of
+publication, e.g., ``According to Golub and Van Loan [1989], \ldots''}
+
+\nonumsection{Acknowledgments} \noindent \textcolor{blue}{This part should come
+before References. Funding information may also be included here.}
+
+\nonumsection{Appendices} \noindent \textcolor{blue}{Appendices should be used only
+when absolutely necessary. They should come immediately before
+References.}
+
+\nonumsection{References}
+
+\noindent A complete list of references cited, arranged in
+alphabetical order according to the surname of the first author,
+should be provided. References by the same author will follow a
+chronological sequence, i.e., \cite{Lie00} precedes \cite{Lie01}.
+Article titles should be stated in full but standard abbreviations
+should be used for journal names. Typeset reference in 10 pt Times
+Roman, single spaced with baselineskip of 12 pt.
+
+\subsection*{Examples}
+
+\subsubsection*{Journal reference:}
+
+\hangindent=1.12em P\"arssinen, A., Jussila, J., Ryyn\"anen, J.,
+Sumanen, L. \& Halonen, K.  A. I. [1999] ``A 2-GHz wide-band direct conversion receiver for WCDMA applications,'' {\it IEEE J. Solid-State
+Circuits} {\bf 34}, p. 1893.
+
+\noindent\hangindent=1.12em Zhu, Z. \& Leung, H. [1999] ``Optimal synchronization of chaotic systems in
+noise,'' {\it IEEE Trans. Circ. Syst.-I\/$:$ Fund. Th. Appl.} {\bf 46},
+1320--1329.
+
+\subsubsection*{Book reference:}
+
+\hangindent=1.12em Golub, G. H. \& Van Loan, C. F. [1989] {\it
+Matrix Comptations}, 2nd Ed. (Johns Hopkins University Press,
+USA).
+
+\noindent\hangindent=1.12em Lie, D. Y. C. \& Wang, K. L. [2001]
+``Si/SiGe processing,''
+{\it Semiconductors and Semimetals} {\bf 73}, eds.~Willardson, R.
+\& Weber, E., (Academic Press,
+San Diego), Chapter 4, pp.~151--197.
+
+\subsubsection*{Proceedings reference:}
+\hangindent=1.12em Haller, B., Streiff, M., Fleisch, U. \&
+Zimmermann, R. [1997] ``Hardware implementation of a systolic
+\hbox{antenna} array signal processor based on CORDIC
+arithmetic,'' {\it Proc. Int. Conf. Acoust. Speech
+\hbox{Signal} Proc.} {\bf 5}, pp. 4141--4144.
+\begin{thebibliography}{9}
+
+\bibitem[Golub \& Van Loan(1989)]{Golub89} Golub, G. H. \& Van Loan, C. F. [1989] {\it Matrix
+Comptations}, 2nd Ed. (Johns Hopkins University Press, USA).
+
+\bibitem[Haller {\it et al.}(1997)]{Hall97} Haller, B., Streiff, M., Fleisch, U. \& Zimmermann,
+R. [1997] ``Hardware implementation of a systolic \hbox{antenna}
+array signal processor based on CORDIC arithmetic,'' {\it Proc.
+Int. Conf. Acoust. Speech \hbox{Signal} Proc.} {\bf 5},
+pp. 4141--4144.
+
+\bibitem[Lie \& Wang(2000)]{Lie00} Lie, D. Y. C. \& Wang, K. L. [2000]  ``Si/SiGe
+heterostructures for Si-based nanoelectronics,'' {\it Handbook of}
+\hbox{\it Advanced} {\it Electronic and Photonic Devices and
+Materials}, ed.~Nalwa, H. S. (\hbox{Academic}
+Press, San Diego), Chapter~1, pp.~1--69.
+
+\bibitem[Lie \& Wang(2001)]{Lie01} Lie, D. Y. C. \& Wang, K. L. [2001]
+``Si/SiGe processing,''
+{\it Semiconductors and Semimetals} {\bf 73}, eds.~Willardson, R.
+\& Weber, E. (Academic Press, San Diego), Chapter 4, pp.~151--197.
+
+\bibitem[Parssinen {\it et al.}(1999)]{Par99} P\"arssinen, A., Jussila, J., Ryyn\"anen, J.,
+Sumanen, L. \& Halonen, K.  A. I. [1999] ``A 2-GHz wide-band direct conversion receiver for WCDMA applications,'' {\it IEEE J. Solid-State
+Circuits} {\bf 34}, p.~1893.
+
+\bibitem[Zhu~\& Leung, 1999]{EKF_DrLeung3}
+Zhu, Z. \& Leung, H. [1999] ``Optimal synchronization of chaotic systems in
+noise,'' {\it IEEE Trans. Circ. Syst.-I\/$:$ Fund. Th. Appl.} {\bf 46},
+1320--1329.
+
+\end{thebibliography}
+%\end{multicols}
+\end{document}

@@ -1,0 +1,724 @@
+\documentclass{paper}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{parskip}
+\begin{document}
+
+\section*{Eigenvector Transfer proof}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Theorem Statement
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Theorem}\textbf{(Eigenvectors of Specialized Graphs)}
+Let $G=(V,E,\omega)$ be a graph and $B\subseteq V$ a base.\\
+(i) If $(\lambda,\mathbf{x})$ is an eigenpair of the graph $G$ and $\lambda\notin\sigma(G|_{\bar{B}})$ then there is an eigenpair $(\lambda,\mathbf{y})$ of $\mathcal{S}_B(G)$ such that $\mathbf{x}_B=\mathbf{y}_B$.\\
+Furthermore, suppose $G$ is strongly connected with positive edge weights and let $\mathbf{u}$ be a leading eigenvector of $G$. Also, let $Z$ be a strongly connected component of $\beta\in\mathcal{B}_S(G)$. Then there is a leading eigenvector $\mathbf{v}$ of $\mathcal{S}_B(G)$ such that the following hold.\\
+(ii) For all $Z_i\in\mathcal{C}(Z)$ the eigenvector restriction 
+\[
+\mathbf{v}_{Z_i}=T(\beta,Z)\mathbf{v}_B.
+\] 
+Hence, if $Z_i,Z_j\in\mathcal{C}(Z)$ have the same incoming branch then $\mathbf{v}_{Z_i}=\mathbf{v}_{Z_j}$.\\
+(iii) For $Z_i\in\mathcal{C}(Z)$ let $\cup_{k=1}^\ell\{Z_k\}$ be the copies of $Z$ that have the same outgoing branch as $Z_i$. Then
+\[
+\mathbf{u}_Z=\sum_{k=1}^{\ell}\mathbf{v}_{Z_k}=\sum_{k=1}^{\ell}T(\beta,Z)\mathbf{v}_B.
+\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection*{Proof of (ii)}
+Let $Z$ be a strongly connected component of $G|_{\overline{B}}$ and let $Z_i$ be a copy of $Z$ in $\mathcal{S}_B(G)$. Then there exists a component branch $\beta$ corresponding to $Z_i$, of the form $\beta = \{v_j, e_0, C_1, ..., C_k, e_k, Z, C_{k+1}, ..., C_{n}\}$ . Then, because specialization isolates each component branch, we can write the adjacency matrix $A$ of $\mathcal{S}_B(G)$ in the form,
+
+\[
+A = 
+\begin{bmatrix}
+\mathcal{A}(In(\beta,Z)) & W \\
+Y & X
+\end{bmatrix}
+=
+\begin{bmatrix}
+\underline{B} & & & & & & W\\
+Y_0 & \underline{C_1} \\
+    & Y_1 	& \underline{C_2} \\
+    &     	& \ddots 	& \ddots \\
+    &  	  	&		 	&	Y_{k-1} 	& \underline{C_k}\\
+
+  &  &  	  	&		 	&	Y_k 	& \underline{Z_i}\\
+  &  &		&			&		& Y_{k+1} & X \\
+\end{bmatrix}.
+\]
+Here, $\underline{B} = \mathcal{A}(G|_B)$, $\underline{Z_i} = \mathcal{A}(Z_i)$ and for $1 \leq j \leq k$, $\underline{C_j} = \mathcal{A}(C_j)$. For $0 \leq j \leq k+1$, the matrix $Y_j$ is a single entry matrix corresponding to the edge $e_j \in \beta$. 
+
+Suppose $(\lambda, \mathbf{v})$ is an eigenpair of $G$, i.e. $A\mathbf{v}=\lambda\mathbf{v}$, such that $\lambda\notin\sigma(G|_{\bar{B}})$. 
+As $ \sigma(G|_{\bar{B}}) = \cup_{j=1}^m \sigma(C_i)$ where $C_1,C_2,\dots,C_m$ 
+are the strongly connected components of $G|_{\bar{B}}$ then $\lambda$ is not an eigenvalue of any strongly connected component of $\beta$. 
+We may conformally partition $\mathbf{v}$ into $\mathbf{v} = [\mathbf{v}_B, \mathbf{v}_{C_1}, \cdots \mathbf{v}_{C_k}, \mathbf{v}_{{Z_{i}}}, \mathbf{v}_{X}]^{T}$ so that entries in each piece correspond with the appropriate sub-matrix of $A$. Then, applying the eigenvector equation produces,
+
+\[
+A\mathbf{v} = 
+\begin{bmatrix}
+\underline{B} & & & & & & W\\
+Y_0 & \underline{C_1} \\
+    & Y_1 	& \underline{C_2} \\
+    &     	& \ddots 	& \ddots \\
+    &  	  	&		 	&	Y_{k-1} 	& \underline{C_k}\\
+
+  &  &  	  	&		 	&	Y_k 	& \underline{Z_i}\\
+  &  &		&			&		& Y_{k+1} & X \\
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{v}_B \\ 
+\mathbf{v}_{C_1}\\
+\mathbf{v}_{C_2}\\
+
+\vdots \\
+\mathbf{v}_{C_k}\\
+\mathbf{v}_{{Z_{i}}} \\
+\mathbf{v}_{X}
+\end{bmatrix}
+= \lambda
+\begin{bmatrix}
+\mathbf{v}_B \\ 
+\mathbf{v}_{C_1}\\
+\mathbf{v}_{C_2}\\
+
+\vdots \\
+\mathbf{v}_{C_k}\\
+\mathbf{v}_{{Z_{i}}} \\
+\mathbf{v}_{X}
+\end{bmatrix}
+=\lambda \mathbf{v}.
+\]
+
+We solve for $\mathbf{v}_Z$ in terms of $\mathbf{v}_B$. Multiplying $\mathbf{v}$ by the appropriate block row of $A$ gives $Y_k \mathbf{v}_{C_k} + \underline{Z_i}$, implying that
+
+\[
+\mathbf{v}_{Z_{i}} = \lambda \mathbf{v}_{Z_{i}}.
+\]
+\begin{equation}
+\mathbf{v}_{Z_i} = (\lambda I - \underline{Z_i})^{-1} Y_k \mathbf{v}_{C_k}
+\end{equation}
+In a similar manner for $2\leq i \leq k$, we may solve for $\mathbf{v}_{C_i}$ in terms of $\mathbf{v}_{C_{i-1}}$ producing,
+\[
+\mathbf{v}_{C_i} = (\lambda I - \underline{C_{i}})^{-1} Y_{i-1} \mathbf{v}_{C_{i-1}}.
+\]
+Combining this with equation \begin{bf}(6)\end{bf} gives,
+\[
+\mathbf{v}_{Z_i} = (\lambda I - \underline{Z_i})^{-1} Y_k (\lambda I - \underline{C_{k}})^{-1} Y_{k-1} \cdots Y_{2}(\lambda I - \underline{C_{2}})^{-1}Y_{1}\mathbf{v}_{C_{1}}.
+\]
+We solve for $\mathbf{v}_{C_{1}}$ in a similar manner and find that
+\[
+\mathbf{v}_{C_{1}} = (\lambda I - \underline{C_1})^{-1}Y_0 \mathbf{v}_{B}.
+\]
+Then, 
+\[
+\mathbf{v}_{Z_i} = (\lambda I - \underline{Z_i})^{-1} Y_k (\lambda I - \underline{C_{k}})^{-1} Y_{k-1} \cdots Y_{1}(\lambda I - \underline{C_{1}})^{-1}Y_{0}\mathbf{v}_{B}.
+\]
+Since $Y_0$,...,$Y_k$, $C_1$ ... $C_k$ and $Z_i$ are all the appropriate submatrixes of $\mathcal{A}(\, In(\beta,Z_i)\,)$, by definition of the eigenvector transfer matrix, 
+
+\[
+\mathbf{v}_{Z_i} = (\lambda I - \underline{Z_i})^{-1} Y_k (\lambda I - \underline{C_{k}})^{-1} Y_{k-1} \cdots Y_{1}(\lambda I - \underline{C_{1}})^{-1}Y_{0}\mathbf{v}_{B} 
+= T(\beta,Z_i,\lambda) \mathbf{v}_{B}.
+\]
+
+Note that each inverse in this equation exists since $\lambda\notin\sigma(Z_i)$ and $\lambda\notin\sigma(C_j)$ for $j=1,2,\dots,k$.
+
+\subsubsection*{Definition (Partial component branch)}
+
+Given a graph $H = (V,E,\omega)$ that is not strongly connected, let $S = \{S_1, S_2,...,S_k\}$ be the strongly connected components of $H$. 
+
+If there exist edges $e_1 \cdots e_{k-1}$  such that, $e_j$ is an edge from $S_j$ to $S_{j+1}$ for $1 \leq j \leq k-1$, we call the ordered set $\alpha$ = \{$S_1$, $e_1$, $S_2,...,S_k$\} a partial component branch from $S_1$ to $S_k$ in $H$. 
+
+We let $\mathcal{P}(S_1,S_k)$ denote the set of all partial component branches from $S_1$ to $S_k$ in $H$. We furthermore define $\mathcal{P}(S_i,S_i)$ to be the set containing only $\alpha=\{S_i\}$.
+
+
+\subsection*{Definition (Partial Eigenvector Transfer Matrix)}
+Let $H = (V,E,\omega)$ be a graph that is not strongly connected and let $S$ and $T$ be strongly connected components of $H$. For $\alpha = \{S, e_0, C_1, e_1, ... C_m, e_m  T \} \in \mathcal{P}(S,T)$, let the adjacency matrix of $\alpha$ be
+
+\[
+\begin{bmatrix}
+\underline{S} \\
+Y_0 & \underline{C_1} \\
+    & Y_1 & \underline{C_2} \\
+    &     & \ddots & \ddots \\
+    &	  & 		   & Y_m & \underline{T}
+\end{bmatrix}
+\]
+Where $\underline{S} = \mathcal{A}(S)$, $\underline{T} = \mathcal{A}(T)$ and $\underline{C_i} = \mathcal{A}(C_i)$ for $1 \leq i \leq m$. We call the matrix 
+\[
+P(\alpha,\lambda) = (\lambda I - T)^{-1}Y_m (\lambda I - C_m)^{-1}Y_{m-1} \cdots Y_m (\lambda I - T)^{-1}\]
+ the partial eigenvector transfer matrix of $\alpha$, where $\lambda$ is a spectral parameter.
+
+
+
+\subsection*{Lemma}
+Assume G = $(V,E,\omega)$ is not strongly connected with strongly connected components $S_1$, $S_2$,...,$S_k$ and 
+\[
+A = 
+\mathcal{A}(G) =
+\begin{bmatrix}
+\underline{S_1} \\
+Y_{21} & \underline{S_2} \\
+\vdots & & \ddots \\
+Y_{k1} & \hdots & Y_{kk-1} & \underline{S_k} \\
+\end{bmatrix}
+\] where $\underline{S_i}= \mathcal{A}(S_i)$ for $1 \leq i \leq k$. If $\lambda \notin \sigma(G)$ then,
+
+\[
+(\lambda I - A)^{-1} = 
+\begin{bmatrix}
+X_{11} \\
+X_{21} & X_{22} \\
+\vdots & \vdots & \ddots \\
+X_{kl} & X_{k2} & \cdots & X_{kk} \\
+\end{bmatrix}
+\]
+where
+\[ X_{ij} = \sum_{\alpha \in \mathcal{P}(S_j,S_i)} P(\alpha,\lambda). \]
+
+\subsection*{Proof}
+
+Since $A$ is block lower triangular, $(\rho I -A)$ and $(\rho I - A)^{-1}$ are also block lower triangular. Since we can write,
+\[
+(\rho I - A)
+=
+\begin{bmatrix}
+(\rho I - S_1) \\
+-Y_{21} & (\rho I - S_2) \\
+\vdots & & \ddots \\
+-Y_{k1} & \hdots & -Y_{kk-1} & (\rho I - S_k) \\
+\end{bmatrix}
+\]
+we can write $(\rho I - A)^{-1}$ as,
+\[
+(\rho I - A)^{-1} = 
+\begin{bmatrix}
+X_{11} \\
+X_{21} & X_{22} \\
+\vdots & \vdots & \ddots \\
+X_{kl} & X_{k2} & \cdots & X_{kk} \\
+\end{bmatrix}
+\]
+where $X_{ii}$ has the same dimensions as $S_i$ for $1 \leq i \leq k$ and $X_{ij}$ has the same dimensions as $Y_{ij}$ when $1 \leq j < i \leq k$. Then it must be the case that,
+
+\[
+\begin{bmatrix}
+(\rho I - S_1) \\
+-Y_{21} & (\rho I - S_2) \\
+\vdots & & \ddots \\
+-Y_{k1} & \hdots & -Y_{kk-1} & (\rho I - S_k) \\
+\end{bmatrix}
+\begin{bmatrix}
+X_{11} \\
+X_{21} & X_{22} \\
+\vdots & \vdots & \ddots \\
+X_{kl} & X_{k2} & \cdots & X_{kk} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+I_1 \\
+& I_2 \\
+& & \ddots \\
+& & & I_k
+\end{bmatrix}
+\]
+
+Where each $I_i$ is the identity matrix with the same dimensions as $S_i$. Let $j \in  \{1,2,...,$k$\}$. Then,
+\[
+\begin{bmatrix}
+(\rho I - S_1) \\
+-Y_{21} & (\rho I - S_2) \\
+\vdots & & \ddots \\
+-Y_{k1} & \hdots & -Y_{kk-1} & (\rho I - S_k) \\
+\end{bmatrix}
+\begin{bmatrix}
+0 \\
+\vdots \\
+0 \\
+X_{jj} \\
+X_{(j+1)j} \\
+\vdots \\
+X_{kj} \\
+\end{bmatrix}
+= 
+\begin{bmatrix}
+0\\
+\vdots \\
+0 \\
+I_j\\
+0\\
+\vdots\\
+0\\
+\end{bmatrix}
+\]
+Multiplying the $j$th row of $(\rho I -A)$ by the $j$th column of $(\rho I -A)^{-1}$ produces
+\[
+(\rho I - S_j)X_{jj} = I_j
+\]
+\begin{equation}
+X_{jj} = (\rho I - S_j)^{-1} = P(\{S_j\},\lambda)
+\end{equation}
+Since $\mathcal{P}(S_j,S_j)$ only contains $\{S_j\}$ by definition, it follows that,
+\[
+X_{jj} = \sum_{\alpha \in \mathcal{P}(S_j,S_j)} P(\alpha,\lambda)
+\]
+
+We will show by induction that 
+\[
+X_{ij} = \sum_{\alpha \in \mathcal{P}(S_j,S_i)} P(\alpha,\lambda)
+\]
+when $i > j$. As a base case, consider $X_{(j+1)j}$. By multiplying row $(j+1)$ of $(\rho I-A)$ by the $j$th column of $(\rho I - A)^{-1}$, we obtain the equations:
+
+\[
+-Y_{(j+1)j}(\rho I - S_{j})^{-1} + (\rho I -S_{(j+1)})X_{(j+1)j} = 0
+\]
+
+\begin{equation}
+X_{(j+1)j} = (\rho I - S_{(j+1)})^{-1}Y_{(j+1)j}(\rho I - S_j)^{-1}
+\end{equation}
+
+Let $m$ be the number of nonzero entries in $Y_{(j+1)j}$ then we can write, 
+\[Y_{(j+1)j} = \sum_{k=1}^{m} Y_{(j+1)j}^{(k)}\] 
+where each $Y_{(j+1)j}^{(k)}$ has one non zero entry and that entry is equal to a non-zero entry of $Y_{(j+1)j}$. Thus, 
+\[
+X_{(j+1)j} = (\rho I - S_{j+1})^{-1} \sum_{k=1}^{m} Y_{(j+1)j}^{(k)}(\rho I - S_j)^{-1}
+\]
+\[
+X_{(j+1)j} = \sum_{k=1}^{m}(\rho I - S_{j+1})^{-1}  Y_{(j+1)j}^{(k)}(\rho I - S_j)^{-1}
+\]
+For each $k$, the matrix
+\[
+\begin{bmatrix}
+S_j \\
+Y_{(j+1)j}^{(k)} & S_{j+1}\\
+\end{bmatrix}
+\]
+is an adjacency matrix for $\alpha^{(k)}=\{S_{j},e^{(k)},S_{j+1}\}$
+where $e^{(k)}$ is an edge from $S_j$ to $S_{j+1}$. Then $\alpha^{(k)} \in \mathcal{P}(S_j,S_{j+1})$ and 
+\[
+X_{(j+1)j} = \sum_{k=1}^{m}P(\alpha^{(k)})
+\] 
+Clearly $\cup_{k=1}^n\{\alpha^{(k)}\} \subset \mathcal{P}(S_j,S_{j+1})$. We assert that $\cup_{k=1}^n\{\alpha^{(k)}\} = \mathcal{P}(S_j,S_{j+1})$. Let $\alpha \in \mathcal{P}(S_j,S_{j+1})$. Then $\alpha = \{S_j,e,S_{j+1} \}$ because if $\alpha$ contained any other strongly connected component $S_l$, it would imply that a path exists from $S_j$ to $S_l$ to $S_{j+1}$ and because of the structure of $A$, it must be the case that $l < j$ or $j+1 < l$. If an edge existed from $S_j$ to $S_{l}$ to $S_{j+1}$ the matrix A would have an entry above the diagonal. This is a contradiction. Thus, 
+\[
+X_{(j+1)j} = \sum_{\alpha \in In(S_j,S_{j+1})}P(\alpha)
+\]
+
+By induction hypothesis assume that when $i < n$, \[
+X_{(j+i)j} = \sum_{\alpha \in In(S_j,S_{j+i})}P(\alpha).
+\]
+Consider $X_{(j+n)j}$. By multiplying the $j+n$th row of $(\rho I - A)$ by the $j$th column of $(\rho I - A)^{-1}$ we obtain the equations,
+\[
+-Y_{(j+n)j}(\rho I - S_j)^{-1} -Y_{(j+n)(j+1)}X_{(j+1)j} \cdots -Y_{(j+n)(j+n-1)}X_{(j+n-1)j} + (\rho I - S_{j+n})X_{(j+n)j} = 0
+\]
+\begin{equation}
+X_{(j+n)j} = (\rho I - S_{j+n})^{-1} Y_{(j+n)j}(\rho I - S_j)^{-1} + \sum_{i=1}^{n-1}(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}X_{(j+i)j} 
+\end{equation}
+
+
+
+As shown in the base case, the first term can be broken up into a sum of partial eigenvector transfer matrices . Let $m_0$ be the number of non-zero entries in $Y_{(j+n)j}.$ If we define $Y_{(j+n)j}^{(k)}$ so that each $Y_{(j+1)j}^{(k)}$ has a single nonzero entry that is equal to a distinct non-zero entry of $Y_{(j+1)j}$ and
+\[Y_{(j+n)j} = \sum_{k=1}^{m_0} Y_{(j+n)j}^{(k)}\]
+then,
+\[
+(\rho I - S_{j+n})^{-1} Y_{(j+n)j}(\rho I - S_j)^{-1} = \sum_{k=1}^{m_0}(\rho I - S_{j+n})^{-1} Y_{(j+n)j}^{(k)}(\rho I - S_j)^{-1}.
+\]
+For each $1 \leq k \leq m_0 $, $(\rho I - S_{j+n})^{-1} Y_{(j+n)j}^{(k)}(\rho I - S_j)^{-1}$ is the partial eigenvector transfer matrix for a distinct partial component branch $\alpha$ in $\mathcal{P}(S_{j+n},S_j)$ that does not contain any strongly connected components except $S_{j+n}$ and $S_j$. Let $D_0$ denote the set of all such branches. By definition of an adjacency matrix,  $D_0$ contains one branch for each non zero entry in $Y_{(j+n)j}$. Thus,
+\begin{equation}
+(\rho I - S_{j+n})^{-1} Y_{(j+n)j}(\rho I - S_j)^{-1} = \sum_{\beta \in D_0}P(\beta,\lambda)
+\end{equation}
+
+We consider the other terms in the sum (3). Let $1 \leq i \leq n-1$. By the induction hypothesis,
+
+\[
+(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}X_{(j+i)j} = \sum_{\alpha \in \mathcal{P}(S_j,S_{j+i})}(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)} P(\alpha,\lambda )
+\]
+Let $m_i$ represent the number of nonzero entries in $Y_{(j+n)j+i}$. As before we write $Y_{(j+n)j+i}$ as a sum of $m_i$ single entry matrices.
+$Y_{(j+n)j+i} = \sum_{k=1}^{m_i} Y_{(j+n)(j+i)}^{(k)}$. Then,
+\[
+(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}X_{(j+i)j} = \sum_{\alpha \in \mathcal{P}(S_j,S_{j+i})} \sum_{k=1}^{m_i}(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}^{(k)} P(\alpha,\lambda )
+\]
+It is clear that for each $\alpha \in \mathcal{P}(S_j,S_{j+i})$ and $k$, the term
+\[
+(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}^{(k)} P(\alpha,\lambda )
+\]
+is a partial eigenvector transfer matrix for some incoming branch $\gamma \in \mathcal{P}(S_j,S_j+n)$, because the matrix $Y_{(j+n)(j+i)}^{(k)}$ is non zero if and only if an edge exists from $S_{j+i}$ to $S_{j+n}$. If $\mathcal{P}(S_j,S_{j+i})$ is non empty, there is a branch from $S_j$ to $S_{j+i}$, implying that there must be a branch from $S_j$ to $S_{j+n}$ with partial eigenvector transfer matrix $(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}^{(k)} P(\alpha )$.
+
+
+What we see here is that for a given $i$, the term \[(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}X_{(j+i)j} \] is equal to the sum of all centrality transfer matrices for the branches in $\mathcal{P}(S_j,S_{j+n})$ that pass through $S_{j+i}$ immediately before reaching $S_{j+n}$. Let $D_i$ denote the set of all such branches. Then,
+\begin{equation}
+(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}X_{(j+i)j} = \sum_{\gamma \in D_i} P(\gamma,\lambda)
+\end{equation}
+
+Putting (3), (4), and (5) together gives,
+\[
+X_{(j+n)j} = \sum_{\beta \in D_0} P(\beta,\lambda) + \sum_{i=1}^{n-1}\sum_{\gamma \in D_i}P(\gamma,\lambda)
+\]
+Let $D = \cup_{i=0}^{n-1}D_i$. Then
+\[
+X_{(j+n)j} = \sum_{\alpha \in D}P(\alpha,\lambda)
+\]
+
+Clearly, $D \subset \mathcal{P}(S_j,S_{j+n})$. We assert that $D = \mathcal{P}(S_j,S_{j+n})$.  Let $\alpha \in \mathcal{P}(S_j,S_{j+n})$. If $\alpha$ has only two components, then $\alpha = \{S_j,e,S_{j+n}\}$ for some edge $e$ and $\alpha \in D_0 \subset D$ by definition of $D_0$. If $\alpha$ has more then two components, then it has a second to last component, $S_{j+i}$ where $ 1 \leq i \leq n-1 $. By definition of $D_i$, $\alpha \in D_i$. Thus,
+\[
+X_{j+n,j} = \sum_{\alpha \in \mathcal{P}(S_j,S_{j+n})}P(\alpha,\lambda)
+\]
+This concludes the proof.
+
+%%%%%%%%%%%%%%%%%%
+% Restating theorem
+(iii) For $Z_i\in\mathcal{C}(Z)$ let $\cup_{k=1}^\ell\{Z_k\}$ be the copies of $Z$ that have the same outgoing branch as $Z_i$. Then
+\[
+\mathbf{u}_Z=\sum_{k=1}^{\ell}\mathbf{v}_{Z_k}=\sum_{k=1}^{\ell}T(\beta,Z)\mathbf{v}_B.
+\]
+%%%%%%%%%%%%%%%%%%%
+
+\subsubsection*{Proof of (iii)}
+
+Since each $Z_k$ is a copy of $Z$ in $\mathcal{S}_B(G)$, each $Z_k$ must correspond to a unique component branch. Let $D = \{\beta_1,...,\beta_{\ell}\}$ be the set of such branches indexed so that $\beta_k$ is the unique branch corresponding to $Z_k$ for $1 \leq k \leq \ell$. Because each $Z_k$ has the same outgoing branch, it follows that $In(\beta_{j},Z) \neq In(\beta_{k},Z)$ when $j \neq k$. Otherwise, there would exist $k \neq j$ such that $\beta_k = \beta_j$ which contradicts uniqueness of each $\beta_k$.
+
+If $In(\beta_k,Z) = \{v_i,e_0,C_1,e_1,...,e_{n-1}, C_m, e_m, Z \}$ define $F_k = \{C_1, C_2,...C_m \}$ 
+to be the set of all strongly connected components of $G|_{\overline{B}}$ in $In(\beta_k,Z)$.
+ We let $F = \cup_{k=1}^{\ell}F_k$. Thus $F$ is the set of all strongly connected components of $G|_B(Z)$ that appear before $Z$ in some incoming branch of $D$.
+
+We may order $F = \{C_1, C_2, ..., C_n,\}$ such that if $1 \leq i < j \leq n$ there are no paths from $C_j$ to $C_i$. If no such ordering existed, it would imply for some $1 \leq i < j \leq n$, paths exist both from $C_i$ to $C_j$ and from $C_j$ back to $C_i$. This implies that $C_i$ and $C_j$ must be part of the same strongly connected component which is a contradiction.
+
+Thus we can write the adjacency matrix, A, of $G$ in the form
+\[
+A
+=
+\begin{bmatrix}
+\underline{B} & W_{BT} & W_{BZ} & W_{BX} \\
+Y_{LB} & L \\
+Y_{ZB} & Y_{ZL} & \underline{Z} \\
+Y_{XB} & Y_{XL} & Y_{XZ} & X \\
+\end{bmatrix}
+\]
+where $L$ is of the form,
+\[
+L
+= 
+\begin{bmatrix}
+\underline{C_1} \\
+Y_{21} & \underline{C_2} \\
+\vdots & & \ddots \\
+Y_{k1} & \hdots & Y_{kk-1} & \underline{C_n} \\
+\end{bmatrix}
+\]
+
+and $\underline{B} = \mathcal{A}(G|_B)$, $\underline{Z} = \mathcal{A}(Z)$, $\underline{C_i} =\mathcal{A}(C_i)$ for $1\leq i \leq m$.
+\begin{bf} Since, $\lambda$ is an eigenvalue of $G$,\end{bf} 
+there is a vector $\mathbf{u}$ such that $A\mathbf{u} = \lambda \mathbf{u}$. We may partition $\mathbf{u}$ into $\mathbf{u} = [\mathbf{u}_B, \mathbf{u}_{L}, \mathbf{u}_{Z}, \mathbf{v}_{X}]^{T}$ so that the number of entries in each sub-vector corresponds with the size of the appropriate sub-matrix of $A$
+
+We apply the eigenvector equation to solve for $\mathbf{u}_{Z}$.
+\[
+\begin{bmatrix}
+\underline{B} & W_{BT} & W_{BZ} & W_{BX} \\
+Y_{LB} & L \\
+Y_{ZB} & Y_{ZL} & \underline{Z} \\
+Y_{XB} & Y_{XL} & Y_{XZ} & X \\
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{u}_B \\
+\mathbf{u}_{L} \\
+\mathbf{u}_{Z} \\
+\mathbf{u}_{X}
+\end{bmatrix}
+= 
+\lambda
+\begin{bmatrix}
+\mathbf{u}_B \\
+\mathbf{u}_{L} \\
+\mathbf{u}_{Z} \\
+\mathbf{u}_{X}
+\end{bmatrix}
+\]
+We have that,
+\[
+Y_{ZB}\mathbf{v}_B + Y_{ZL}\mathbf{u}_L + \underline{Z} \mathbf{u}_Z = \lambda \mathbf{u}_Z
+\]
+\[
+\mathbf{u}_{Z} = (\lambda I - \underline{Z})^{-1}Y_{ZB} \mathbf{u}_{B} + (\lambda	I - \underline{Z})^{-1}Y_{ZL} \mathbf{u}_{L}.
+\]
+Solving for $\mathbf{u}_L$ produces,
+\[
+\mathbf{u}_{L} = (\lambda I - L)^{-1}Y_{LB} \mathbf{u}_{B}.
+\]
+Thus,
+\[
+\mathbf{u}_{Z} = \big{(}\,(\lambda I - \underline{Z})^{-1}Y_{ZB} + (\lambda	I - \underline{Z})^{-1}Y_{ZL} (\lambda I - L)^{-1}Y_{LB} \,\big{)}\mathbf{u}_B.
+\]
+We now show that,
+\[
+\mathbf{u}_{Z} = \big{(}\,(\lambda I - \underline{Z})^{-1}Y_{ZB} + (\lambda	I - \underline{Z})^{-1}Y_{ZL} (\lambda I - L)^{-1}Y_{LB} \,\big{)}\mathbf{u}_B = \sum_{k=1}^{\ell} T(\beta_k,Z,\lambda) \mathbf{u}_B.
+\]
+by showing that,
+\begin{equation}
+(\lambda I - \underline{Z})^{-1}Y_{ZB} + (\lambda	I - \underline{Z})^{-1}Y_{ZL} (\lambda I - L)^{-1}Y_{LB} = \sum_{k=1}^{\ell} T(\beta_k,Z,\lambda).
+\end{equation}
+
+First, we consider $(\lambda I - \underline{Z})^{-1}Y_{ZB}$. Since every nonzero entry in $Y_{ZB}$ corresponds to an edge from $G|_B$ to $Z$ we let $n_0$ equal the number of non-zero entries in $Y_{ZB}$ and write,
+\[
+Y_{ZB} = \sum_{r=1}^{n_o}Y_{ZB}^{(r)}
+\]
+
+where each $Y_{ZB}^{(r)}$ has exactly one non zero entry and that entry is equal to a non-zero entry of $Y_{ZB}$. Then, 
+\[
+(\lambda I - \underline{Z})^{-1}Y_{ZB} = \sum_{r=1}^{n_o}(\lambda I - \underline{Z})^{-1} Y_{ZB}^{(r)}.
+\]
+We fix $r \in \{1,...,n_0\}$ and consider $(\lambda I - \underline{Z})^{-1} Y_{ZB}^{(r)}$. The matrix $Y_{ZB}^{(r)}$ corresponds to exactly one edge from $G|_B$ to $Z$. Then there must exist $\beta_r \in D$ such that $In(\beta_r,Z) = \{v,e,Z\}$ where $v \in B$ and $e$ corresponds with the non zero entry in $Y_{ZB}^{(r)}$. 
+
+Then,
+\[(\lambda I - \underline{Z})^{-1} Y_{ZB}^{(r)} = T(\beta_r,Z,\lambda).
+\]
+Furthermore, $\beta_r$ must be the only branch in $D$ that contains $e$. If not, must be another $\beta_s \in D$ such that $In(\beta_s,Z) =    \{v,e,Z\} = In(\beta_r,Z)$. Since $\beta_r$ and $\beta_s$ are in $D$, they have the same outgoing branch and it must be the case that $\beta_r = \beta_s$. This contradicts uniqueness of each $\beta$ in $D$.
+
+Thus, each $Y_{ZB}^{(r)}$ corresponds with exactly one $\beta_r \in D$ such that i$In(\beta_r,Z)$ that has no strongly connected components except $Z$. Then
+\[
+\mathcal{A}(In(\beta_r,Z))
+=
+\begin{bmatrix}
+\underline{B}\\
+Y_{ZB}^{(r)} & \underline{Z} \\
+\end{bmatrix}
+\] and  $(\lambda I - \underline{Z})^{-1} Y_{ZB}^{(r)}$ must the eigenvector transfer matrix of $\beta_r$ with respect to $Z$.
+
+
+Consider the set $D_0 = \{\beta_1, ... \beta_{n_0} \}$ of component branches corresponding to $\{Y_{ZB}^{(1)}, ..., Y_{ZB}^{(n_0)} \}$. 
+
+
+Thus
+\begin{equation}
+(\lambda I - \underline{Z})^{-1}Y_{ZB} = \sum_{r=1}^{n_o}(\lambda I - \underline{Z})^{-1} Y_{ZB}^{(r)} = \sum_{\beta \in D_0} T(\beta,Z,\lambda).
+\end{equation}
+
+Note that for all $\beta \in D_0$, $In(\beta,Z)$ has no strongly connected components except $Z$. 
+We assert that $D_0$ is the set of all branches in $D$ that satisfy this property. 
+If $\beta \in D$ and $In(\beta,Z) = \{v,e,Z\}$, then by definition of $\mathcal{A}(G)$, $e$ must correspond to a non zero entry in $Y_{ZB}$ and therefore $\beta$ corresponds to $Y_{ZB}^{(r)}$ for some $1 \leq r \leq n_0$. Then $\beta \in D_0$ and $D_0$ is the set of all $\beta \in D$ where $In(\beta,Z)$ contains no strongly connected components except $Z$.
+
+Next we consider $(\lambda	I - \underline{Z})^{-1}Y_{ZL} (\lambda I - L)^{-1}Y_{ZB}$ from \begin{bf} equation (7) \end{bf}. Once again, we write $Y_{ZL} = \sum_{s=1}^{n_1}Y_{ZL}^{(s)}$ and $Y_{LB}=\sum_{t=1}^{n_2}Y_{LB}^{(t)}$ as the sum of their non zero entries. 
+
+By definition of an adjacency matrix, it must be the case that the set $\{Y_{ZL}^{(s)} \}_{s=1}^{n_1}$ is in a bijective correspondence with the edges from components in $\{C_1, ... C_n\}$ to $Z$ 
+and the set $\{Y_{LB}^{(t)} \}_{t=1}^{n_2}$ is in a bijective correspondence with the edges from $G|_B$ to components in $\{C_1, ... C_n\}$. 
+Thus we may let $\{f_s\}_{s=1}^{n_1}$ be the set of edges corresponding with $\{Y_{ZL}^{(s)} \}_{s=1}^{n_1}$ 
+and $\{g_s\}_{t=1}^{n_1}$ be the set of edges corresponding with $\{Y_{LB}^{(s)} \}_{t=1}^{n_1}$.
+
+We have,
+\[
+(\lambda	I - \underline{Z})^{-1}Y_{ZL} (\lambda I - L)^{-1}Y_{LB}
+= \sum_{s=1}^{n_1} \sum_{t=1}^{n_2} (\lambda	I - \underline{Z})^{-1}Y_{ZL}^{(s)} (\lambda I - L)^{-1}Y_{LB}^{(t)}
+\]
+Fix, $s \in \{1,...,n_1\}$ and $t \in \{1,...n_2\}$ and consider, $Y_{ZL}^{(s)} (\lambda I - L)^{-1}Y_{LB}^{(t)}$ . 
+By definition, $Y_{LB}^{(s)}$ represents an edge from $G|_B$ to some $C_i \in F$  and $Y_{ZL}^{(s)}$ represents an edge from some $C_j \in F$ to $Z$. Since there are no paths from $C_j$ to $C_i$ when $i > j$, it must be the case that $i \leq j$. This gives us information about the location of the non-zero entries in $Y_{LB}^{(s)}$ and $Y_{ZL}^{(s)}$. It must be the case that
+\[
+\begin{bmatrix}
+Y_{LB}^{(t)} & L \\
+ &Y_{ZL}^{(s)}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\begin{bmatrix}
+0 \\
+0 \\
+Y^{(t)}\\
+0 \\
+0 \\
+0 \\
+0 \\
+0 \\
+\end{bmatrix}
+&
+\begin{bmatrix}
+\underline{C_1} \\
+\vdots & \ddots \\
+Y_{i1} & & \underline{C_i} \\
+\vdots & & & \ddots \\
+Y_{j1} & & & & \underline{C_j} \\
+\vdots & & & & & \ddots \\
+
+Y_{k1} & \hdots & Y_{ki} & \hdots & Y_{kj} & \hdots & \underline{C_n} \\
+\end{bmatrix}
+\\
+& 
+\begin{bmatrix}
+\, \, 0 \, \, & \hdots & \hdots & \, \, 0  & \, \, Y^{(s)} & 0 \quad & 0 
+\end{bmatrix}
+\end{bmatrix} \\
+\]
+For some $Y^{(t)}$ and $Y^{(s)}$ that contain a single non-zero entry. 
+This is because $Y_{LB}^{(t)}$ and $Y_{ZL}^{(s)}$ represent an edge from $G|_B$ to a component $C_i$ and an edge from a component $C_j$ to $Z$ respectively. Thus we conclude that all entries in $Y_{LB}^{(t)}$ and $Y_{ZL}^{(s)}$ that correspond to edges to or from components besides $C_i$ and $C_j$ respectively must be zero. 
+
+By lemma, 
+\[
+(\lambda I - L)^{-1}
+=
+\begin{bmatrix}
+X_{11} \\
+X_{21} & X_{22} \\
+\vdots & \vdots & \ddots \\
+X_{kl} & X_{k2} & \cdots & X_{kk} \\
+\end{bmatrix}
+\]
+where
+\[ X_{ij} = \sum_{\alpha \in \mathcal{P}(C_j,C_i)} P(\alpha,\lambda).
+\]
+
+Using this fact we simplify the expression $Y_{ZL}^{(s)}(\lambda I -L)^{-1}  Y_{LB}^{(t)}$ to
+\[
+\begin{bmatrix}
+0 & \hdots &  0  & Y^{(s)} & 0 & \hdots & 0 
+\end{bmatrix}
+\begin{bmatrix}
+X_{11}\\
+\vdots & \ddots \\
+X_{i1} & & X_{ii} \\
+\vdots & & \vdots & \ddots \\
+X_{j1} & & X_{ji} & & X_{jj} \\
+\vdots & & \vdots & & & \ddots \\
+
+X_{k1} & \hdots & X_{ki} & \hdots & X_{kj} & \hdots & X_{nn} \\
+\end{bmatrix}
+\begin{bmatrix}
+0 \\
+0 \\
+Y^{(t)}\\
+0 \\
+0 \\
+0 \\
+0 \\
+0 \\
+\end{bmatrix}
+\]
+
+demonstrating that, 
+\[
+Y_{ZL}^{(s)}(\lambda I -L)^{-1}  Y_{LB}^{(t)}
+=
+Y^{(s)} X_{ji} Y^{(t)}
+=   \sum_{\alpha \in \mathcal{P}(C_i,C_j)} Y^{(s)}P(\alpha,\lambda) Y^{(t)}
+\].
+
+Thus, for each $s$ and $t$ the term,
+\[
+(\lambda	I - \underline{Z})^{-1}Y_{ZL}^{(s)} (\lambda I - L)^{-1}Y_{LB}^{(t)}
+=
+\sum_{\alpha \in \mathcal{P}(C_{i_t},C_{j_s})}(\lambda	I - Z)^{-1}Y^{(s)} P(\alpha,\lambda) Y^{(t)}
+\]
+where $j_s, i_t \in \{1,...,n\}$. We now show that for each $\alpha \in \mathcal{P}(C_{i_t},C_{j_s})$
+\[
+(\lambda	I - \underline{Z})^{-1}Y^{(s)} P(\alpha,\lambda) Y^{(t)}
+=
+T(\beta,Z, \lambda)
+\]
+where $\beta \in \mathcal{B}_B(G)$. Let $\alpha \in \ \mathcal{P}(C_{i_t},C_{j_s})$. 
+Then $\alpha = \{C_{\alpha_0}, e_1, C_{\alpha_1}, e_2, ... C_{\alpha_{N-1}}, e_{N} C_{\alpha_N} \} $ 
+where $C_{\alpha_0} =C_{i_t}$, $C_{\alpha_N} = C_{j_s}$ and for each $1 \leq k \leq N$, $C_{\alpha_k} \in F$. 
+Because $Y^{(s)}$ and $Y^{(t)}$ correspond to unique edges from $C_{j_s}$ to $Z$ and from $G|_B$ to $C_{i_t}$ respectively, there is a unique component branch $\beta \in \mathcal{B}_B(G)$ such that 
+\[
+\beta 
+= 
+\{v,g_t,  C_{\alpha_0}, e_1, C_{\alpha_1}, e_2, ... C_{\alpha_{N-1}}, e_N, C_{\alpha_N}, f_s, Z, ... u \}
+\]
+ for some $v,u \in B$ and where $g_t, f_s \in E$ are edges corresponding to $Y^{(t)}$ and $Y^{(s)}$ respectively as defined previously. 
+Then,
+\[
+T(\beta,Z, \lambda)
+=
+(\lambda I -\underline{Z})^{-1} Y^{(s)} (\lambda I -\underline{C_{\alpha_0}})^{-1} Y_1 (\lambda I -\underline{C_{\alpha_1}})^{-1} Y_2 ... Y_N (\lambda I -\underline{C_{\alpha_N}})^{-1} Y^{(t)}
+\]
+\[
+T(\beta,Z, \lambda)
+=
+(\lambda	I - \underline{Z})^{-1}Y^{(s)} P(\alpha,\lambda) Y^{(t)}
+\]
+because, $P(\alpha,\lambda) = (\lambda I -\underline{C_{\alpha_0}})^{-1} Y_1 (\lambda I -\underline{C_{\alpha_1}})^{-1} Y_2 ... Y_N (\lambda I -\underline{C_{\alpha_N}})^{-1}$. 
+
+Thus we see that given $s$, $t$ and $\alpha$, $(\lambda	I - \underline{Z})^{-1}Y^{(s)} P(\alpha,\lambda) Y^{(t)}$ is equal to the eigenvector transfer matrix for some branch $\beta$ that contains $Z$ where the first edge in $\beta$ is $g_t$ and the edge before $Z$ is $f_s$. Let $D_{st}$ represent the set of all $\beta \in \mathcal{B}_B(G)$ where the first edge is $g_t$ and the edge leading to $Z$ is $f_s$.  We have already shown that for each $\alpha \in \mathcal{P}(C_i,C_j)$, there exists a $\beta \in D_{st}$ such that 
+\[
+(\lambda	I - \underline{Z})^{-1}Y^{(s)} P(\alpha,\lambda) Y^{(t)}
+=
+T(\beta,Z, \lambda).
+\]
+We now show that for each $\beta \in D_{st}$ there exists and $\alpha \in \mathcal{P}(C_i,C_j)$ such that the above equation is true. Let $\beta \in D_{st}$. Then $\beta	 = \{v,g_t, C_{\beta_0}, e_1 ... e_{M}, C_{\beta_M}, f_s, Z ... u\}$ where for $1 \leq k \leq M$, $e_k \in E$ and $C_{\beta_k} \in F$ when $0 \leq k \leq M$. By definition of a component branch, each $e_k$ is and edge from $C_{\beta_{k-1}} $ to $ C_{\beta_k}$ when $1 \leq k \leq M$. This implies that there is a partial component branch from $C_{\beta_1}$ to $C_{\beta_M}$ of the form, $\alpha = \{ C_{\beta_0}, e_1 ... e_M, C_{\beta_M} \}$. Clearly $\alpha \in \mathcal{P}(C_{\beta_1},C_{\beta_M})$. Then the adjacency matrix for $\alpha$ is of the form,
+\[
+\mathcal{A}(\alpha)
+=
+\begin{bmatrix}
+\underline{C_{\beta_0}} \\
+Y_1 & \underline{C_{\beta_1}} \\
+    & \ddots & \ddots \\
+    & 		   & Y_m & \underline{C_{\beta_M}}
+\end{bmatrix}
+\]
+and
+ $P(\alpha, \lambda) = (\lambda I - \underline{C_{\beta_M}})^{-1} Y_M ... Y_1 (\lambda I - \underline{C_{\beta_0}})^{-1}$. Since the components and edges in $\alpha$ are in $\beta$, the adjacency matrix of $In(\beta,Z)$ can be written as,
+ \[
+ \mathcal{A}(In(\beta,Z))
+ =
+\begin{bmatrix}
+B \\
+Y^{(t)} & \underline{C_{\beta_0}} \\
+        & Y_1 & \underline{C_{\beta_1}} \\
+    		&	& \ddots & \ddots \\
+    		&	& 		   & Y_m & \underline{C_{\beta_M}} \\
+    		&	&			&	& Y^{(s)} & Z
+\end{bmatrix}
+\].
+Thus, there exists an $\alpha$ such that $T(\beta,Z,\lambda) = (\lambda I - Z)^{-1} Y^{(s)} P(\alpha, \lambda) Y^{(t)}$. 
+
+Since the sets $\mathcal{P}(C_{\beta_1},C_{\beta_M})$ and $D_{st}$ are in bijective correspondence, and for each $\alpha \in \mathcal{P}(C_{i_t},C_{j_s})$ there is a $\beta \in D_{st}$ such that
+\[
+(\lambda	I - \underline{Z})^{-1}Y^{(s)} P(\alpha,\lambda) Y^{(t)}
+=
+T(\beta,Z,\lambda)
+\]
+
+
+such that we may substitute each $(\lambda	I - \underline{Z})^{-1}Y^{(s)} P(\alpha,\lambda) Y^{(t)}$ in the sum
+\[
+\sum_{\alpha \in \mathcal{P}(C_i,C_j)} (\lambda	I - \underline{Z})^{-1}Y^{(s)}P(\alpha,\lambda) Y^{(t)}
+\]
+for the corresponding $T(\beta,Z,\lambda)$, producing
+\[
+\sum_{\alpha \in \mathcal{P}(C_{i_t},C_{j_s})}(\lambda	I - \underline{Z})^{-1} Y^{(s)}P(\alpha,\lambda) Y^{(t)} = \sum_{\beta \in D_{st}} T(\beta, Z, \lambda).
+\]
+We have now shown that 
+\begin{align*}
+(\lambda	I - \underline{Z})^{-1}Y_{ZL} (\lambda I - L)^{-1}Y_{LB} &= \sum_{s=1}^{n_1} \sum_{t=1}^{n_2} (\lambda	I - \underline{Z})^{-1}Y_{ZL}^{(s)} (\lambda I - L)^{-1}Y_{LB}^{(t)} \\
+&= \sum_{s=1}^{n_1} \sum_{t=1}^{n_2} \sum_{\alpha \in \mathcal{P}(C_{i_t},C_{j_s})}(\lambda	I - \underline{Z})^{-1} Y^{(s)}P(\alpha,\lambda) Y^{(t)}\\
+&= \sum_{s=1}^{n_1} \sum_{t=1}^{n_2} \sum_{\beta \in D_{st}} T(\beta, Z, \lambda).
+\end{align*}
+Since
+\[
+\mathbf{u}_{Z} = \left(\,(\lambda I - \underline{Z})^{-1}Y_{ZB} + (\lambda	I - \underline{Z})^{-1}Y_{ZL} (\lambda I - L)^{-1}Y_{LB} \,\right)\mathbf{u}_B,
+\]
+by \begin{bf}equation (8)\end{bf} we have:
+\[
+\mathbf{u}_{Z} 
+=
+\left(
+\sum_{\beta \in D_0} T(\beta,Z,\lambda)
++
+\sum_{s=1}^{n_1} \sum_{t=1}^{n_2} \sum_{\beta \in D_{st}} T(\beta, Z, \lambda) \right) \mathbf{u}_B.
+\]
+Finally we show that
+\[
+D = D_0 \cup \left( \bigcup_{s=1}^{n_1} \bigcup_{t=1}^{n_2} D_{st} \right).
+\]
+By definition, $D_0 \subset D$ and $D_{st} \subset D$ for all $1 \leq s \leq n1 ,1 \leq t \leq n_2$. Then $D_0 \cup \left( \bigcup_{s=1}^{n_1} \bigcup_{t=1}^{n_2} D_{st} \right) \subset D$. Let $\beta \in D$. Then $In(\beta,Z)$ either contains a strongly connected component besides Z, or it does not. If it does not, $\beta \in D_0$ as shown previously. If it does, then the first edge in $\beta$ must connect a node in $G|_B$ to a node in some component $C_i \in F$ and therefore correspond to $f_t$ for some $1 \leq t \leq n_2$. Additionally the edge that appears prior to $Z$ must correspond to $g_s$ for some $1 \leq s \leq n_1$. Thus $\beta \in D_0 \cup \left( \bigcup_{s=1}^{n_1} \bigcup_{t=1}^{n_2} D_{st} \right)$ and $D \subset D_0 \cup \left( \bigcup_{s=1}^{n_1} \bigcup_{t=1}^{n_2} D_{st} \right)$. This produces
+\[
+\mathbf{u}_{Z} 
+=
+\sum_{\beta \in D} T(\beta,Z,\lambda) \mathbf{u}_B
+=\sum_{k=1}^{\ell} T(\beta_k,Z,\lambda) \mathbf{u}_B.
+\]
+By (ii), $T(\beta_k,Z,\lambda) \mathbf{u}_B = \mathbf{v}_{Z_k}$ and
+\[
+\mathbf{u}_{Z} 
+=
+\sum_{k=1}^{\ell} \mathbf{v}_{Z_k}
+\]
+\end{document}

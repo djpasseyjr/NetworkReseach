@@ -1,152 +1,472 @@
-\documentclass{article}
+\documentclass{paper}
 \usepackage{amsmath}
-
+\usepackage{amsthm}
+\usepackage{parskip}
 \begin{document}
-\title{Eigencentrality of Specialized Graph}
-\section*{Eigencentrality of a Specialized Graph}
 
-Let $G = (V,E)$ be a graph with adjacency matrix $M$ let $B \subset V$ be a structural set and let $\mathcal{S}(G)$ and $\hat{M}$ represent the specialization of $G$ over $B$ and it's adjacency matrix respectively. Without loss of generality we can write
-\[M = \begin{bmatrix} U & W \\ Y & Z \\ \end{bmatrix} \] where $U$ is the adjacency matrix of $G|_{B}$ and $Z$ is the adjacency matrix of $G|_{\bar{B}}$. Assume that $Z$ is strongly connected. Then we can write 
-\[\hat{M} = 
+\section*{Centrality and Specialization}
+
+
+
+\subsubsection*{Definition (Incoming branch)}
+
+Given a graph $G = (V,E,\omega)$, a set $B \subset V$ and a strongly connected component $Z$ of $G|_{\overline{B}}$, let $S_1,S_2 \cdots S_k$ be strongly connected components of $G|_{\overline{B}}$. Let $H$ represent the subgraph $G|_B$.
+
+If there exist edges $e_0 \cdots e_m$  such that,
+
+(i) $e_0$ is an edge from $H$ to $S_1$
+
+(ii) $e_j$ is an edge from $S_j$ to $S_{j+1}$ for $1 \leq j \leq k-1$
+
+(iii) $e_k$ is an edge from $S_k$ to $Z$
+
+The we call the ordered set $\alpha$ = \{$H$, $e_0$, $S_1$, $e_1$, $S_2,...,S_k$, $e_k$, $Z$\} an incoming branch from $B$ to $Z$. We let $In(H,Z)$ denote the set of all incoming branches from $H$ to $Z$ in $G$.
+
+\subsubsection*{Definition (Outgoing branch)}
+
+Given a graph $G = (V,E,\omega)$, a set $B \subset V$ and a strongly connected component $Z$ of $G|_B$, let $S_1,S_2 \cdots S_k$ are strongly connected components of $G|_B$. Let $H$ represent the subgraph $G|_B$.
+
+If there exist edges $e_0 \cdots e_m$ such that,
+
+(i) $e_0$ is an edge from $Z$ to $S_1$
+
+(ii) $e_j$ is an edge from $S_j$ to $S_{j+1}$ for $1 \leq j \leq k-1$
+
+(iii) $e_k$ is an edge from $S_k$ to $H$
+
+The we call the ordered set $\gamma$ = \{$Z$, $e_0$, $S_1$, $e1$, $S_2,...,S_k$, $e_k$, $H$\} an outgoing branch from $Z$ to $H$. We let $Out(Z,H)$ denote the set of all outgoing branches from $Z$ to $H$.
+
+With these definitions established we can make a few observations. 
+
+\subsubsection*{Proposition}
+Let $G(V,E)$ be a strongly connected graph. Let $B \subset V$ and $H = G|_B$. 
+Let $Z$ be a strongly connected component of $G|_{\overline{B}}$. 
+By definition of specialization, the subgraph $H = G|_{B}$ is also a subgraph 
+of $\mathcal{S}_B(G)$. Then,
+
+(1) There is a nonempty set $C(Z)$ = \{$Z_1$,...,$Z_k$\} of copies of $Z$ in the specialized graph $\mathcal{S}_B(G)$. 
+
+(2) For each $Z_i \in C(Z)$, the sets $In(H,Z_i)$ and $Out(Z_i,H)$ for the graph $\mathcal{S}_B(G)$ contain one element.
+
+
+\subsubsection*{Proof}
+
+(1) Since G is strongly connected, there is a path from vertices in $B$ to $Z$ and a path from $Z$ to vertices in $B$. 
+Then, there must be component branches of $G$ that contain $Z$. By definition of specialization, there is a copy of $Z$ in $\mathcal{S}_{B}(G)$ for each component branch of $G$ containing $Z$. We let $C(Z)$ be the set of all copies of $Z$ in $\mathcal{S}_{B}(G)$.
+
+(2) Let $Z_i \in C(G)$. Then by definition of specialization, $Z_i$ corresponds with a unique component branch $\beta$ in $G$ containing $Z$ and $Z_i$ is contained in exactly one component branch $\hat{\beta}$ = \{$v_j$, $e_0$, $S_1$, $e_1$, $S_2$,...,$S_k$, $e_k$, $v_p$\} of $\mathcal{S}_{B}(G)$. Therefore, $Z_i$ must have exactly one incoming branch (the first half of $\hat{\beta}$) and exactly one outgoing branch (the second half of $\hat{\beta}$).
+
+\subsubsection*{Definition} Let $G = (V,E,\omega)$ have a centrality vector $\mathbf{v}$ and let $S$ be a subgraph of $G$. We denote the restriction of $\mathbf{v}$ to nodes in S by $\mathbf{v}_S$.
+
+\subsubsection*{Proposition 1} Let $G$ = ($V$, $E$, $\omega$) be strongly connected and let $B \subset V$ with $H = G|_B$. Assume $Z$ is a strongly connected component of $G|_{\overline{B}}$ and let $C(Z)$ be the set of copies of $Z$ in $\mathcal{S}_B(G)$. Let $\mathbf{u}$ be the centrality vector of $\mathcal{S}|_B(G)$. Then, if $Z_i, Z_j \in C(Z)$ have the same incoming branch, then $\mathbf{u}_{Z_i} = \mathbf{u}_{Z_j}$. That is, the centralities of nodes in $Z_i$ are the same as the centralities of analogous nodes in $Z_j$.
+
+\subsubsection*{Proof} For clarity we let the variable denoting We may write the adjacency matrix of $\mathcal{S}_B(G)$ as follows. 
+
+\[M=
 \begin{bmatrix}
-	U & \begin{bmatrix}W_1\cdots W_1 \end{bmatrix} & \cdots & \begin{bmatrix}W_m\cdots W_m \end{bmatrix} \\
-
-	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
-	
-	\vdots & & \ddots & \\
-	
-	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & & & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
-	
+H   & & & & & W\\
+Y_1 & L & & \\
+    & Y_2 & Z_i & \\
+Y_1 & & & L \\
+   & & & Y_2 & Z_j \\ 
+Y  & & Y_i & & Y_j & X \\
 \end{bmatrix}
 \]
-Where each $Y_j$ and $W_i$ has a single entry and 
-\[\sum_{j=1}^{k} Y_j = Y \hspace{1cm} \sum_{i=1}^{m} W_i = W\]
-by the definition of specialization.
+For clarity, we allow an abuse of notation, and let $H,Z_i$,and $Z_j$ represent the adjacency matrixes of their respective subgraphs in $\mathcal{S}_B(G)$. 
+The matrixes $Y_1, Y_2, Y_i$,and $Y_j$ each contain a single entry. The matrix $X$ is the adjacency matrix for the rest of the graph and $Y$ is the adjacency matrix for all links from nodes in $B$ to nodes in $X$. $W$ represents links from nodes in $X$ to nodes in $B$. The matrix $L$ is of the form,
+\[ L = 
+\begin{bmatrix}
+S_1 & & & & \\
+Y_{21} & S_2 & & \\
+    & Y_{32} & \ddots & \\
+    & & Y_{n(n-1)}& S_n \\
+\end{bmatrix}
+\]
+where each $S_k$ is an adjacency matrix for a strongly connected component in the in-going path to $Z_i$, and each $Y_{k(k-1)}$ is a matrix with a single entry corresponding to the edge from $S_{k-1}$ to $S_{k}$. 
 
-Assume that $Mv = \rho v$ where $\rho$ is the spectral radius of $M$. Since specialization preserves spectrum, we know that there exists $u \neq 0$ such that $\hat{M}u = \rho u$. Write $v = \begin{bmatrix}
-v_b \\ v_z
-\end{bmatrix}$ so that 
+We can write M in this form for two reasons. First, because $Z_i$ and $Z_j$ have the same in-going path. Second, because any non-zero entries above the diagonal must be contained in $W$. Otherwise, they would violate the strongly connected component structure of $\mathcal{S}_B(G)$ 
 
-\[Mv = \begin{bmatrix} U & W \\ Y & Z \\ \end{bmatrix} \begin{bmatrix} v_b \\ v_z \end{bmatrix}
+To complete the proof, we let $\mathbf{u}$ represent the leading eigenvector of $M$ with associated eigenvalue $\rho$. 
+Such an eigenvector exists by the Perron-Frobenius theorem.
+Note that $\rho$ is the spectral radius of $M$.
+ The vector $\mathbf{u}$ is the centralities of nodes in $\mathcal{S}_B(G)$ and we can partition $\mathbf{u}$ into $\mathbf{u} = 
+ \begin{bmatrix}
+ \mathbf{u}_B &
+\mathbf{u}_{L} &
+\mathbf{u}_{Z_i} &
+\mathbf{u}_{L} &
+\mathbf{u}_{Z_j} &
+\mathbf{u}_{X} &
+\end{bmatrix}^T$. This produces the eigenvector equation
+
+\[
+M \mathbf{u}=
+\begin{bmatrix}
+B   & & & & & W\\
+Y_1 & L & & \\
+    & Y_2 & Z_i & \\
+Y_1 & & & L \\
+   & & & Y_2 & Z_j \\ 
+Y  & & Y_i & & Y_j & X \\
+\end{bmatrix} 
+ \begin{bmatrix}
+\mathbf{u}_B  \\
+\mathbf{u}_{L} \\
+\mathbf{u}_{Z_i} \\
+\mathbf{u}_{L} \\
+\mathbf{u}_{Z_j} \\
+\mathbf{u}_{X} \\
+\end{bmatrix}
 =
-\begin{bmatrix}Uv_b + Wv_z \\ Yv_b + Zv_z \end{bmatrix}
+\rho
+\begin{bmatrix}
+\mathbf{u}_B  \\
+\mathbf{u}_{L} \\
+\mathbf{u}_{Z_i} \\
+\mathbf{u}_{L} \\
+\mathbf{u}_{Z_j} \\
+\mathbf{u}_{X} \\
+\end{bmatrix}
+\]
+
+Solving for $\mathbf{u}_{Z_i}$ produces,
+\[ 
+Y_2 \mathbf{u}_{L} + Z_i\mathbf{u}_{Z_i} = \rho \mathbf{u}_{Z_i}
+\]
+\[ \mathbf{u}_{Z_i} = (\rho I-Z_i)^{-1} Y_2 \mathbf{u}_{L}
+\]
+
+We know that $rho I - Z$ is invertable because if it is not invertible, there exists a nonzero vector $\mathbf{e}$ such that $(rho I - Z)\mathbf{e} = \mathbf{0}$. Then, $\rho \mathbf{e} = Z\mathbf{e}$ and $\rho$ is an eigenvalue for $Z$. However, in a  strongly connected graph the spectral radius of a subgraph is strictly smaller than the spectral radius of the graph. Since $\rho$ is the spectral radius of $G$ and $Z$ is a subgraph of $G$, $\rho$ cannot be an eigenvalue for $Z$. Thus $\rho I - Z$ is invertable.
+
+Solving for $\mathbf{u}_{L}$ produces,
+\[ 
+Y_1 \mathbf{u}_{B} + L \mathbf{u}_{L} = \rho \mathbf{u}_{L}
+\]
+\[ \mathbf{u}_{L} = (\rho I-L)^{-1} Y_1 \mathbf{u}_{B}
+\]
+
+Thus, \[ \mathbf{u}_{Z_i} = (\rho I-Z_i)^{-1} Y_2(\rho I-L)^{-1} Y_1 \mathbf{u}_{B} \]
+Solving for  $\mathbf{u}_{Z_j}$ similarly produces,
+\[ \mathbf{u}_{Z_j} = (\rho I-Z_j)^{-1} Y_2(\rho I-L)^{-1} Y_1 \mathbf{u}_{B} \]
+Since $Z_i = Z_j$, $\mathbf{u}_{Z_i} = \mathbf{u}_{Z_j}$. 
+\subsection*{Definition (Centrality Transfer Matrix)}
+Let $G = (V,E,\omega)$ with $B \subset V$ and $Z$ a strongly connected component of $G|_{\overline{B}}$. If $\alpha = $\{$B$, $e_0$, $S_1$, $e_1$, $S_2,...,S_k$, $e_k$, $Z$\}$ \in In(B,Z)$, then the subgraph generated by $alpha$ is the 
+\subsection*{Definition (Centrality Transfer Matrix)}
+Let $G = (V,E,\omega)$ have a centrality vector and associated spectral radius $\rho$, let $B \subset V$ and let $Z$ be a strongly connected component of $G|_B$. If $\alpha$ = \{$B$, $e_0$, $S_1$, $e1$, $S_2$,...,$S_k$, $e_k$, $Z$ \} is an incoming path from B to Z then
+
+\[
+P(\alpha) = (\rho I - Z)^{-1}Y_k(\rho I - S_k)^{-1}Y_{k-1}\cdots (\rho I - S_1)^{-1}Y_0(\rho I - B)^{-1}
+\]
+is a centrality transfer matrix of $\alpha$, if
+\[
+ \begin{bmatrix}
+B \\
+Y_0 & S_1 \\
+    & Y_1 & S_2 \\
+    &     &     & \ddots \\
+&&& Y_{k-1} & S_k \\
+&&&& Y_k & Z 
+\end{bmatrix}
+\]
+is an adjacency matrix for the subgraph generated by $\alpha$.
+
+\subsection*{Lemma}
+Assume G = $(V,E,\omega)$ is not strongly connected. Let If $\rho > \max\{|\lambda| : \lambda \in \sigma(G)\}$ then,
+\[
+(\rho I - A)^{-1} = 
+\begin{bmatrix}
+(\rho I - S_1)^{-1} \\
+X_{21} & (\rho I - S_2)^{-1} \\
+X_{31} & X_{32} & (\rho I - S_3)^{-1} \\
+\vdots & \vdots & \ddots & \ddots \\
+X_{k1} & X_{k2} & & X_{kk-1} & (\rho I - S_k)^{-1} \\
+\end{bmatrix}
+\] 
+
+where $A$ is an adjacency matrix of $G$, 
+$S_1$, $S_2$,...,$S_k$ are all adjacency matrices of the strongly connected components of $G$, and each 
+\[ X_{ij} = \sum_{\alpha \in In(S_j,S_i)} P(\alpha ). \]
+
+\subsection*{Proof}
+
+Since $G$ is not strongly connected, there is a block lower triangular adjacency matrix, $A$ of $G$ such that,
+\[
+A = 
+\begin{bmatrix}
+S_1 \\
+Y_{21} & S_2 \\
+\vdots & & \ddots \\
+Y_{k1} & \hdots & Y_{kk-1} & S_k \\
+\end{bmatrix}
+\]
+
+ Since $A$ is block lower triangular, $(\rho I -A)$ and $(\rho I - A)^{-1}$ are also block lower triangular. Since we can write,
+\[
+(\rho I - A)
+=
+\begin{bmatrix}
+(\rho I - S_1) \\
+-Y_{21} & (\rho I - S_2) \\
+\vdots & & \ddots \\
+-Y_{k1} & \hdots & -Y_{kk-1} & (\rho I - S_k) \\
+\end{bmatrix}
+\]
+we can write $(\rho I - A)^{-1}$ as,
+\[
+\begin{bmatrix}
+C_1 \\
+X_{21} & C_2\\
+\vdots &  & \ddots  \\
+X_{k1} & \hdots & X_{kk-1} & C_k \\
+\end{bmatrix}.
+\]
+where for each $i,j \in \{1,2,...,k\}$ the matrices$X_{ij}$ and $C_i$ have the same dimensions as $Y_{ij}$ and $(\rho I - S_i)$ respectively. Then it must be the case that,
+\[
+\begin{bmatrix}
+(\rho I - S_1) \\
+-Y_{21} & (\rho I - S_2) \\
+\vdots & & \ddots \\
+-Y_{k1} & \hdots & -Y_{kk-1} & (\rho I - S_k) \\
+\end{bmatrix}
+\begin{bmatrix}
+C_1 \\
+X_{21} & C_2\\
+\vdots &  & \ddots  \\
+X_{k1} & \hdots & X_{kk-1} & C_k \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+I_1 \\
+& I_2 \\
+& & \ddots \\
+& & & I_k
+\end{bmatrix}
+\]
+
+Where each $I_i$ is the identity matrix with the same dimensions as $S_i$. Let $j \in  \{1,2,...,$k$\}$. Then,
+\[
+\begin{bmatrix}
+(\rho I - S_1) \\
+-Y_{21} & (\rho I - S_2) \\
+\vdots & & \ddots \\
+-Y_{k1} & \hdots & -Y_{kk-1} & (\rho I - S_k) \\
+\end{bmatrix}
+\begin{bmatrix}
+0 \\
+\vdots \\
+0 \\
+C_j \\
+X_{(j+1)j} \\
+\vdots \\
+X_{kj} \\
+\end{bmatrix}
 = 
-\begin{bmatrix}\rho v_b \\ \rho v_z \end{bmatrix}
-\]
-and \begin{equation}
-\rho v_b = Uv_b + Wv_z
-\end{equation}
-\begin{equation}
-\rho v_z = Yv_b + Zv_z 
-\end{equation}
-
-Write \[ 
-u = 
-\begin{bmatrix}u_b & 
-\begin{bmatrix} u_{w_1,y_1} & u_{w_1,y_2} & \cdots & u_{w_1,y_k}   \end{bmatrix} &
-\cdots &
-\begin{bmatrix} u_{w_m,y_1} & u_{w_m,y_2} & \cdots &  u_{w_m,y_k}   \end{bmatrix}
-\end{bmatrix}^T
-\]
-so that 
-\[
-\hat{M}u = 
 \begin{bmatrix}
-	U & \begin{bmatrix}W_1\cdots W_1 \end{bmatrix} & \cdots & \begin{bmatrix}W_m\cdots W_m \end{bmatrix} \\
-
-	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
-	
-	\vdots & & \ddots & \\
-	
-	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & & & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
-	
+0\\
+\vdots \\
+0 \\
+I_j\\
+0\\
+\vdots\\
+0\\
 \end{bmatrix}
- \begin{bmatrix}u_b \\
-\begin{bmatrix} u_{w_1,y_1} \\ \vdots \\ u_{w_1,y_k}   \end{bmatrix} \\
-\vdots \\
-\begin{bmatrix} u_{w_m,y_1}  \\ \vdots \\ u_{w_m,y_k}   \end{bmatrix}
-\end{bmatrix}^T
-=
- \begin{bmatrix}\rho u_b \\
-\begin{bmatrix} \rho u_{w_1,y_1} \\ \vdots \\ \rho u_{w_1,y_k}   \end{bmatrix} \\
-\vdots \\
-\begin{bmatrix} \rho u_{w_m,y_1}  \\ \vdots \\ \rho u_{w_m,y_k}   \end{bmatrix}
-\end{bmatrix}^T
 \]
-
-producing the equations:
+Multiplying the $j$th row of $(\rho I -A)$ by the $j$th column of $(\rho I -A)^{-1}$ produces
+\[
+(\rho I - S_j)C_r = I_j
+\]
 \begin{equation}
-\rho u_b = Uu_b +\sum_{i=1}^{m}\sum_{j=1}^{k}W_iu_{w_i,y_j}
+C_j = (\rho I - S_j)^{-1}
 \end{equation}
+We will show by induction that $X_{ij} = \sum_{\alpha \in In(S_j,S_i)} P(\alpha)$ when $i > j$. As a base case, consider $X_{(j+1)j}$. By multiplying row $(j+1)$ of $(\rho I-A)$ by the $j$th column of $(\rho I - A)^{-1}$, we obtain the equations:
+
+\[
+-Y_{(j+1)j}(\rho I - S_{j})^{-1} + (\rho I -S_{(j+1)})X_{(j+1)j} = 0
+\]
 
 \begin{equation}
-\rho u_{w_i,y_j} = Y_ju_b +Zu_{w_i,y_j}
+X_{(j+1)j} = (\rho I - S_{(j+1)})^{-1}Y_{(j+1)j}(\rho I - S_j)^{-1}
 \end{equation}
 
-Summing (4) over $j$ produces
+Let $m$ be the number of nonzero entries in $Y_{(j+1)j}$ then we can write, 
+\[Y_{(j+1)j} = \sum_{k=1}^{m} Y_{(j+1)j}^{(k)}\] 
+where each $Y_{(j+1)j}^{(k)}$ has one non zero entry and that entry is equal to a non-zero entry of $Y_{(j+1)j}$. Thus, 
 \[
-\rho \sum_{j=1}^{k} u_{w_i,y_j}
+X_{(j+1)j} = (\rho I - S_{j+1})^{-1} \sum_{k=1}^{m} Y_{(j+1)j}^{(k)}(\rho I - S_j)^{-1}
+\]
+\[
+X_{(j+1)j} = \sum_{k=1}^{m}(\rho I - S_{j+1})^{-1}  Y_{(j+1)j}^{(k)}(\rho I - S_j)^{-1}
+\]
+For each $k$, the matrix
+\[
+\begin{bmatrix}
+S_j \\
+Y_{(j+1)j}^{(k)} & S_{j+1}\\
+\end{bmatrix}
+\]
+is an adjacency matrix for $\alpha^{(k)}=\{S_{j},e^{(k)},S_{j+1}\}$
+where $e^{(k)}$ is an edge from $S_j$ to $S_{j+1}$. Then $\alpha^{(k)} \in In(S_j,S_{j+1})$ and 
+\[
+X_{(j+1)j} = \sum_{k=1}^{m}P(\alpha^{(k)})
+\] 
+We assert that $\cup_{k=1}^n\{\alpha^{(k)}\} = In(S_j,S_{j+1})$. Let $\alpha \in In(S_j,S_{j+1})$. Then $\alpha = \{S_j,e,S_{j+1} \}$ because if $\alpha$ contained any other strongly connected component $S_l$, it would imply that a path exists from $S_j$ to $S_l$ to $S_{j+1}$ and because of the structure of $A$, it must be the case that $l < j$ or $j+1 < l$. If an edge existed from $S_j$ to $S_{l}$ to $S_{j+1}$ the matrix A would have an entry above the diagonal this is a contradiction. Thus, 
+\[
+X_{(j+1)j} = \sum_{\alpha \in In(S_j,S_{j+1})}P(\alpha)
+\]
+
+By induction hypothesis assume that when $i < n$, \[
+X_{(j+i)j} = \sum_{\alpha \in In(S_j,S_{j+i})}P(\alpha).
+\]
+Consider $X_{(j+n)j}$. By multiplying the $j+n$th row of $(\rho I - A)$ by the $j$th column of $(\rho I - A)^{-1}$ we obtain the equations,
+\[
+-Y_{(j+n)j}(\rho I - S_j)^{-1} -Y_{(j+n)(j+1)}X_{(j+1)j} \cdots -Y_{(j+n)(j+n-1)}X_{(j+n-1)j} + (\rho I - S_{j+n})X_{(j+n)j} = 0
+\]
+\begin{equation}
+X_{(j+n)j} = (\rho I - S_{j+n})^{-1} Y_{(j+n)j}(\rho I - S_j)^{-1} + \sum_{i=1}^{n-1}(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}X_{(j+i)j} 
+\end{equation}
+
+
+
+As shown in the base case, the first term can be broken up into a sum of centrality transfer matrices . Let $m_0$ be the number of non-zero entries in $Y_{(j+n)j}.$ If we define $Y_{(j+n)j}^{(k)}$ so that each $Y_{(j+1)j}^{(k)}$ has a single nonzero entry that is equal to a distinct non-zero entry of $Y_{(j+1)j}$ and
+\[Y_{(j+n)j} = \sum_{k=1}^{m_0} Y_{(j+n)j}^{(k)}\]
+then,
+\[
+(\rho I - S_{j+n})^{-1} Y_{(j+n)j}(\rho I - S_j)^{-1} = \sum_{k=1}^{m_0}(\rho I - S_{j+n})^{-1} Y_{(j+n)j}^{(k)}(\rho I - S_j)^{-1}.
+\]
+For each $1 \leq k \leq m_0 $, $(\rho I - S_{j+n})^{-1} Y_{(j+n)j}^{(k)}(\rho I - S_j)^{-1}$ is the centrality transfer matrix for a distinct branch $\alpha$ in $In(S_{j+n},S_j)$ that does not contain any strongly connected components except $S_j+n$ and $S_j$. Let $D_0$ denote the set of all such branches. By definition of an adjacency matrix,  $D_0$ contains one branch for each non zero entry in $Y_{(j+n)j}$. Thus,
+\begin{equation}
+(\rho I - S_{j+n})^{-1} Y_{(j+n)j}(\rho I - S_j)^{-1} = \sum_{\beta \in D_0}P(\beta)
+\end{equation}
+
+We consider the other terms in the sum (3). Let $1 \leq i \leq n-1$. By induction hypothesis,
+
+\[
+(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}X_{(j+i)j} = \sum_{\alpha \in In(S_j,S_{j+i})}(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)} P(\alpha )
+\]
+Let $m_i$ represent the number of nonzero entries in $Y_{(j+n)j+i}$. As before we write $Y_{(j+n)j+i}$ as a sum of $m_i$ single entry matrices.
+$Y_{(j+n)j+i} = \sum_{k=1}^{m_i} Y_{(j+n)(j+i)}^{(k)}$. Then,
+\[
+(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}X_{(j+i)j} = \sum_{\alpha \in In(S_j,S_{j+i})} \sum_{k=1}^{m_i}(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}^{(k)} P(\alpha )
+\]
+It is clear that for each $\alpha \in In(S_j,S_{j+i})$ and $k$, the term
+\[
+(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}^{(k)} P(\alpha )
+\]
+is a centrality transfer matrix for some incoming branch $\gamma \in In(S_j,S_j+n)$, because the matrix $Y_{(j+n)(j+i)}^{(k)}$ is non zero if and only if an edge exists from $S_{j+i}$ to $S_{j+n}$. If $In(S_j,S_{j+i})$ is non empty, there is a branch from $S_j$ to $S_{j+i}$, implying that there must be a branch from $S_j$ to $S_{j+n}$ with centrality transfer matrix $(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}^{(k)} P(\alpha )$.
+
+
+What we see here is that for a given $i$, the term \[(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}X_{(j+i)j} \] is equal to the sum of all centrality transfer matrices for the branches in $In(S_j,S_{j+n})$ that pass through $S_{j+i}$ immediately before reaching $S_{j+n}$. Let $D_i$ denote the set of all such branches. Then,
+\begin{equation}
+(\rho I - S_{j+n})^{-1}Y_{(j+n)(j+i)}X_{(j+i)j} = \sum_{\gamma \in D_i} P(\gamma)
+\end{equation}
+
+Putting (3), (4), and (5) together gives,
+\[
+X_{(j+n)j} = \sum_{\beta \in D_0} P(\beta) + \sum_{i=1}^{n-1}\sum_{\gamma \in D_i}P(\gamma)
+\]
+Let $D = \cup_{i=0}^{n-1}D_i$. Then
+\[
+X_{(j+n)j} = \sum_{\alpha \in D}P(\alpha)
+\]
+
+We assert that $D = In(S_j,S_{j+n})$. Clearly, $D \subset In(S_j,S_{j+n})$. Let $\alpha \in In(S_j,S_{j+n})$. If $\alpha$ has only two components, then $\alpha = \{S_j,e,S_{j+n}\}$ for some edge $e$ and $\alpha \in D_0 \subset D$ by definition of $D_0$. If $\alpha$ has more then two components, then it has a second to last component, $S_{j+i}$ where $ 1 \leq i \leq n-1 $. By definition of $D_i$, $\alpha \in D_i$. Thus,
+\[
+X_{j+n,j} = \sum_{\alpha \in In(S_j,S_{j+n})}P(\alpha)
+\]
+This concludes the proof.
+
+
+\subsection*{Proposition 2}
+
+Let $G$ = ($V$, $E$, $\omega$) be strongly connected and let $B \subset V$. Assume $Z$ is a strongly connected component of $G|_{\overline{B}}$. If $C = \{ Z_{1},Z_{2},\cdots Z_{k} \}$ is the set of all copies  of $Z$ in $\mathcal{S}_B(G)$ with the same outgoing branch, then
+\[\sum_{Z_i \in C} \mathbf{u}_{Z_i} = \mathbf{v}_{Z}
+\]
+That is, if we sum together the centralities of each copy of $Z$ with the same outgoing branch, it is equal to the centrality of $Z$ in the original network.
+
+\subsubsection*{Proof}
+
+We write the adjacency matrix for $G$ as follows.
+
+\[
+A =
+\begin{bmatrix}
+B &  \begin{bmatrix}
+& & W & &
+\end{bmatrix}& \\
+\begin{bmatrix}
+Y_1 \\
+Y_2 \\
+Y_4 \\
+\end{bmatrix} &
+\begin{bmatrix}
+ T \\
+ Y_3 & Z \\
+ Y_5 & Y_6 & X \\
+\end{bmatrix}
+\end{bmatrix} 
+\]
+Where $T$ is of the form,
+\[
+T
+= 
+\begin{bmatrix}
+S_1 \\
+Y_{21} & S_2 \\
+\vdots & & \ddots \\
+Y_{k1} & \hdots & Y_{kk-1} & S_k \\
+\end{bmatrix}
+\]
+And each $S_i$ is the adjacency matrix of a strongly connected component of $G|_{\overline{B}}$. We can write $A$ in this form, because there are no edges from $Z$ to componenets in $T$, or from the rest of the graph $X$ to $Z$ or $T$ because this would violate the assumed strongly connected component structure. Let $\mathbf{v}$ be an eigenvector for $\rho$. for Consider the eigenvalue equation,
+\[
+A \mathbf{v}=
+\begin{bmatrix}
+B &  \begin{bmatrix}
+& & W & &
+\end{bmatrix}& \\
+\begin{bmatrix}
+Y_1 \\
+Y_2 \\
+Y_4 \\
+\end{bmatrix} &
+\begin{bmatrix}
+ T \\
+ Y_3 & Z \\
+ Y_5 & Y_6 & X \\
+\end{bmatrix}
+\end{bmatrix} 
+ \begin{bmatrix}
+\mathbf{v}_B  \\
+\mathbf{v}_{T} \\
+\mathbf{v}_{Z} \\
+\mathbf{v}_{X} \\
+\end{bmatrix}
 =
-\sum_{j=1}^{k} (Y_ju_b +Zu_{w_i,y_j})
-= \sum_{j=1}^{k} Y_ju_b + Z \sum_{j=1}^{k} u_{w_i,y_j}
+\rho
+\begin{bmatrix}
+\mathbf{v}_B  \\
+\mathbf{v}_{T} \\
+\mathbf{v}_{Z} \\
+\mathbf{v}_{X} \\
+\end{bmatrix}
 \]
-\[
-\rho( \sum_{j=1}^{k} u_{w_i,y_j} )
-= Yu_b + Z(\sum_{j=1}^{k} u_{w_i,y_j})
-\]
-Subtracting (2) from this produces
-\[
-\rho( \sum_{j=1}^{k} u_{w_i,y_j} - v_z)
-= Z(\sum_{j=1}^{k} u_{w_i,y_j} - v_z)
-\]
-Then $\sum_{j=1}^{k} u_{w_i,y_j} - v_z = 0 $ because $\rho$ is not an eigenvalue of $Z$. (The spectral radius of a subgraph is strictly smaller than the spectral radius of the graph.)
-Thus $\sum_{j=1}^{k} u_{w_i,y_j} = v_z$. This means that the sum of the vectors in each sub-bracket of $u$ is equal to the eigenvector centrality of the nodes in Z in the original graph.
 
-Next we consider equation (3).
+Solving for $\mathbf{v}_Z$ produces,
 \[
-\rho u_b 
-= Uu_b +\sum_{i=1}^{m}\sum_{j=1}^{k}W_iu_{w_i,y_j}
-= Uu_b +\sum_{i=1}^{m}W_i\sum_{j=1}^{k}u_{w_i,y_j}
-= Uu_b +(\sum_{i=1}^{m}W_i)v_z
-= Uu_b + Wv_z
-\]
-subtracting (1) from this gives
-\[
-\rho (u_b-v_b) = U(u_b-v_b)
-\]
-implying that $u_b = v_b$. Then the eigenvector for the base set remains the same.
-
-To solve for each $u_{w_i,y_j}$ explicitly using $v_b$ of  we use equation (4).
-\[
-\rho u_{w_i,y_j} = Y_ju_b +Zu_{w_i,y_j}
+\mathbf{v}_Z = (\rho I - Z)^{-1}Y_2\mathbf{v}_B + (\rho I - Z)^{-1}Y_3(\rho I - T)^{-1}Y_1\mathbf{v}_B
 \]
 \[
-(\rho I - Z)u_{w_i,y_j} = Y_jv_b 
+\mathbf{v}_Z = (\rho I - Z)^{-1} \sum_{k=1}^{n_1}Y_2^{(k)}\mathbf{v}_B + (\rho I - Z)^{-1}\sum_{l=1}^{n_3}Y_3^{(l)}(\rho I - T)^{-1}\sum_{m=1}^{n_2}Y_1^{(m)}\mathbf{v}_B
 \]
 \[
-u_{w_i,y_j} =(\rho I - Z)^{-1} Y_jv_b 
+\mathbf{v}_Z = \sum_{k=1}^{n_1}(\rho I - Z)^{-1} Y_2^{(k)}\mathbf{v}_B + \sum_{l=1}^{n_3}\sum_{m=1}^{n_2}(\rho I - Z)^{-1}Y_3^{(l)}(\rho I - T)^{-1}Y_1^{(m)}\mathbf{v}_B
 \]
-The matrix $(\rho I - Z)^{-1}$ is invertible since $\rho$ is not an eigenvalue of $Z$.
-
-Specialization in this manner produces $km$ copies of $Z$. For a particular node in $Z$ one might be interested in how it's centrality in $G$ relates to the centrality of it's copies in $\mathcal{S}(G)$. Each $u_{w_i,y_j}$ represents the centralities of the nodes in a particular copy of $Z$. Thus, the sum, 
+We can show that for each $k$,
 \[
-\sum_{i=1}^{m}\sum_{j=1}^{k}u_{w_i,y_j} = mv_z
+(\rho I - Z)^{-1} Y_2^{(k)}\mathbf{v}_B = \mathbf{v}_{Z_i} 
 \]
-tells us the the sum of the centrality of the copies is $m$ times the centrality of the node in the original graph where $m$ is the number of entries in $W$ and is therefore  the out degree of $Z$.
-
-Finally by equation (4) for any $u_{w_i,y_j}, u_{w_s,y_j}$ with $i \neq s$ we have,
+for some $Z_i \in C$, and for fixed $l$ and $m$, by lemma,
 \[
-\rho u_{w_i,y_j} = Y_ju_b +Zu_{w_i,y_j}
+(\rho I - Z)^{-1}Y_3^{(l)}(\rho I - T)^{-1}Y_1^{(m)}\mathbf{v}_B = \mathbf{v}_{Z_i} 
 \]
-\[
-\rho u_{w_s,y_j} = Y_ju_b +Zu_{w_s,y_j}
-\]
-Subtracting these two equations gives,
-\[
-\rho (u_{w_i,y_j} - u_{w_s,y_j}) = Z(u_{w_i,y_j}-u_{w_s,y_j})
-\]
-Implying that,
-$u_{w_i,y_j} = u_{w_s,y_j}$
-because $\rho$ is not an eigenvalue of $Z$. Thus, each $u_{w_i,y_j}$ depends only on $j$.
-
+for some $Z_i \in C$. Showing that every unique $\mathbf{v}_{Z_i}$ is accounted for in the sum will conclude the proof.
 \end{document}

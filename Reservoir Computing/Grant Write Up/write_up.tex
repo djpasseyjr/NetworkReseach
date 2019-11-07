@@ -1,0 +1,32 @@
+\documentclass{paper}
+\usepackage{amsmath}
+\usepackage{parskip}
+\begin{document}
+
+\begin{table*}[]
+\centering
+\label{table:3}
+\begin{tabular}{|| c || c | c ||}
+\hline
+Method &  Mean & Standard Deviation \\
+\hline
+\textbf{Original} & \textbf{15883.35} &  \textbf{21995.36} \\
+\textbf{Random Specialization} & \textbf{38.89} & \textbf{187.57} \\
+Random Specialization Control &  825.82 & 3022.73 \\
+\textbf{Impact Specialization} &  \textbf{19.91} & \textbf{67.21}  \\
+Impact Specialization Control &  33.73 & 183.31 \\
+\hline
+\end{tabular}
+
+\end{table*}
+
+Original: Reservoir computer was initialized with a random graph of 30 nodes and a .12 probability of edges. The average error and standard deviation are so large because this model produced many networks did a terrible job learning the problem. The specialized networks did not produce any networks that preformed this badly.
+
+Random Specialization: Three random nodes from the original graph were specialized and the resulting network was used in the reservoir computer.
+
+Random Specialization Control: Each reservoir computer was initialized with a random graph containing the same number of nodes and edges as the specialized graphs
+
+Impact Specialization: The three nodes whose activations were the most useful in learning were specialized.
+
+Impact Specialization Control: Each reservoir computer was initialized with a random graph containing the same number of nodes and edges as  the impact specialized graphs
+\end{document}

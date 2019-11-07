@@ -1,0 +1,46 @@
+\documentclass{paper}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{parskip}
+\begin{document}
+
+\section*{Centrality and Specialization}
+
+I was thinking about what to do and this is something I came up with:
+\begin{enumerate}
+	\item Keep your definitions in the paper
+	\item Add a definition of centrality transfer matrix
+	\item Revise the results slightly
+\end{enumerate}
+
+Here are my pseudo definitions:
+
+\subsubsection*{Definition (Centrality Transfer Matrix)}
+Let $\beta = \{v_i, e_0, C_1, ..., C_n, e_n v_j \}  \in \mathcal{B}_B(G)$. Then for each $1 < i < n$, the centrality transfer matrix of  $C_i$ is defined to be,
+
+\[
+P(\beta,C_i) = (\rho I-C_i)^{-1}Y_{n-1}(\rho I-C_{i-1})^{-1}\cdots(\rho I - C_1)^{-1}Y_0
+\]
+
+where we figure out a clean way to define each $Y_j$.
+
+\subsubsection*{Result 1}
+Let $G$ = ($V$, $E$, $\omega$) be strongly connected and let $B \subset V$. Assume $Z$ is a strongly connected component of $G|_{\overline{B}}$. If $Z_i$ is a copy of $Z$ in $\mathcal{S}_B(G)$ with corresponding component branch $\beta$, then
+
+\[
+\mathbf{v}_{Z_i} = P(\beta,Z)\mathbf{v}_{B}
+\]
+
+\subsubsection*{Corollary}
+Let $Z_i$ and $Z_j$ be copies of $Z$ in $\mathcal{S}_B(G)$ with corresponding component branches $\alpha$ and $\beta$. If $In(\alpha,Z_i) = In(\beta,Z_j)$, then $\mathbf{v}_{Z_i} = \mathbf{v}_{Z_j}$
+
+\subsection*{Result 2}
+Let $G$ = ($V$, $E$, $\omega$) be strongly connected and let $B \subset V$. Assume $Z$ is a strongly connected component of $G|_{\overline{B}}$. Let $D = \{\beta \in \mathcal{B}_B(G) \, |\, In(\beta,Z)\, \text{is distinct} \}$. Then,
+\[
+\mathbf{v}_Z = \sum_{\beta \in D}P(\beta,Z)\,\mathbf{v}_B
+\]
+
+
+This seems fairly clean. We might not need the $C_{in}$ and $C_{out}$ definitions. We just need a definition for the set $D$ in result 2.Let me know what you think of these. Also, what letter do you think I should use for the centrality transfer matrix?
+
+\end{document}

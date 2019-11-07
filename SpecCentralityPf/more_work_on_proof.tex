@@ -1,0 +1,31 @@
+\documentclass{paper}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{parskip}
+\begin{document}
+
+\subsubsection*{The Problem}
+I have an adjacency matrix that looks like this:
+\[
+A = 
+\begin{bmatrix}
+S_1 \\
+Y_{21} & S_2 \\
+\vdots & & \ddots \\
+Y_{k1} & \hdots & Y_{kk-1} & S_k \\
+\end{bmatrix}
+\]
+where each $S_i$ is the adjacency matrix of a strongly connected component. I need to define a way to talk about component branches from any $S_i$ to $S_j$ and their associated eigenvector transfer matrix.
+
+\subsubsection*{This Morning's Attempt}
+I thought about doing it by given $S_i$ and $S_j$, defining $S$ to be the set of all vertices in $S_i$ and $S_j$, then using the set $\mathcal{B}_S(G)$ to produce the set of all branches from $S_i$ to $S_j$. The trickiness here is that in order to define the eigenvector transfer matrix from $S_i$ to $S_j$, we will have to bend the definition of a eigenvector transfer matrix because both components are in the base. The matrix, $T(\beta,S_i,\lambda)$ is ambiguous when $S_i$ is a part of the base set. Furthermore, branches of the form $\{S_i, e, S_j\}$ are also a part of the base set and will not appear in  $\mathcal{B}_S(G)$ even though I need them to.
+
+I don't think I'm in favor of redefining component branches in the paper because Dallas' work is based on that definition. Although we could redefine the transfer matrix, I don't think we would want to do that because the results look very good right now. 
+
+It would be helpful if you skimmed my old proof and got an idea of my general strategy, especially my use of the old transfer matrix definition and the sets of incoming branches.
+
+I need some direction as to what to do in the appendix. Should I stick with the definitions we have and try to only adjust them slightly or should I make several new definitions in the appendix that make it easy to use my old proof and them bridge them back to the definitions in the paper?
+
+If you have any ideas, that would be fantastic!
+
+\end{document}

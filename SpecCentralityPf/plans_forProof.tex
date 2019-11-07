@@ -1,0 +1,72 @@
+\documentclass{paper}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{parskip}
+\begin{document}
+
+\section*{Centrality and Specialization}
+
+I read through the changes you made and they seem great. 
+
+Dallas does use $A_{ij}$ is an edge from $v_i$ to $v_j$ so I'll need to change my proofs. 
+
+I looked at the section on dynamic networks and it looks like you were using the $A_{ij}$ is an edge from $v_j$ to $v_i$, specifically after definition 4.2 in the equation:
+
+\begin{equation}\label{eq:netclass}
+F_i(\mathbf{x})=\sum_{j=1}^n A_{ij}f_{ij}(x_j), \quad \text{for} \quad i\in N=\{1,2,\dots,n\}
+\end{equation}
+
+To me, it looks like you are using $A_{ij}$ to weight the effect $x_j$ has on $x_i$. Thus it seems to represent the edge weight from $v_j$ to $v_i$.
+
+This is important because I'm concerned that I need to define eigenvectors for the transpose of the adjacency matrix. When we define the adjacency  matrix $A$ the way Dallas did, the dynamics should technically be $F(\mathbf{x})= A^{T} \mathbf{x}$ (for example), then the eigenvectors that really matter are the eigenvectors of $A^{T}$ and my results should be about those. (Hope that made sense...)
+
+
+Also, I think that we do get a little more than just centrality for free, so why don't we go ahead an include a lambda in the eigenvector transfer matrix to make it more general. Maybe $T_\lambda(\beta,Z)$. I'll think more carefully about this as well as the result for weighted graphs as I rewrite my proof.
+
+I've put together a plan for using the updated definitions to prove my results in the appendix. Let me know what you think.
+
+
+\subsection*{Theorem}\textbf{(Eigenvectors of Specialized Graphs)}
+Let $G=(V,E,\omega)$ be a graph and $B\subseteq V$ a base.\\
+(i) If $(\lambda,\mathbf{x})$ is an eigenpair of the graph $G$ and $\lambda\notin\sigma(G|_{\bar{B}})$ then there is an eigenpair $(\lambda,\mathbf{y})$ of $\mathcal{S}_B(G)$ such that $\mathbf{x}_B=\mathbf{y}_B$.\\
+Furthermore, suppose $G$ is strongly connected with positive edge weights and let $\mathbf{u}$ be a leading eigenvector of $G$. Also, let $Z$ be a strongly connected component of $\beta\in\mathcal{B}_S(G)$. Then there is a leading eigenvector $\mathbf{v}$ of $\mathcal{S}_B(G)$ such that the following hold.\\
+(ii) For all $Z_i\in\mathcal{C}(Z)$ the eigenvector restriction 
+\[
+\mathbf{v}_{Z_i}=T(\beta,Z)\mathbf{v}_B.
+\] 
+Hence, if $Z_i,Z_j\in\mathcal{C}(Z)$ have the same incoming branch then $\mathbf{v}_{Z_i}=\mathbf{v}_{Z_j}$.\\
+(iii) For $Z_i\in\mathcal{C}(Z)$ let $\cup_{k=1}^\ell\{Z_k\}$ be the copies of $Z$ that have the same outgoing branch as $Z_i$. Then
+\[
+\mathbf{u}_Z=\sum_{k=1}^{\ell}\mathbf{v}_{Z_k}=\sum_{k=1}^{\ell}T(\beta,Z)\mathbf{v}_B.
+\]
+
+\begin{proof}
+
+(ii) with the new definition this will be really easy
+
+(iii) I'll need the lemma below. I've reworked it to fit with the new definitions
+\end{proof}
+
+\subsection*{Definition} Let $S_i,S_j$ be strongly connected components of a graph $G$. Let $S$ be the set of vertices containing in $S_i$ and $S_j$. We let
+\[
+B_{in}(S_i\,,S_j) = \{ In(\beta,S_j)\, |\, \beta \in \mathcal{B}_{S_i}(G) \}
+\]
+\subsection*{Lemma}Assume $G = (V,E,\omega)$ is not strongly connected and let $\lambda \notin \sigma(G)$. If $S_1$, $S_2$,...,$S_k$ are the strongly connected components of G, then there exists an adjacency matrix $A$ for $G$ such that 
+\[
+(\rho I - A)^{-1} =
+\begin{bmatrix}
+X_{11} & X_{12} & \cdots & X_{1k} \\
+ & X_{22} & \cdots & X_{2k} \\
+	& & \ddots & \vdots \\
+	X_{kk} & & & 
+\end{bmatrix}
+\]
+Where
+\[ X_{ij} = \sum_{\beta \in B_{in}(S_j,S_i)} T(\beta,S_i)(\rho I - S_j)^{-1} 
+\]
+if $i < j$ and
+\[ X_{ij} = (\rho I - S_j)^{-1} 
+\]
+if $i=j$
+
+\end{document}

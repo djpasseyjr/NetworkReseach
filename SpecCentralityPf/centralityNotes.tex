@@ -1,0 +1,326 @@
+\documentclass{paper}
+\usepackage{amsmath}
+\usepackage{parskip}
+\begin{document}
+\title{Eigencentrality of Specialized Graph}
+\section*{Eigencentrality of a Specialized Graph}
+
+Let $G = (V,E)$ be a graph with adjacency matrix $M$ let $B \subset V$ be a structural set and let $\mathcal{S}(G)$ and $\hat{M}$ represent the specialization of $G$ over $B$ and it's adjacency matrix respectively. Without loss of generality we can write
+\[M = \begin{bmatrix} U & W \\ Y & Z \\ \end{bmatrix} \] where $U$ is the adjacency matrix of $G|_{B}$ and $Z$ is the adjacency matrix of $G|_{\bar{B}}$. Assume that $Z$ is strongly connected. Then we can write 
+\[\hat{M} = 
+\begin{bmatrix}
+	U & \begin{bmatrix}W_1\cdots W_1 \end{bmatrix} & \cdots & \begin{bmatrix}W_m\cdots W_m \end{bmatrix} \\
+
+	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
+	
+	\vdots & & \ddots & \\
+	
+	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & & & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
+	
+\end{bmatrix}
+\]
+Where each $Y_j$ and $W_i$ has a single entry and 
+\[\sum_{j=1}^{k} Y_j = Y \hspace{1cm} \sum_{i=1}^{m} W_i = W\]
+by the definition of specialization.
+
+Assume that $Mv = \rho v$ where $\rho$ is the spectral radius of $M$. Since specialization preserves spectrum, we know that there exists $u \neq 0$ such that $\hat{M}u = \rho u$. Write $v = \begin{bmatrix}
+v_b \\ v_z
+\end{bmatrix}$ so that 
+
+\[Mv = \begin{bmatrix} U & W \\ Y & Z \\ \end{bmatrix} \begin{bmatrix} v_b \\ v_z \end{bmatrix}
+=
+\begin{bmatrix}Uv_b + Wv_z \\ Yv_b + Zv_z \end{bmatrix}
+= 
+\begin{bmatrix}\rho v_b \\ \rho v_z \end{bmatrix}
+\]
+and \begin{equation}
+\rho v_b = Uv_b + Wv_z
+\end{equation}
+\begin{equation}
+\rho v_z = Yv_b + Zv_z 
+\end{equation}
+
+Write \[ 
+u = 
+\begin{bmatrix}u_b & 
+\begin{bmatrix} u_{w_1,y_1} & u_{w_1,y_2} & \cdots & u_{w_1,y_k}   \end{bmatrix} &
+\cdots &
+\begin{bmatrix} u_{w_m,y_1} & u_{w_m,y_2} & \cdots &  u_{w_m,y_k}   \end{bmatrix}
+\end{bmatrix}^T
+\]
+so that 
+\[
+\hat{M}u = 
+\begin{bmatrix}
+	U & \begin{bmatrix}W_1\cdots W_1 \end{bmatrix} & \cdots & \begin{bmatrix}W_m\cdots W_m \end{bmatrix} \\
+
+	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
+	
+	\vdots & & \ddots & \\
+	
+	\begin{bmatrix} Y_1 \\ \vdots \\ Y_k \end{bmatrix} & & & \begin{bmatrix} Z \\ & \ddots \\ & & Z \end{bmatrix} \\
+	
+\end{bmatrix}
+ \begin{bmatrix}u_b \\
+\begin{bmatrix} u_{w_1,y_1} \\ \vdots \\ u_{w_1,y_k}   \end{bmatrix} \\
+\vdots \\
+\begin{bmatrix} u_{w_m,y_1}  \\ \vdots \\ u_{w_m,y_k}   \end{bmatrix}
+\end{bmatrix}^T
+=
+ \begin{bmatrix}\rho u_b \\
+\begin{bmatrix} \rho u_{w_1,y_1} \\ \vdots \\ \rho u_{w_1,y_k}   \end{bmatrix} \\
+\vdots \\
+\begin{bmatrix} \rho u_{w_m,y_1}  \\ \vdots \\ \rho u_{w_m,y_k}   \end{bmatrix}
+\end{bmatrix}^T
+\]
+
+producing the equations:
+\begin{equation}
+\rho u_b = Uu_b +\sum_{i=1}^{m}\sum_{j=1}^{k}W_iu_{w_i,y_j}
+\end{equation}
+
+\begin{equation}
+\rho u_{w_i,y_j} = Y_ju_b +Zu_{w_i,y_j}
+\end{equation}
+
+Summing (4) over $j$ produces
+\[
+\rho \sum_{j=1}^{k} u_{w_i,y_j}
+=
+\sum_{j=1}^{k} (Y_ju_b +Zu_{w_i,y_j})
+= \sum_{j=1}^{k} Y_ju_b + Z \sum_{j=1}^{k} u_{w_i,y_j}
+\]
+\[
+\rho( \sum_{j=1}^{k} u_{w_i,y_j} )
+= Yu_b + Z(\sum_{j=1}^{k} u_{w_i,y_j})
+\]
+Subtracting (2) from this produces
+\[
+\rho( \sum_{j=1}^{k} u_{w_i,y_j} - v_z)
+= Z(\sum_{j=1}^{k} u_{w_i,y_j} - v_z)
+\]
+Then $\sum_{j=1}^{k} u_{w_i,y_j} - v_z = 0 $ because $\rho$ is not an eigenvalue of $Z$. (The spectral radius of a subgraph is strictly smaller than the spectral radius of the graph.)
+Thus $\sum_{j=1}^{k} u_{w_i,y_j} = v_z$. This means that the sum of the vectors in each sub-bracket of $u$ is equal to the eigenvector centrality of the nodes in Z in the original graph.
+
+Next we consider equation (3).
+\[
+\rho u_b 
+= Uu_b +\sum_{i=1}^{m}\sum_{j=1}^{k}W_iu_{w_i,y_j}
+= Uu_b +\sum_{i=1}^{m}W_i\sum_{j=1}^{k}u_{w_i,y_j}
+= Uu_b +(\sum_{i=1}^{m}W_i)v_z
+= Uu_b + Wv_z
+\]
+subtracting (1) from this gives
+\[
+\rho (u_b-v_b) = U(u_b-v_b)
+\]
+implying that $u_b = v_b$. Then the eigenvector for the base set remains the same.
+
+To solve for each $u_{w_i,y_j}$ explicitly using $v_b$ of  we use equation (4).
+\[
+\rho u_{w_i,y_j} = Y_ju_b +Zu_{w_i,y_j}
+\]
+\[
+(\rho I - Z)u_{w_i,y_j} = Y_jv_b 
+\]
+\[
+u_{w_i,y_j} =(\rho I - Z)^{-1} Y_jv_b 
+\]
+The matrix $(\rho I - Z)^{-1}$ is invertible since $\rho$ is not an eigenvalue of $Z$.
+
+Specialization in this manner produces $km$ copies of $Z$. For a particular node in $Z$ one might be interested in how it's centrality in $G$ relates to the centrality of it's copies in $\mathcal{S}(G)$. Each $u_{w_i,y_j}$ represents the centralities of the nodes in a particular copy of $Z$. Thus, the sum, 
+\[
+\sum_{i=1}^{m}\sum_{j=1}^{k}u_{w_i,y_j} = mv_z
+\]
+tells us the the sum of the centrality of the copies is $m$ times the centrality of the node in the original graph where $m$ is the number of entries in $W$ and is therefore  the out degree of $Z$.
+
+Finally by equation (4) for any $u_{w_i,y_j}, u_{w_s,y_j}$ with $i \neq s$ we have,
+\[
+\rho u_{w_i,y_j} = Y_ju_b +Zu_{w_i,y_j}
+\]
+\[
+\rho u_{w_s,y_j} = Y_ju_b +Zu_{w_s,y_j}
+\]
+Subtracting these two equations gives,
+\[
+\rho (u_{w_i,y_j} - u_{w_s,y_j}) = Z(u_{w_i,y_j}-u_{w_s,y_j})
+\]
+Implying that,
+$u_{w_i,y_j} = u_{w_s,y_j}$
+because $\rho$ is not an eigenvalue of $Z$. Thus, each $u_{w_i,y_j}$ depends only on $j$.
+
+\newpage
+
+\section*{Out Path Specialization}
+
+We show that if the in going paths are preserved when a component is copied, the sum of the centralities of the copy are equal to the original centrality times the number of copies (The centrality of each copy is the same as the original)
+
+\vspace{.5cm}
+
+We begin with a lemma:
+Let $G$ be a strongly connected graph with strongly connected subgraph $G'$  Let $A$ and $A'$ be the respective adjacency matrixes. If $\lambda$ is not an eigenvalue of $A'$ then the matrix $(\lambda I - A')$ is invertible.
+
+Proof
+
+\subsubsection*{Proof}
+
+Let $G(V,E)$ be a strongly connected graph. Let $B \subset V$ be a base set of verticies. Let $C$ be a strongly connected component of $G|_{\overline{B}}$ and let $Z$ be the adjacency matrix for $C$ and $U$ be the adjacency matrix for $G|_{B}$. Then we can write the adjacency matrix $M$ for G as
+\[M=
+\begin{bmatrix}
+U & W_{T}&  & W_{F} \\
+Y_{T,U} & T & & \\
+Y_{Z,U} & Y_{Z,T} & Z & \\
+Y_{F,U} & Y_{F,T} & Y_{Z,F} & F
+\end{bmatrix}
+\]
+
+where $T$ is the adjacency matrix for all paths from the base to $Z$  and $F$ is all paths from $Z$ to the base. It is important to note that since $T$ and $F$ contain directed paths through strongly connected components, there are no links from $Z$ to $T$ or from $F$ to $Z$ or $T$. Such a link would contradict the strongly connected component structure of the graph. We also assume for simplicity that there are no links from $Z$ back to the base.
+
+Consider the cenrality vector of $M$, i.e. $\mathbf{v}$ such that $M\mathbf{v} = \rho \mathbf{v}$ where $\rho$ is the spectral radius of $M$. ($\rho$ and $\mathbf{v}$ exist by irreducibility of $M$). If we write $\mathbf{v} = [\mathbf{v_U} \ \mathbf{v_T}\  \mathbf{v_Z} \  \mathbf{v_F}]^T$ where each sub vector is the centralities of the verteces in $U$,$T$,$Z$,$F$ respectively, we can solve for $\mathbf{v_Z}$ (the eigen centralities of the nodes in C) in terms of $\mathbf{v_U}$. We have  
+\[M=
+\begin{bmatrix}
+U & W_{T}&  & W_{F} \\
+Y_{T,U} & T & & \\
+Y_{Z,U} & Y_{Z,T} & Z & \\
+Y_{F,U} & Y_{F,T} & Y_{Z,F} & F
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{v_U} \\
+\mathbf{v_T}\\
+\mathbf{v_Z} \\
+\mathbf{v_F}
+\end{bmatrix}
+= 
+\rho \begin{bmatrix}
+\mathbf{v_U} \\
+\mathbf{v_T}\\
+\mathbf{v_Z} \\
+\mathbf{v_F}
+\end{bmatrix}
+\]
+
+Matrix multiplication gives:
+\[\rho \mathbf{v_T} = Y_{T,U}\mathbf{v_U} + T \mathbf{v_T} \]
+\[(\rho I - T) \mathbf{v_T} = Y_{T,U}\mathbf{v_U} \]
+\[\mathbf{v_T} = (\rho I - T)^{-1}Y_{T,U}\mathbf{v_U}
+\]
+The matrix $(\rho I - T)$ is invertible because $\rho$ is not an eigenvalue of T.
+\[\rho \mathbf{v_Z} = Y_{Z,U}\mathbf{v_U} + Y_{Z,T}\mathbf{v_T} + Z \mathbf{v_Z} \]
+\[(\rho I - Z) \mathbf{v_Z} = Y_{Z,U}\mathbf{v_U} + Y_{Z,T}\mathbf{v_T}\]
+\[\mathbf{v_Z} = (\rho I - Z)^{-1}[\,Y_{T,U} + Y_{Z,T}(\rho I - T)^{-1}Y_{T,U}\,]\mathbf{v_U}
+\]
+
+
+Next we preform a partial specialization of the graph. For every out going  component branch, we make a copy of Z, preserving all in going edges. This results in the following adjacency matrix:
+\[\hat{M} = 
+\begin{bmatrix}
+U & W_{T}&  &  & & & W_{\beta_{1}} & \cdots & W_{\beta_{k}} \\
+Y_{T,U}  & T &  &  &  &  \\
+Y_{Z,U}  & Y_{Z,T} & Z & \\
+Y_{Z,U}  & Y_{Z,T} &  & Z \\
+Y_{Z,U}  & \vdots & & &\ddots & \\
+Y_{Z,U}  & Y_{Z,T} & & & & Z\\
+  
+  & & Y_{F_1}  &  &  & &\beta_1 & \\
+  & & & Y_{F_2}  &  &  & &\beta_2 & \\
+
+  & & & &\ddots &   &  & &\ddots & \\
+  & & & & & Y_{F_k} & & & &\beta_k \\
+
+\end{bmatrix}
+\]
+We partition the centrality vector as before to give the following equation.
+\[\hat{M} \mathbf{u} = 
+\begin{bmatrix}
+U & W_{T}&  &  & & & W_{\beta_{1}} & \cdots & W_{\beta_{k}} \\
+Y_{T,U}  & T &  &  &  &  \\
+Y_{Z,U}  & Y_{Z,T} & Z & \\
+Y_{Z,U}  & Y_{Z,T} &  & Z \\
+Y_{Z,U}  & \vdots & & &\ddots & \\
+Y_{Z,U}  & Y_{Z,T} & & & & Z\\
+  
+  & & Y_{F_1}  &  &  & &\beta_1 & \\
+  & & & Y_{F_2}  &  &  & &\beta_2 & \\
+
+  & & & &\ddots &   &  & &\ddots & \\
+  & & & & & Y_{F_k} & & & &\beta_k \\
+
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{u_U} \\
+\mathbf{u_T} \\
+\mathbf{u_{Z_1}} \\
+\mathbf{u_{Z_2}} \\
+\vdots \\
+\mathbf{u_{Z_k}} \\
+\mathbf{u_{\beta_1}} \\
+\mathbf{u_{\beta_2}} \\
+\vdots \\
+\mathbf{u_{\beta_3}} \\
+\end{bmatrix}
+=
+\rho
+\begin{bmatrix}
+\mathbf{u_U} \\
+\mathbf{u_T} \\
+\mathbf{u_{Z_1}} \\
+\mathbf{u_{Z_2}} \\
+\vdots \\
+\mathbf{u_{Z_k}} \\
+\mathbf{u_{\beta_1}} \\
+\mathbf{u_{\beta_2}} \\
+\vdots \\
+\mathbf{u_{\beta_3}} \\
+\end{bmatrix}
+\]
+Just as before, we solve for $\mathbf{u_{T}}$ producing,
+\[  \mathbf{u_T} = (\rho I - T)^{-1}Y_{T,U}\mathbf{u_U} \]
+Thus, for any $\mathbf{u_{Z_i}}$ we have,
+\[ \mathbf{u_{Z_i}} = Y_{Z,U} \mathbf{u_{U}} Y_{Z,T} \mathbf{u_{T}}+ Z \mathbf{u_{Z_i}} \]
+\[ \mathbf{u_Z} = (\rho I - Z)^{-1}[\,Y_{T,U} + Y_{Z,T}(\rho I - T)^{-1}Y_{T,U}\,]\mathbf{u_U} \]
+As shown previously, $\mathbf{v_U} =\mathbf{u_U}$. Thus $\mathbf{v_{Z_i}} =\mathbf{v_Z}$ for all $i \in {1,2,\cdots,k}$.
+
+If there are edges from $Z$ to the base then $M$ is of the form,
+\[M=
+\begin{bmatrix}
+U & W_{T}& W_{Z} & W_{F} \\
+Y_{T,U} & T & & \\
+Y_{Z,U} & Y_{Z,T} & Z & \\
+Y_{F,U} & Y_{F,T} & Y_{Z,F} & F
+\end{bmatrix}
+\] and the partial specialization of $M$ has the form,
+\[
+\begin{bmatrix}
+\begin{bmatrix}
+U & W_T \\
+Y_{T,U} & T \\
+\end{bmatrix} 
+& 
+W
+&
+\begin{bmatrix}
+W_{Z_1} & W_{Z_2} & \cdots & W_{Z_p} \\
+& & & & \\
+& & & & \\
+\end{bmatrix} \\
+Y & \beta & \\
+\begin{bmatrix}
+Y_{Z,U}&Y_{Z,T} \\
+Y_{Z,U}&Y_{Z,T} \\
+\vdots & \vdots \\
+Y_{Z,U}&Y_{Z,T} \\
+\end{bmatrix} 
+& &
+\begin{bmatrix}
+Z & & & \\
+& Z & & \\
+& & \ddots & \\
+& & & Z \\
+
+\end{bmatrix}
+
+
+\end{bmatrix}
+\]
+
+\end{document}
