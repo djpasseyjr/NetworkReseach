@@ -21,9 +21,28 @@ class ResComp:
         else:
             self.res   = np.random.rand(res_sz, res_sz) - .5
             self.res[np.random.rand(res_sz,res_sz) > connect_p] = 0
-            self.res *= spect_rad/max(np.linalg.eigvals(self.res)).real
+        
+        # No self edges
+        for i in range(res_sz): self.res[i,i] = 0
+    
+        # Set spectral radius
+        self.res *= spect_rad/max(np.linalg.eigvals(self.res)).real
+        
+        # Storing all params for easy access
+        self.params = {
+              "res_sz": res_sz, 
+              "activ_f": activ_f,
+              "connect_p": connect_p, 
+              "ridge_alpha": ridge_alpha, 
+              "spect_rad": spect_rad, 
+              "gamma": gamma, 
+              "sigma": sigma,
+              "uniform_weights": uniform_weights,
+              "solver": solver
+        }
         
     # end
+    
     
     def drive(self,t,u):
         """
@@ -79,7 +98,7 @@ class ResComp:
         # end
         
         elif r_0 is None and u_0 is not None:
-            r_0 = res.W_in.dot(u_0)
+            r_0 = self.W_in.dot(u_0)
 
         pred = integrate.odeint(res_pred_f, r_0, t)
         

@@ -4,7 +4,7 @@ Functions used to examine reservoir specialization
 """
 from ResComp import *
 from specializeGraph import *
-from specializer import *
+from sparse_specializer import *
 import copy
 
 def lorentz_deriv(t0, X, sigma=10., beta=8./3, rho=28.0):
@@ -57,7 +57,7 @@ def config_model(A):
     return M
 # end
 
-def score_nodes(rc, u, t, r_0=None):
+def score_nodes(rc, u, t, r_0=None, u_0=None):
     """ Give every node in the reservoir a relative importance score
         
         Parameters
@@ -70,13 +70,26 @@ def score_nodes(rc, u, t, r_0=None):
         -------
         scores (ndarray): Each node's importance score
     """
-    pre, r     = rc.predict(t, return_states=True, r_0=r_0)
+    pre, r     = rc.predict(t, return_states=True, r_0=r_0, u_0=u_0)
     derivative = rc.W_out.T.dot(pre - u(t))
     scores     = np.mean(np.abs(derivative*r), axis=1)
     return scores
 # end
 
-def specialize_best_nodes(rc, how_many, u, t, r_0=None): 
+def avg_score_nodes(A, params, u, t, trials=10):
+    """ Determines the most useful nodes in a network by averaging scores
+        over a number of trials
+    """
+    scores = np.zeros(A.shape[0])
+    for i in range(trials):
+        rc = make_res_comp(A,params)
+        rc.fit(t,u)
+        scores += score_nodes(rc, u, t)
+    
+    return scores/trials
+# end
+
+def specialize_best_nodes(rc, how_many, u, t, r_0=None, u_0=None): 
     """ Specializes the most useful nodes in the reservoir and
         returns an adjacency matrix of the specialized reservoir
         
@@ -89,16 +102,38 @@ def specialize_best_nodes(rc, how_many, u, t, r_0=None):
         
         Returns
         S (ndarray): adj matrix of the specialized reservoir
-        """
-    scores     = score_nodes(rc, u, t, r_0=r_0)
+    """
+    scores     = score_nodes(rc, u, t, r_0=r_0, u_0=u_0)
     tot        = rc.res.shape[0]
     worst_idxs = list(np.argsort(scores)[1:(tot-how_many)])
     A          = rc.res
-    for i in range(tot): A[i,i] = 0
     A          = (A != 0)*1
     S          = specializeGraph(A, worst_idxs)
     return S
 # end   
+
+def spec_avg_best_nodes(rc, how_many, u, t, r_0=None, u_0=None, trials=1): 
+    """ Specializes the most useful nodes on average and
+        returns an adjacency matrix of the specialized reservoir
+        
+        Parameters
+        ----------
+        rc (ResComp): reservoir computer
+        how_many (int): How many nodes to specialize
+        u  (solve_ivp solution): system to model
+        t  (ndarray): time values to test
+        
+        Returns
+        S (ndarray): adj matrix of the specialized reservoir
+    """
+    scores     = avg_score_nodes(rc.res, rc.params, u, t, trials=trials, r_0=r_0, u_0=u_0)
+    tot        = rc.res.shape[0]
+    worst_idxs = list(np.argsort(scores)[1:(tot-how_many)])
+    A          = rc.res
+    A          = (A != 0)*1
+    S          = specializeGraph(A, worst_idxs)
+    return S
+# end
     
 def how_long_accurate(u, pre, tol=1):
     """ Find the first i such that ||u_i - pre_i||_2 > tol """
@@ -115,6 +150,6 @@ def make_res_comp(A, params):
     m,n    = A.shape    
     new_params["res_sz"] = n
     rc     = ResComp(3,3, **new_params)
-    rc.res = A * new_params["spect_rad"] / max(np.linalg.eigvals(A)).real
+    rc.res = A * new_params["spect_rad"] / max(np.abs(np.linalg.eigvals(A)))
     return rc
 # end
